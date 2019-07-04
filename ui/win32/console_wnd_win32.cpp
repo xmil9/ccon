@@ -279,14 +279,14 @@ bool ConsoleWndWin32::onPaint()
 }
 
 
-bool ConsoleWndWin32::onEraseBkgnd(HDC /*hdc*/)
+bool ConsoleWndWin32::onEraseBkgnd(HDC hdc)
 {
    // We draw the background in the paint handler.
    return false;
 }
 
 
-bool ConsoleWndWin32::onSize(long width, long height, UINT /*resizeFlag*/)
+bool ConsoleWndWin32::onSize(long width, long height, UINT resizeFlag)
 {
    if (!m_isLayoutInited)
       return false;
@@ -302,44 +302,43 @@ bool ConsoleWndWin32::onSize(long width, long height, UINT /*resizeFlag*/)
 }
 
 
-bool ConsoleWndWin32::onKeyDown(UINT virtKeyCode, UINT /*repeatCount*/, BYTE /*scanCode*/,
-                                bool /*isExtendedKey*/, bool /*wasPreviouslyDown*/)
+bool ConsoleWndWin32::onKeyDown(UINT virtKeyCode, UINT repeatCount, BYTE scanCode,
+                                bool isExtendedKey, bool wasPreviouslyDown)
 {
    return handleEditKey(virtKeyCode);
 }
 
 
-bool ConsoleWndWin32::onChar(TCHAR ch, UINT /*repeatCount*/, BYTE /*scanCode*/,
-                             bool /*isExtendedKey*/, bool /*wasPreviouslyDown*/,
-                             bool /*isAltDown*/, bool /*isReleased*/)
+bool ConsoleWndWin32::onChar(TCHAR ch, UINT repeatCount, BYTE scanCode,
+                             bool isExtendedKey, bool wasPreviouslyDown, bool isAltDown,
+                             bool isReleased)
 {
    return handleInputKey(ch);
 }
 
 
-bool ConsoleWndWin32::onSetFocus(HWND /*unfocusedWnd*/)
+bool ConsoleWndWin32::onSetFocus(HWND unfocusedWnd)
 {
    m_inputCursor.start();
    return true;
 }
 
 
-bool ConsoleWndWin32::onKillFocus(HWND /*focusedWnd*/)
+bool ConsoleWndWin32::onKillFocus(HWND focusedWnd)
 {
    m_inputCursor.stop();
    return true;
 }
 
 
-bool ConsoleWndWin32::onVScroll(UINT scrollAction, UINT thumbPos, HWND /*scrollCtrl*/)
+bool ConsoleWndWin32::onVScroll(UINT scrollAction, UINT thumbPos, HWND scrollCtrl)
 {
    scrollVertical(scrollAction, thumbPos);
    return true;
 }
 
 
-bool ConsoleWndWin32::onMouseWheel(int delta, UINT /*keyState*/,
-                                   win32::Point /*mousePos*/)
+bool ConsoleWndWin32::onMouseWheel(int delta, UINT keyState, win32::Point mousePos)
 {
    // The passed delta value could be smaller than the wheel delta (the threshold for
    // wheel scrolling. If delta is smaller then we have to accumalate it until it reaches
@@ -417,7 +416,7 @@ void ConsoleWndWin32::updateContentLayout(HDC hdc)
 }
 
 
-void ConsoleWndWin32::updateInputLine(HDC /*hdc*/)
+void ConsoleWndWin32::updateInputLine(HDC hdc)
 {
    const std::size_t prevNumLines = m_layout.countPhysicalLines();
    m_layout.calcInputLineMetrics(clientBounds());

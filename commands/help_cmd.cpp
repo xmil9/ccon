@@ -13,13 +13,12 @@ namespace ccon
 {
 ///////////////////
 
-HelpCmd::HelpCmd(const std::set<CmdSpec>& specs)
-   : m_specs(specs)
+HelpCmd::HelpCmd(const std::set<CmdSpec>& specs) : m_specs(specs)
 {
 }
 
 
-CmdOutput HelpCmd::execute(const VerifiedCmd& /*input*/)
+CmdOutput HelpCmd::execute(const VerifiedCmd& input)
 {
    const string indent{"  "};
 

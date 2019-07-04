@@ -17,7 +17,7 @@ namespace ccon
 
 ConsoleInputCursorWin32::ConsoleInputCursorWin32(HWND hwnd, COLORREF color)
 : m_hwnd{hwnd}, m_blickCallback{bind(&ConsoleInputCursorWin32::onBlink, this,
-                                          placeholders::_1)},
+                                     placeholders::_1)},
   m_brush{CreateSolidBrush(color)}
 {
 }
@@ -35,12 +35,13 @@ ConsoleInputCursorWin32::ConsoleInputCursorWin32(ConsoleInputCursorWin32&& other
 }
 
 
-ConsoleInputCursorWin32& ConsoleInputCursorWin32::operator=(ConsoleInputCursorWin32&& other) noexcept
+ConsoleInputCursorWin32& ConsoleInputCursorWin32::
+operator=(ConsoleInputCursorWin32&& other) noexcept
 {
    m_hwnd = other.m_hwnd;
    // Recreate timed callback with the onBlink() member function of this instance.
-   m_blickCallback = move(TimedCallback{
-      bind(&ConsoleInputCursorWin32::onBlink, this, placeholders::_1)});
+   m_blickCallback = move(
+      TimedCallback{bind(&ConsoleInputCursorWin32::onBlink, this, placeholders::_1)});
    m_blinkRateMs = other.m_blinkRateMs;
    m_width = other.m_width;
    m_height = other.m_height;
@@ -113,7 +114,7 @@ void ConsoleInputCursorWin32::stop()
 void ConsoleInputCursorWin32::inval()
 {
    Rect invalBounds{m_topLeft.x, m_topLeft.y, m_topLeft.x + m_width,
-                           m_topLeft.y + m_height};
+                    m_topLeft.y + m_height};
    InvalidateRect(m_hwnd, &invalBounds, !m_isVisible);
 }
 
@@ -123,7 +124,7 @@ void ConsoleInputCursorWin32::draw(HDC hdc, const win32::Rect& wndBounds) const
    if (m_isVisible)
    {
       const Rect cursorShape(m_topLeft.x, m_topLeft.y, m_topLeft.x + m_width,
-                                    m_topLeft.y + m_height);
+                             m_topLeft.y + m_height);
 
       auto [haveIntersection, intersection] = intersect(cursorShape, wndBounds);
 
@@ -134,7 +135,7 @@ void ConsoleInputCursorWin32::draw(HDC hdc, const win32::Rect& wndBounds) const
 }
 
 
-void ConsoleInputCursorWin32::onBlink(DWORD /*sysTime*/)
+void ConsoleInputCursorWin32::onBlink(DWORD sysTime)
 {
    m_isVisible = !m_isVisible;
    inval();

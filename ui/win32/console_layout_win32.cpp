@@ -181,7 +181,7 @@ bool ConsoleLayoutWin32::calcContentMetrics(const win32::Rect& displayBounds)
 }
 
 
-bool ConsoleLayoutWin32::calcInputLineMetrics(const win32::Rect& /*displayBounds*/)
+bool ConsoleLayoutWin32::calcInputLineMetrics(const win32::Rect& displayBounds)
 {
    const std::size_t inputLineIdx = maxLogicalIndex();
 

@@ -91,7 +91,7 @@ bool AppWindow::registerWindowClass() const
 }
 
 
-Window::CreationResult AppWindow::onCreate(const CREATESTRUCT* /*createInfo*/)
+Window::CreationResult AppWindow::onCreate(const CREATESTRUCT* createInfo)
 {
    loadPreferences();
    return CreationResult::Handled;
@@ -105,7 +105,7 @@ bool AppWindow::onDestroy()
 }
 
 
-bool AppWindow::onCommand(int id, UINT /*notificationCode*/, HWND /*ctrlWnd*/)
+bool AppWindow::onCommand(int id, UINT notificationCode, HWND ctrlWnd)
 {
    switch (id)
    {
@@ -159,8 +159,8 @@ void AppWindow::makeConsoleUi()
 } // namespace
 
 
-int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE /*prevInstance*/,
-                      _In_ LPWSTR /*cmdLine*/, _In_ int /*cmdShow*/)
+int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
+                      _In_ LPWSTR cmdLine, _In_ int cmdShow)
 {
    AppWindow appWnd;
    if (!appWnd.create(NULL, Rect{100, 100, 1000, 500}, L"Example Console",

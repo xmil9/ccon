@@ -145,7 +145,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../..;../../ui/win32;../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -165,7 +165,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../..;../../ui/win32;../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -187,7 +187,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../..;../../ui/win32;../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -211,7 +211,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../..;../../ui/win32;../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>

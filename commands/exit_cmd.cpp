@@ -12,13 +12,12 @@ namespace ccon
 {
 ///////////////////
 
-ExitCmd::ExitCmd(ConsoleUI* ui)
-   : m_ui{ui}
+ExitCmd::ExitCmd(ConsoleUI* ui) : m_ui{ui}
 {
 }
 
 
-CmdOutput ExitCmd::execute(const VerifiedCmd& /*input*/)
+CmdOutput ExitCmd::execute(const VerifiedCmd& input)
 {
    if (m_ui)
       m_ui->hideConsole();
