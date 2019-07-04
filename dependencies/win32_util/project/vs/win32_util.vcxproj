@@ -196,7 +196,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -215,7 +215,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -234,7 +234,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -253,7 +253,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -274,7 +274,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -297,7 +297,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -320,7 +320,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -343,7 +343,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <DisableSpecificWarnings>4251</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4100;4251</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>../../dependencies</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>

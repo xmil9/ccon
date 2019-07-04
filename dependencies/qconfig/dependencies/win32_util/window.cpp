@@ -502,14 +502,13 @@ LRESULT Window::handleMessage(HWND hwnd, UINT msgId, WPARAM wParam, LPARAM lPara
 }
 
 
-Window::CreationResult Window::onNcCreate(HWND /*hwnd*/,
-                                          const CREATESTRUCT* /*createInfo*/)
+Window::CreationResult Window::onNcCreate(HWND hwnd, const CREATESTRUCT* createInfo)
 {
    return CreationResult::NotHandled;
 }
 
 
-Window::CreationResult Window::onCreate(const CREATESTRUCT* /*createInfo*/)
+Window::CreationResult Window::onCreate(const CREATESTRUCT* createInfo)
 {
    return CreationResult::NotHandled;
 }

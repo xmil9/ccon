@@ -159,7 +159,7 @@ void TimedCallback::setId(UINT_PTR id)
 }
 
 
-void TimedCallback::timerProc(HWND /*hwnd*/, UINT msgId, UINT timerId, DWORD sysTime)
+void TimedCallback::timerProc(HWND hwnd, UINT msgId, UINT timerId, DWORD sysTime)
 {
    assert(msgId == WM_TIMER);
    if (msgId != WM_TIMER)

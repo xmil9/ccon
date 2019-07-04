@@ -86,23 +86,23 @@ class WIN32UTIL_API Window
    virtual CreationResult onCreate(const CREATESTRUCT* createInfo);
    virtual bool onDestroy() { return false; }
    virtual bool onClose();
-   virtual bool onNcPaint(HRGN /*updateRegion*/) { return false; }
+   virtual bool onNcPaint(HRGN updateRegion) { return false; }
    virtual bool onPaint() { return false; }
-   virtual bool onEraseBkgnd(HDC /*hdc*/) { return false; }
+   virtual bool onEraseBkgnd(HDC hdc) { return false; }
    virtual bool onSize(long width, long height, UINT resizeFlag);
    virtual bool onCommand(int id, UINT notificationCode, HWND ctrlWnd);
    virtual bool onKeyDown(UINT virtKeyCode, UINT repeatCount, BYTE scanCode,
                           bool isExtendedKey, bool wasPreviouslyDown);
    virtual bool onChar(TCHAR ch, UINT repeatCount, BYTE scanCode, bool isExtendedKey,
                        bool wasPreviouslyDown, bool isAltDown, bool isReleased);
-   virtual bool onSetFocus(HWND /*unfocusedWnd*/) { return false; }
-   virtual bool onKillFocus(HWND /*focusedWnd*/) { return false; }
+   virtual bool onSetFocus(HWND unfocusedWnd) { return false; }
+   virtual bool onKillFocus(HWND focusedWnd) { return false; }
    virtual bool onHScroll(UINT scrollAction, UINT thumbPos, HWND scrollCtrl);
    virtual bool onVScroll(UINT scrollAction, UINT thumbPos, HWND scrollCtrl);
    virtual bool onMouseMove(win32::Point mousePos, UINT virtKeyCode);
    virtual bool onMouseWheel(int delta, UINT keyState, Point mousePos);
    virtual bool onMouseHorzWheel(int delta, UINT keyState, Point mousePos);
-   virtual bool onTimer(UINT_PTR /*timerId*/, TIMERPROC /*callback*/) { return false; }
+   virtual bool onTimer(UINT_PTR timerId, TIMERPROC callback) { return false; }
 
  private:
    void setupWindow(HWND hwnd);
@@ -142,53 +142,49 @@ inline bool Window::haveInvalBounds() const
    return invalBounds().first;
 }
 
-inline bool Window::onSize(long /*width*/, long /*height*/, UINT /*resizeFlag*/)
+inline bool Window::onSize(long width, long height, UINT resizeFlag)
 {
    return false;
 }
 
-inline bool Window::onCommand(int /*id*/, UINT /*notificationCode*/, HWND /*ctrlWnd*/) 
+inline bool Window::onCommand(int id, UINT notificationCode, HWND ctrlWnd)
 {
    return false;
 }
 
-inline bool Window::onKeyDown(UINT /*virtKeyCode*/, UINT /*repeatCount*/,
-                              BYTE /*scanCode*/, bool /*isExtendedKey*/,
-                              bool /*wasPreviouslyDown*/)
+inline bool Window::onKeyDown(UINT virtKeyCode, UINT repeatCount, BYTE scanCode,
+                              bool isExtendedKey, bool wasPreviouslyDown)
 {
    return false;
 }
 
-inline bool Window::onChar(TCHAR /*ch*/, UINT /*repeatCount*/, BYTE /*scanCode*/,
-                           bool /*isExtendedKey*/, bool /*wasPreviouslyDown*/,
-                           bool /*isAltDown*/, bool /*isReleased*/)
+inline bool Window::onChar(TCHAR ch, UINT repeatCount, BYTE scanCode, bool isExtendedKey,
+                           bool wasPreviouslyDown, bool isAltDown, bool isReleased)
 {
    return false;
 }
 
-inline bool Window::onHScroll(UINT /*scrollAction*/, UINT /*thumbPos*/,
-                              HWND /*scrollCtrl*/)
+inline bool Window::onHScroll(UINT scrollAction, UINT thumbPos, HWND scrollCtrl)
 {
    return false;
 }
 
-inline bool Window::onVScroll(UINT /*scrollAction*/, UINT /*thumbPos*/,
-                              HWND /*scrollCtrl*/)
+inline bool Window::onVScroll(UINT scrollAction, UINT thumbPos, HWND scrollCtrl)
 {
    return false;
 }
 
-inline bool Window::onMouseMove(win32::Point /*mousePos*/, UINT /*virtKeyCode*/)
+inline bool Window::onMouseMove(win32::Point mousePos, UINT virtKeyCode)
 {
    return false;
 }
 
-inline bool Window::onMouseWheel(int /*delta*/, UINT /*keyState*/, Point /*mousePos*/)
+inline bool Window::onMouseWheel(int delta, UINT keyState, Point mousePos)
 {
    return false;
 }
 
-inline bool Window::onMouseHorzWheel(int /*delta*/, UINT /*keyState*/, Point /*mousePos*/)
+inline bool Window::onMouseHorzWheel(int delta, UINT keyState, Point mousePos)
 {
    return false;
 }
