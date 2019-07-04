@@ -2,10 +2,11 @@
 Customizable console.
 
 Supports:
-- Customizable commands through commands specs.
+- Addition of domain-specific commands through commands specs.
 - Automatic command parsing based on command specs.
 - Generation of help for commands.
 - Auto completion of commands.
+- Customizable console colors and font size.
 
 Built-in commands to:
 - Show help.
