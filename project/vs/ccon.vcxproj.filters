@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\auto_completion.cpp" />
+    <ClCompile Include="..\..\blackboard.cpp" />
+    <ClCompile Include="..\..\cmd_depot.cpp" />
+    <ClCompile Include="..\..\cmd_parser.cpp" />
+    <ClCompile Include="..\..\cmd_spec.cpp" />
+    <ClCompile Include="..\..\console.cpp" />
+    <ClCompile Include="..\..\console_util.cpp" />
+    <ClCompile Include="..\..\commands\colors_cmd.cpp">
+      <Filter>commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\commands\exit_cmd.cpp">
+      <Filter>commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\commands\font_size_cmd.cpp">
+      <Filter>commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\commands\help_cmd.cpp">
+      <Filter>commands</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\preferences.cpp" />
+    <ClCompile Include="..\..\ui\win32\console_ui_win32.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\win32\console_wnd_win32.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\win32\console_layout_win32.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ui\win32\console_input_cursor_win32.cpp">
+      <Filter>ui</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\auto_completion.h" />
+    <ClInclude Include="..\..\blackboard.h" />
+    <ClInclude Include="..\..\cmd.h" />
+    <ClInclude Include="..\..\cmd_depot.h" />
+    <ClInclude Include="..\..\cmd_parser.h" />
+    <ClInclude Include="..\..\cmd_spec.h" />
+    <ClInclude Include="..\..\console.h" />
+    <ClInclude Include="..\..\console_content.h" />
+    <ClInclude Include="..\..\console_ui.h" />
+    <ClInclude Include="..\..\console_util.h" />
+    <ClInclude Include="..\..\formatting.h" />
+    <ClInclude Include="..\..\preferences.h" />
+    <ClInclude Include="..\..\commands\colors_cmd.h">
+      <Filter>commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\commands\exit_cmd.h">
+      <Filter>commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\commands\font_size_cmd.h">
+      <Filter>commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\commands\help_cmd.h">
+      <Filter>commands</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ui\win32\console_ui_win32.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ui\win32\console_wnd_win32.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ui\win32\console_layout_win32.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ui\win32\console_input_cursor_win32.h">
+      <Filter>ui</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="commands">
+      <UniqueIdentifier>{6c650cde-1385-4f68-98f5-ab91a0277543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ui">
+      <UniqueIdentifier>{43a0b273-3bc2-4e3d-a1e6-d2252140c59c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\device_context.cpp" />
+    <ClCompile Include="..\..\err_util.cpp" />
+    <ClCompile Include="..\..\gdi_object.cpp" />
+    <ClCompile Include="..\..\message_util.cpp" />
+    <ClCompile Include="..\..\registry.cpp" />
+    <ClCompile Include="..\..\timer.cpp" />
+    <ClCompile Include="..\..\window.cpp" />
+    <ClCompile Include="..\..\screen.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\device_context.h" />
+    <ClInclude Include="..\..\err_util.h" />
+    <ClInclude Include="..\..\gdi_object.h" />
+    <ClInclude Include="..\..\geometry.h" />
+    <ClInclude Include="..\..\mem_util.h" />
+    <ClInclude Include="..\..\message_util.h" />
+    <ClInclude Include="..\..\registry.h" />
+    <ClInclude Include="..\..\timer.h" />
+    <ClInclude Include="..\..\tstring.h" />
+    <ClInclude Include="..\..\win32_util_api.h" />
+    <ClInclude Include="..\..\win32_windows.h" />
+    <ClInclude Include="..\..\window.h" />
+    <ClInclude Include="..\..\screen.h" />
+  </ItemGroup>
+</Project>
