@@ -5,6 +5,7 @@
 // MIT license
 //
 #pragma once
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -45,5 +46,9 @@ struct Cmd
    virtual ~Cmd() = default;
    virtual CmdOutput execute(const VerifiedCmd& input) = 0;
 };
+
+
+// Type of factory functions for commands.
+using CmdFactoryFn = std::function<std::unique_ptr<Cmd>()>;
 
 } // namespace ccon

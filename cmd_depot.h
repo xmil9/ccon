@@ -5,6 +5,7 @@
 // MIT license
 //
 #pragma once
+#include "cmd.h"
 #include <memory>
 #include <set>
 #include <string>
@@ -13,7 +14,6 @@
 namespace ccon
 {
 class CmdSpec;
-struct Cmd;
 struct ConsoleUI;
 }
 
@@ -34,6 +34,8 @@ public:
    CmdDepot& operator=(CmdDepot&&) = default;
 
    void setUI(ConsoleUI* ui);
+   void addCommand(const CmdSpec& spec, CmdFactoryFn factoryFn);
+
    // Returns a collection of all available console command specs.
    const std::set<CmdSpec>& availableCommands() const;
    // Instantiates a command with a given name.

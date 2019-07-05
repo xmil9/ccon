@@ -33,13 +33,13 @@ class CmdDepot::Impl
    Impl& operator=(Impl&&) = default;
 
    void setUI(ConsoleUI* ui);
+   void addCommand(const CmdSpec& spec, CmdFactoryFn factoryFn);
    const std::set<CmdSpec>& availableCommands() const;
    std::unique_ptr<Cmd> makeCommand(const std::string& cmdName) const;
    std::vector<std::string> getCommandHelp(const std::string& cmdName) const;
 
  private:
    using CmdName = std::string;
-   using CmdFactoryFn = std::function<std::unique_ptr<Cmd>()>;
 
  private:
    void initCmdSpecs();
@@ -49,8 +49,6 @@ class CmdDepot::Impl
    std::set<CmdSpec> m_specs;
    std::unordered_map<CmdName, CmdFactoryFn> m_cmdFactory;
    ConsoleUI* m_ui = nullptr;
-   // Can also hold durable state for individual commands that needs to persist
-   // beyond command instances' lifetimes.
 };
 
 
@@ -64,6 +62,17 @@ CmdDepot::Impl::Impl()
 void CmdDepot::Impl::setUI(ConsoleUI* ui)
 {
    m_ui = ui;
+}
+
+
+void CmdDepot::Impl::addCommand(const CmdSpec& spec, CmdFactoryFn factoryFn)
+{
+   const bool haveCommand = (m_specs.find(spec) != m_specs.end());
+   if (!haveCommand)
+   {
+      m_specs.insert(spec);
+      m_cmdFactory[spec.name()] = factoryFn;
+   }
 }
 
 
@@ -135,6 +144,12 @@ CmdDepot::~CmdDepot()
 void CmdDepot::setUI(ConsoleUI* ui)
 {
    m_pimpl->setUI(ui);
+}
+
+
+void CmdDepot::addCommand(const CmdSpec& spec, CmdFactoryFn factoryFn)
+{
+   m_pimpl->addCommand(spec, factoryFn);
 }
 
 

@@ -52,6 +52,12 @@ void Console::setUI(ConsoleUI* ui)
 }
 
 
+void Console::addCommand(const CmdSpec& spec, CmdFactoryFn factoryFn)
+{
+   m_cmds.addCommand(spec, factoryFn);
+}
+
+
 std::size_t Console::countLines() const
 {
    return m_blackboard.countLines();

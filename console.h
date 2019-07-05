@@ -34,7 +34,9 @@ public:
    Console& operator=(const Console&) = delete;
    Console& operator=(Console&&) = default;
 
-   void setUI(ConsoleUI* ui) override;
+   void setUI(ConsoleUI* ui);
+   void addCommand(const CmdSpec& spec, CmdFactoryFn factoryFn);
+
    std::size_t countLines() const override;
    std::string lineText(std::size_t lineIdx) const override;
    bool isEnteredLine(std::size_t lineIdx) const override;

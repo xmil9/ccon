@@ -23,7 +23,6 @@ struct ConsoleContent
 {
    virtual ~ConsoleContent() = default;
 
-   virtual void setUI(ConsoleUI* ui) = 0;
    // The input line is the last of the console lines but can also be accessed
    // individually through InputLine().
    virtual std::size_t countLines() const = 0;
