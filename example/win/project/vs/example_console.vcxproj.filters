@@ -21,9 +21,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\example_console.cpp" />
+    <ClCompile Include="..\..\greet_cmd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\resource.h" />
     <ClInclude Include="..\..\targetver.h" />
+    <ClInclude Include="..\..\greet_cmd.h" />
   </ItemGroup>
 </Project>

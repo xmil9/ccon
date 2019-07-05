@@ -4,6 +4,7 @@
 // Jul-2019, Michael Lindner
 // MIT license
 //
+#include "greet_cmd.h"
 #include "resource.h"
 #include "targetver.h"
 #include "ccon/console.h"
@@ -43,8 +44,8 @@ class AppWindow : public Window
  private:
    bool createPreferences(const fs::path& prefsPath);
    bool loadPreferences();
+   void setupConsole();
    void showConsole();
-   void makeConsoleUi();
 
  private:
    UserPrefs m_prefs;
@@ -94,6 +95,7 @@ bool AppWindow::registerWindowClass() const
 Window::CreationResult AppWindow::onCreate(const CREATESTRUCT* createInfo)
 {
    loadPreferences();
+   setupConsole();
    return CreationResult::Handled;
 }
 
@@ -141,19 +143,18 @@ bool AppWindow::loadPreferences()
 }
 
 
-void AppWindow::showConsole()
-{
-   if (!m_consoleUi)
-      makeConsoleUi();
-   m_consoleUi->showConsole();
-}
-
-
-void AppWindow::makeConsoleUi()
+void AppWindow::setupConsole()
 {
    m_consoleUi =
       make_unique<ConsoleUIWin32>(hwnd(), L"Example Console", m_prefs, m_console);
    m_console.setUI(m_consoleUi.get());
+   m_console.addCommand(makeGreetCmdSpec(), []() { return make_unique<GreetCmd>(); });
+}
+
+
+void AppWindow::showConsole()
+{
+   m_consoleUi->showConsole();
 }
 
 } // namespace
