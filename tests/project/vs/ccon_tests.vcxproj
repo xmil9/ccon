@@ -20,10 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ccon_tests.cpp" />
+    <ClCompile Include="..\..\formatting_tests.cpp" />
     <ClCompile Include="..\..\preferences_tests.cpp" />
     <ClCompile Include="..\..\test_util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\formatting_tests.h" />
     <ClInclude Include="..\..\preferences_tests.h" />
     <ClInclude Include="..\..\test_util.h" />
   </ItemGroup>
