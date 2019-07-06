@@ -5,10 +5,12 @@
     <ClCompile Include="..\..\test_util.cpp" />
     <ClCompile Include="..\..\preferences_tests.cpp" />
     <ClCompile Include="..\..\formatting_tests.cpp" />
+    <ClCompile Include="..\..\console_util_tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test_util.h" />
     <ClInclude Include="..\..\preferences_tests.h" />
     <ClInclude Include="..\..\formatting_tests.h" />
+    <ClInclude Include="..\..\console_util_tests.h" />
   </ItemGroup>
 </Project>
