@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="..\..\ccon_tests.cpp" />
+    <ClCompile Include="..\..\test_util.cpp" />
+    <ClCompile Include="..\..\preferences_tests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\test_util.h" />
+    <ClInclude Include="..\..\preferences_tests.h" />
+  </ItemGroup>
+</Project>

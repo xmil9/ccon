@@ -1,0 +1,3 @@
+ConsoleWidth=100
+ConsoleHeight=200
+FontSize=6
