@@ -33,6 +33,8 @@ namespace
 class AppWindow : public Window
 {
  public:
+    AppWindow();
+
  protected:
    const TCHAR* windowClassName() const override;
    bool registerWindowClass() const override;
@@ -52,6 +54,12 @@ class AppWindow : public Window
    Console m_console;
    unique_ptr<ConsoleUIWin32> m_consoleUi;
 };
+
+
+AppWindow::AppWindow()
+   : m_prefs{userDirectory() / "ExampleConsole" / "prefs.txt"}
+{
+}
 
 
 const TCHAR* AppWindow::windowClassName() const
@@ -133,13 +141,11 @@ bool AppWindow::createPreferences(const fs::path& prefsPath)
 
 bool AppWindow::loadPreferences()
 {
-   const fs::path prefsPath = userDirectory() / "ExampleConsole" / "prefs.txt";
-
    error_code errCode;
-   if (!fs::exists(prefsPath, errCode) && !createPreferences(prefsPath))
+   if (!fs::exists(m_prefs.location(), errCode) && !createPreferences(m_prefs.location()))
       return false;
 
-   return m_prefs.load(prefsPath);
+   return m_prefs.load();
 }
 
 

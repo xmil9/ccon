@@ -39,8 +39,16 @@ struct DefaultPrefs
 // User preference for the console.
 class UserPrefs
 {
-public:
-   bool load(const std::filesystem::path& configPath);
+ public:
+   explicit UserPrefs(const std::filesystem::path& configPath);
+   ~UserPrefs() = default;
+   UserPrefs(const UserPrefs&) = default;
+   UserPrefs(UserPrefs&&) = default;
+   UserPrefs& operator=(const UserPrefs&) = default;
+   UserPrefs& operator=(UserPrefs&&) = default;
+
+   std::filesystem::path location() const { return m_configPath; }
+   bool load();
    bool save();
 
    std::optional<int> consoleWidth() const;
@@ -56,7 +64,7 @@ public:
    void setTextInputColor(const sutil::Rgb& color);
    void setFontSize(int sizeInPoints);
 
-private:
+ private:
    std::filesystem::path m_configPath;
    qcfg::Config m_config;
 };

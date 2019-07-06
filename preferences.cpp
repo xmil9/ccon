@@ -96,13 +96,21 @@ win32::Rect DefaultPrefs::consoleWindowBounds()
 
 ///////////////////
 
-bool UserPrefs::load(const std::filesystem::path& configPath)
+UserPrefs::UserPrefs(const std::filesystem::path& configPath)
+   : m_configPath{configPath}
 {
-   FileStorage configStorage{configPath};
+}
+
+
+bool UserPrefs::load()
+{
+   if (m_configPath.empty())
+      return false;
+
+   FileStorage configStorage{m_configPath};
    if (!m_config.load(configStorage))
       return false;
 
-   m_configPath = configPath;
    return true;
 }
 
