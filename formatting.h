@@ -6,6 +6,7 @@
 //
 #pragma once
 #include <algorithm>
+#include <iterator>
 #include <locale>
 #include <sstream>
 #include <string>
@@ -31,6 +32,8 @@ enum class IntBase
 template <typename Int>
 std::string formatIntOutput(Int val, const std::string& label, IntBase base)
 {
+   static_assert(std::is_integral_v<Int>);
+
    std::string out;
    if (!label.empty())
       out += formatLabel(label);
@@ -61,6 +64,8 @@ std::string formatIntOutput(Int val, const std::string& label, IntBase base)
 template <typename Iter>
 std::string formatIntArrayOutput(Iter begin, Iter end, const std::string& label)
 {
+   using value_type = typename iterator_traits<Iter>::value_type;
+
    std::string out;
    if (!label.empty())
       out += formatLabel(label);
@@ -68,7 +73,7 @@ std::string formatIntArrayOutput(Iter begin, Iter end, const std::string& label)
    // Handle first element differently because of element separators.
    if (begin != end)
       out += std::to_string(*(begin++));
-   std::for_each(begin, end, [&out](Iter::value_type val) {
+   std::for_each(begin, end, [&out](value_type val) {
       out += ", ";
       out += std::to_string(val);
    });
