@@ -33,7 +33,8 @@ inline CmdSpec makeConsoleFontSizeCmdSpec()
            ":fs",
            "sets the font size for the console",
            {
-              ArgSpec{1, "font size in points; use 0 to reset to default size"},
+              ArgSpec::makePositionalArg(
+                 1, "font size in points; use 0 to reset to default size"),
            },
            ""};
 }

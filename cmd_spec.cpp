@@ -89,6 +89,28 @@ std::string LabelWithAbbrev::abbreviation() const
 
 ///////////////////
 
+ArgSpec ArgSpec::makePositionalArg(std::size_t numValues,
+                                    const std::string& description)
+{
+   return ArgSpec("", "", numValues, description);
+}
+
+
+ArgSpec ArgSpec::makeOptionalArg(const std::string& label, std::size_t numValues,
+                                 const std::string& abbrev,
+                                 const std::string& description)
+{
+   return ArgSpec(label, abbrev, numValues, description);
+}
+
+
+ArgSpec ArgSpec::makeFlagArg(const std::string& label, const std::string& abbrev,
+                              const std::string& description)
+{
+   return ArgSpec(label, abbrev, 0, description);
+}
+
+
 ArgSpec::ArgSpec(const std::string& label, const std::string& abbrev,
                  std::size_t numValues, const std::string& description)
 : m_label{lowercase(label), lowercase(abbrev)}, m_numValues{numValues}, m_description{
@@ -97,22 +119,9 @@ ArgSpec::ArgSpec(const std::string& label, const std::string& abbrev,
 }
 
 
-ArgSpec::ArgSpec(const std::string& label, std::size_t numValues,
-                 const std::string& description)
-: ArgSpec{label, {}, numValues, description}
-{
-}
-
-
-ArgSpec::ArgSpec(std::size_t numValues, const std::string& description)
-: ArgSpec{{}, {}, numValues, description}
-{
-}
-
-
 bool ArgSpec::isRequired() const
 {
-   return !hasLabel();
+   return !hasLabel() && m_numValues > 0;
 }
 
 

@@ -38,14 +38,14 @@ inline CmdSpec makeConsoleColorsCmdSpec()
            ":c",
            "sets the colors for the console",
            {
-              ArgSpec{consoleColorsCmdSpec::backgroundOption, "b", 1,
-                      "background color (rrggbb)"},
-              ArgSpec{consoleColorsCmdSpec::outputTextOption, "o", 1,
-                      "output text color (rrggbb)"},
-              ArgSpec{consoleColorsCmdSpec::inputTextOption, "i", 1,
-                      "input text color (rrggbb)"},
-              ArgSpec{consoleColorsCmdSpec::defaultsOption, "d", 0,
-                      "reset all colors to defaults"},
+              ArgSpec::makeOptionalArg(consoleColorsCmdSpec::backgroundOption, 1, "b",
+                                       "background color (rrggbb)"),
+              ArgSpec::makeOptionalArg(consoleColorsCmdSpec::outputTextOption, 1, "o",
+                                       "output text color (rrggbb)"),
+              ArgSpec::makeOptionalArg(consoleColorsCmdSpec::inputTextOption, 1, "i",
+                                       "input text color (rrggbb)"),
+              ArgSpec::makeFlagArg(consoleColorsCmdSpec::defaultsOption, "d",
+                                   "reset all colors to defaults"),
            },
            ""};
 }

@@ -26,7 +26,7 @@ inline ccon::CmdSpec makeGreetCmdSpec()
            "g",
            "shows greeting",
            {
-              ccon::ArgSpec{1, "name of user"},
+              ccon::ArgSpec::makePositionalArg(1, "name of user"),
            },
            ""};
 }

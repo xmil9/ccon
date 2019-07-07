@@ -50,15 +50,18 @@ class ArgSpec
    static constexpr std::size_t ZeroOrMore = std::numeric_limits<std::size_t>::max();
    static constexpr std::size_t OneOrMore = std::numeric_limits<std::size_t>::max() - 1;
 
+   // Creates a spec for a required, positional argument (one or more values).
+   static ArgSpec makePositionalArg(std::size_t numValues,
+                                    const std::string& description = "");
+   // Creates a spec for an optional argument (a label followed by one or more values).
+   static ArgSpec makeOptionalArg(const std::string& label, std::size_t numValues,
+                                  const std::string& abbrev = "",
+                                  const std::string& description = "");
+   // Creates a spec for a flag argument (a special optional argument without any values).
+   static ArgSpec makeFlagArg(const std::string& label, const std::string& abbrev = "",
+                              const std::string& description = "");
+
    ArgSpec() = default;
-   // With label and abbreviation.
-   ArgSpec(const std::string& label, const std::string& abbrev, std::size_t numValues,
-           const std::string& description = {});
-   // Without abbbreviation.
-   ArgSpec(const std::string& label, std::size_t numValues,
-           const std::string& description = {});
-   // Sequence of values only.
-   ArgSpec(std::size_t numValues, const std::string& description = {});
    ~ArgSpec() = default;
    ArgSpec(const ArgSpec&) = default;
    ArgSpec(ArgSpec&&) = default;
@@ -75,6 +78,9 @@ class ArgSpec
                                       CmdArgs::const_iterator actualArgsEnd) const;
 
  private:
+   ArgSpec(const std::string& label, const std::string& abbrev, std::size_t numValues,
+           const std::string& description);
+
    std::pair<bool, std::vector<std::string>>
    matchValues(CmdArgs::const_iterator& actualArgs,
                CmdArgs::const_iterator actualArgsEnd) const;
@@ -89,7 +95,7 @@ class ArgSpec
 
 
 // Common help argument that can be used for all commands.
-const ArgSpec HelpArgSpec{"help", "?", 0};
+const ArgSpec HelpArgSpec = ArgSpec::makeFlagArg("help", "?");
 
 
 ///////////////////
