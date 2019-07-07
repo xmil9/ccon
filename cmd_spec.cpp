@@ -9,6 +9,7 @@
 #include "console_util.h"
 #include "essentutils/string_util.h"
 #include <algorithm>
+#include <cassert>
 
 using namespace std;
 using namespace sutil;
@@ -119,6 +120,12 @@ ArgSpec::ArgSpec(const std::string& label, const std::string& abbrev,
 }
 
 
+ArgSpec::operator bool() const
+{
+   return hasLabel() || m_numValues > 0;
+}
+
+
 bool ArgSpec::isRequired() const
 {
    return !hasLabel() && m_numValues > 0;
@@ -139,10 +146,14 @@ std::string ArgSpec::label() const
 
 std::string ArgSpec::help(const std::string& indent) const
 {
+   // Ignore empty spec.
+   if (!*this)
+      return "";
+
    string help;
 
    help += indent;
-   help += hasLabel() ? "Optional:" : "Required:";
+   help += isRequired() ? "Required:" : "Optional:";
 
    if (hasLabel())
    {
@@ -160,7 +171,12 @@ std::string ArgSpec::help(const std::string& indent) const
       if (hasLabel())
          help += " +";
       help += " ";
-      help += to_string(m_numValues);
+      if (m_numValues == ZeroOrMore)
+         help += "zero or more";
+      else if (m_numValues == OneOrMore)
+         help += "one or more";
+      else
+         help += to_string(m_numValues);
       help += (m_numValues == 1) ? " value" : " values";
    }
 

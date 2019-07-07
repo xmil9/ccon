@@ -68,6 +68,7 @@ class ArgSpec
    ArgSpec& operator=(const ArgSpec&) = default;
    ArgSpec& operator=(ArgSpec&&) = default;
 
+   explicit operator bool() const;
    bool isRequired() const;
    bool hasLabel() const;
    std::string label() const;
