@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <cassert>
 #include <map>
+#include <optional>
 
 using namespace ccon;
 using namespace std;
@@ -21,51 +22,46 @@ namespace
 {
 ///////////////////
 
-pair<bool, VerifiedArg> matchArgSpec(const ArgSpec& spec,
-                                     CmdArgs::const_iterator& actualArgs,
-                                     CmdArgs::const_iterator actualArgsEnd)
+optional<VerifiedArg> matchArgSpec(const ArgSpec& spec,
+                                   CmdArgs::const_iterator& actualArgs,
+                                   CmdArgs::const_iterator actualArgsEnd)
 {
    CmdArgs::const_iterator iterCopy = actualArgs;
-
-   bool haveMatch = false;
-   VerifiedArg match;
-   tie(haveMatch, match) = spec.match(iterCopy, actualArgsEnd);
-   if (!haveMatch)
-      return {false, {}};
+   const optional<VerifiedArg> match = spec.match(iterCopy, actualArgsEnd);
+   if (!match.has_value())
+      return nullopt;
 
    // Only advance the iterator over the actual arguments if we found a match.
    actualArgs = iterCopy;
-   return {haveMatch, match};
+   return match;
 }
 
 
-pair<bool, VerifiedArgs> parsePositionalCmdArgs(CmdSpec::ArgSpecIter_t posSpec,
-                                                CmdSpec::ArgSpecIter_t posSpecEnd,
-                                                CmdArgs::const_iterator& actualArgs,
-                                                CmdArgs::const_iterator actualArgsEnd)
+optional<VerifiedArgs> parsePositionalCmdArgs(CmdSpec::ArgSpecIter_t posSpec,
+                                              CmdSpec::ArgSpecIter_t posSpecEnd,
+                                              CmdArgs::const_iterator& actualArgs,
+                                              CmdArgs::const_iterator actualArgsEnd)
 {
    VerifiedArgs verifiedArgs;
 
    for (; posSpec != posSpecEnd; ++posSpec)
    {
-      bool haveMatch = false;
-      VerifiedArg matchedArg;
-      tie(haveMatch, matchedArg) = matchArgSpec(*posSpec, actualArgs, actualArgsEnd);
+      const optional<VerifiedArg> matchedArg =
+         matchArgSpec(*posSpec, actualArgs, actualArgsEnd);
+      if (!matchedArg.has_value())
+         return nullopt;
 
-      if (haveMatch)
-         verifiedArgs.push_back(matchedArg);
-      else if (!haveMatch)
-         return {false, {}};
+      verifiedArgs.push_back(matchedArg.value());
    }
 
-   return {true, verifiedArgs};
+   return verifiedArgs;
 }
 
 
-pair<bool, VerifiedArgs> parseOptionalCmdArgs(CmdSpec::ArgSpecIter_t optSpecBegin,
-                                              CmdSpec::ArgSpecIter_t optSpecEnd,
-                                              CmdArgs::const_iterator& actualArgs,
-                                              CmdArgs::const_iterator actualArgsEnd)
+optional<VerifiedArgs> parseOptionalCmdArgs(CmdSpec::ArgSpecIter_t optSpecBegin,
+                                            CmdSpec::ArgSpecIter_t optSpecEnd,
+                                            CmdArgs::const_iterator& actualArgs,
+                                            CmdArgs::const_iterator actualArgsEnd)
 {
    VerifiedArgs verifiedArgs;
 
@@ -76,28 +72,30 @@ pair<bool, VerifiedArgs> parseOptionalCmdArgs(CmdSpec::ArgSpecIter_t optSpecBegi
       for (CmdSpec::ArgSpecIter_t optSpec = optSpecBegin; optSpec != optSpecEnd;
            ++optSpec)
       {
-         VerifiedArg matchedArg;
-         tie(haveMatch, matchedArg) = matchArgSpec(*optSpec, actualArgs, actualArgsEnd);
-
-         if (haveMatch)
+         const optional<VerifiedArg> matchedArg =
+            matchArgSpec(*optSpec, actualArgs, actualArgsEnd);
+         if (matchedArg.has_value())
          {
-            verifiedArgs.push_back(matchedArg);
+            verifiedArgs.push_back(matchedArg.value());
+            haveMatch = true;
             break;
          }
       }
 
+      // There is an actual arg that does not match any optional arg spec. Fail the
+      // parsing.
       if (!haveMatch)
-         return {false, {}};
+         return nullopt;
    }
 
-   return {true, verifiedArgs};
+   return verifiedArgs;
 }
 
 
-pair<bool, VerifiedArgs> parseCmdArgs(const CmdArgs& args, const CmdSpec& spec)
+optional<VerifiedArgs> parseCmdArgs(const CmdArgs& args, const CmdSpec& spec)
 {
    if (containsHelpParameter(args))
-      return {true, {VerifiedArg{HelpArgSpec.label()}}};
+      return vector<VerifiedArg>{VerifiedArg{HelpArgSpec.label()}};
 
    auto posSpecs = spec.firstPositionalArgument();
    auto posSpecsEnd = spec.firstOptionalArgument();
@@ -107,25 +105,25 @@ pair<bool, VerifiedArgs> parseCmdArgs(const CmdArgs& args, const CmdSpec& spec)
    auto actualArgs = begin(args);
    auto actualArgsEnd = end(args);
 
-   bool argsMatch = false;
    VerifiedArgs verifiedArgs;
-   tie(argsMatch, verifiedArgs) =
+   const optional<VerifiedArgs> parsedArgs =
       parsePositionalCmdArgs(posSpecs, posSpecsEnd, actualArgs, actualArgsEnd);
-   if (!argsMatch)
-      return {false, {}};
+   if (!parsedArgs.has_value())
+      return nullopt;
+   verifiedArgs = parsedArgs.value();
 
-   VerifiedArgs verifieOptArgs;
-   tie(argsMatch, verifieOptArgs) =
+   const optional<VerifiedArgs> parsedOptArgs =
       parseOptionalCmdArgs(optSpecs, optSpecsEnd, actualArgs, actualArgsEnd);
-   if (!argsMatch)
-      return {false, {}};
+   if (!parsedOptArgs.has_value())
+      return nullopt;
 
    const bool haveUnmacthedArgs = (actualArgs != end(args));
    if (haveUnmacthedArgs)
-      return {false, {}};
+      return nullopt;
 
-   copy(verifieOptArgs.begin(), verifieOptArgs.end(), back_inserter(verifiedArgs));
-   return {true, verifiedArgs};
+   copy(parsedOptArgs.value().begin(), parsedOptArgs.value().end(),
+        back_inserter(verifiedArgs));
+   return verifiedArgs;
 }
 
 
@@ -161,18 +159,18 @@ unsigned int intFromHexDoubleDigit(const std::string& hex)
 }
 
 
-pair<bool, Rgb> colorFromString(const std::string& colorAsStr)
+optional<Rgb> colorFromString(const std::string& colorAsStr)
 {
    if (colorAsStr.size() != 6)
-      return {false, {}};
+      return nullopt;
 
    const uint8_t r = static_cast<uint8_t>(intFromHexDoubleDigit(colorAsStr.substr(0, 2)));
    const uint8_t g = static_cast<uint8_t>(intFromHexDoubleDigit(colorAsStr.substr(2, 2)));
    const uint8_t b = static_cast<uint8_t>(intFromHexDoubleDigit(colorAsStr.substr(4, 2)));
    if (r == -1 || g == -1 || b == -1)
-      return {false, {}};
+      return nullopt;
 
-   return {true, Rgb{r, g, b}};
+   return Rgb{r, g, b};
 }
 
 } // namespace
@@ -196,10 +194,10 @@ CmdParsingResult parseCmd(const std::string& cmd, const CmdSpec& spec)
 
    cmdPieces.erase(cmdPieces.begin());
 
-   bool argsValid = false;
-   tie(argsValid, verifiedCmd.args) = parseCmdArgs(cmdPieces, spec);
-   if (!argsValid)
+   const optional<VerifiedArgs> args = parseCmdArgs(cmdPieces, spec);
+   if (!args.has_value())
       return {true, false, {}};
+   verifiedCmd.args = args.value();
 
    return {true, true, verifiedCmd};
 }
@@ -258,11 +256,8 @@ Rgb parseColorArg(VerifiedArgs::const_iterator beginOptions,
       return defaultColor;
 
    assert(colorIter->values.size() == 1);
-   bool haveColor = false;
-   Rgb color;
-   tie(haveColor, color) = colorFromString(colorIter->values[0]);
-
-   return haveColor ? color : defaultColor;
+   const optional<Rgb> color = colorFromString(colorIter->values[0]);
+   return color.has_value() ? color.value() : defaultColor;
 }
 
 } // namespace ccon

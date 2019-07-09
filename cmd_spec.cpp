@@ -90,8 +90,7 @@ std::string LabelWithAbbrev::abbreviation() const
 
 ///////////////////
 
-ArgSpec ArgSpec::makePositionalArg(std::size_t numValues,
-                                    const std::string& description)
+ArgSpec ArgSpec::makePositionalArg(std::size_t numValues, const std::string& description)
 {
    return ArgSpec("", "", numValues, description);
 }
@@ -106,7 +105,7 @@ ArgSpec ArgSpec::makeOptionalArg(const std::string& label, std::size_t numValues
 
 
 ArgSpec ArgSpec::makeFlagArg(const std::string& label, const std::string& abbrev,
-                              const std::string& description)
+                             const std::string& description)
 {
    return ArgSpec(label, abbrev, 0, description);
 }
@@ -196,17 +195,17 @@ bool ArgSpec::matchLabel(const std::string& match) const
 }
 
 
-std::pair<bool, VerifiedArg> ArgSpec::match(CmdArgs::const_iterator& actualArgs,
-                                            CmdArgs::const_iterator actualArgsEnd) const
+std::optional<VerifiedArg> ArgSpec::match(CmdArgs::const_iterator& actualArgs,
+                                          CmdArgs::const_iterator actualArgsEnd) const
 {
    if (actualArgs == actualArgsEnd)
-      return {false, {}};
+      return nullopt;
 
    string currArg = *actualArgs;
    string currArgWithoutSep = stripArgSeparators(currArg);
 
    if (hasLabel() && (!isArgLabel(currArg) || !matchLabel(currArgWithoutSep)))
-      return {false, {}};
+      return nullopt;
 
    VerifiedArg matchedArg;
    if (hasLabel())
@@ -215,16 +214,16 @@ std::pair<bool, VerifiedArg> ArgSpec::match(CmdArgs::const_iterator& actualArgs,
       ++actualArgs;
    }
 
-   bool haveValidValues = false;
-   tie(haveValidValues, matchedArg.values) = matchValues(actualArgs, actualArgsEnd);
-   if (!haveValidValues)
-      return {false, {}};
+   const auto matchedValues = matchValues(actualArgs, actualArgsEnd);
+   if (!matchedValues.has_value())
+      return nullopt;
+   matchedArg.values = matchedValues.value();
 
-   return {true, matchedArg};
+   return matchedArg;
 }
 
 
-std::pair<bool, std::vector<std::string>>
+std::optional<std::vector<std::string>>
 ArgSpec::matchValues(CmdArgs::const_iterator& actualArgs,
                      CmdArgs::const_iterator actualArgsEnd) const
 {
@@ -243,8 +242,8 @@ ArgSpec::matchValues(CmdArgs::const_iterator& actualArgs,
    }
 
    if (!haveEnoughValues(matchedValues.size()))
-      return {false, {}};
-   return {true, matchedValues};
+      return nullopt;
+   return matchedValues;
 }
 
 

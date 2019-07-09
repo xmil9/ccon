@@ -8,6 +8,7 @@
 #include "cmd.h"
 #include <cstddef>
 #include <limits>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -75,14 +76,14 @@ class ArgSpec
    std::string help(const std::string& indent = {}) const;
 
    bool matchLabel(const std::string& argName) const;
-   std::pair<bool, VerifiedArg> match(CmdArgs::const_iterator& actualArgs,
-                                      CmdArgs::const_iterator actualArgsEnd) const;
+   std::optional<VerifiedArg> match(CmdArgs::const_iterator& actualArgs,
+                                    CmdArgs::const_iterator actualArgsEnd) const;
 
  private:
    ArgSpec(const std::string& label, const std::string& abbrev, std::size_t numValues,
            const std::string& description);
 
-   std::pair<bool, std::vector<std::string>>
+   std::optional<std::vector<std::string>>
    matchValues(CmdArgs::const_iterator& actualArgs,
                CmdArgs::const_iterator actualArgsEnd) const;
    bool canMatchMoreValues(std::size_t matchedValues) const;
