@@ -199,8 +199,13 @@ std::optional<VerifiedArg> ArgSpec::match(CmdArgs::const_iterator& actualArgs,
                                           CmdArgs::const_iterator actualArgsEnd) const
 {
    if (actualArgs == actualArgsEnd)
-      return nullopt;
+   {
+      // Zero matching positional values might be valid for 'zero or more' specs.
+      return (!hasLabel() && haveEnoughValues(0)) ? optional<VerifiedArg>{VerifiedArg{}}
+                                                  : nullopt;
+   }
 
+   CmdArgs::const_iterator actualArgsBegin = actualArgs;
    string currArg = *actualArgs;
    string currArgWithoutSep = stripArgSeparators(currArg);
 
@@ -216,7 +221,11 @@ std::optional<VerifiedArg> ArgSpec::match(CmdArgs::const_iterator& actualArgs,
 
    const auto matchedValues = matchValues(actualArgs, actualArgsEnd);
    if (!matchedValues.has_value())
+   {
+      // Restore original position of actual arg iterator.
+      actualArgs = actualArgsBegin;
       return nullopt;
+   }
    matchedArg.values = matchedValues.value();
 
    return matchedArg;
@@ -276,6 +285,12 @@ CmdSpec::CmdSpec(const std::string& name, const std::string& shortName,
 }
 
 
+CmdSpec::operator bool() const
+{
+   return !!m_name;
+}
+
+
 bool CmdSpec::matchesName(const std::string& name) const
 {
    return m_name.matches(name);
@@ -296,6 +311,10 @@ std::string CmdSpec::description() const
 
 std::string CmdSpec::help() const
 {
+   // Ignore empty spec.
+   if (!*this)
+      return "";
+
    const string Indent{"  "};
    const string Newline{"\n"};
    const string NotAvailable = Indent + string{"<none>"} + Newline;
@@ -354,7 +373,8 @@ bool CmdSpec::hasArgSpec(const std::string& argLabel) const
 
 CmdSpec::ArgSpecIter_t CmdSpec::firstPositionalArgument() const
 {
-   return begin();
+   return find_if(begin(), end(),
+                  [](const ArgSpec& argSpec) { return argSpec.isRequired(); });
 }
 
 

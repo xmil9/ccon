@@ -131,6 +131,7 @@ class CmdSpec
    CmdSpec& operator=(const CmdSpec&) = default;
    CmdSpec& operator=(CmdSpec&&) = default;
 
+   explicit operator bool() const;
    bool matchesName(const std::string& cmdName) const;
    std::string name() const;
    std::string description() const;
