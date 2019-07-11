@@ -93,8 +93,7 @@ bool containsHelpParameter(const VerifiedArgs& args)
 bool haveArgWithLabel(VerifiedArgs::const_iterator beginOptions,
                       VerifiedArgs::const_iterator endOptions, const std::string& label)
 {
-   return find_if(beginOptions, endOptions,
-                  [&label](const auto& arg) { return arg.label == label; }) != endOptions;
+   return findArgWithLabel(beginOptions, endOptions, label) != endOptions;
 }
 
 
@@ -102,8 +101,9 @@ VerifiedArgs::const_iterator findArgWithLabel(VerifiedArgs::const_iterator begin
                                               VerifiedArgs::const_iterator endOptions,
                                               const std::string& label)
 {
-   return find_if(beginOptions, endOptions,
-                  [&label](const auto& arg) { return arg.label == label; });
+   return find_if(beginOptions, endOptions, [&label](const auto& arg) {
+      return stripArgSeparators(arg.label) == stripArgSeparators(label);
+   });
 }
 
 
