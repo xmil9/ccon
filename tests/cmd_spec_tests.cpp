@@ -1200,6 +1200,401 @@ void testCmdSpecEnd()
 void testCmdSpecMatch()
 {
    {
+      const string caseLabel = "CmdSpec::match - no match for empty spec";
+      CmdSpec spec;
+      VERIFY(!spec.match("help").isMatching, caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match - no match for empty command";
+      CmdSpec spec{"test", "t", "run a test", {}, ""};
+      VERIFY(!spec.match("").isMatching, caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match command name";
+      CmdSpec spec{"test", "t", "run a test", {}, ""};
+
+      CmdSpec::Match res = spec.match("test");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match - fail for incorrect command name";
+      CmdSpec spec{"test", "t", "run a test", {}, ""};
+
+      CmdSpec::Match res = spec.match("toast");
+
+      VERIFY(!res.isMatching, caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match command abbreviation";
+      CmdSpec spec{"test", "t", "run a test", {}, ""};
+
+      CmdSpec::Match res = spec.match("t");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match command name with different case";
+      CmdSpec spec{"test", "t", "run a test", {}, ""};
+
+      CmdSpec::Match res = spec.match("TEST");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match help argument";
+      CmdSpec spec{"test", "t", "run a test", {}, ""};
+
+      CmdSpec::Match res = spec.match("test -help");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[0].label == "help", caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match help argument abbreviation";
+      CmdSpec spec{"test", "t", "run a test", {}, ""};
+
+      CmdSpec::Match res = spec.match("test -?");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[0].label == "help", caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match positional args";
+      CmdSpec spec{"test", "t", "run a test", {ArgSpec::makePositionalArg(2)}, ""};
+
+      CmdSpec::Match res = spec.match("test abc 2");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values.size() == 2, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values[0] == "abc", caseLabel);
+      VERIFY(res.matchedCmd.args[0].values[1] == "2", caseLabel);
+   }
+   {
+      const string caseLabel =
+         "CmdSpec::match positional args specified in two arg specs";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(1), ArgSpec::makePositionalArg(1)},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test abc 2");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 2, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values[0] == "abc", caseLabel);
+      VERIFY(res.matchedCmd.args[1].values[0] == "2", caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match - fail for too few positional args";
+      CmdSpec spec{"test", "t", "run a test", {ArgSpec::makePositionalArg(2)}, ""};
+
+      CmdSpec::Match res = spec.match("test abc");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(!res.areArgsValid, caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match - fail for too many positional args";
+      CmdSpec spec{"test", "t", "run a test", {ArgSpec::makePositionalArg(2)}, ""};
+
+      CmdSpec::Match res = spec.match("test abc 2 3");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(!res.areArgsValid, caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match optional args";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test -size 10 -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 2, caseLabel);
+      VERIFY(res.matchedCmd.args[0].label == "size", caseLabel);
+      VERIFY(res.matchedCmd.args[0].values.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values[0] == "10", caseLabel);
+      VERIFY(res.matchedCmd.args[1].label == "scan", caseLabel);
+      VERIFY(res.matchedCmd.args[1].values.empty(), caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match missing optional arg";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[0].label == "scan", caseLabel);
+      VERIFY(res.matchedCmd.args[0].values.empty(), caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match all optional args missing";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+      VERIFY(res.matchedCmd.args.empty(), caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match - fail for too many optional args";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test -size 10 -scan -other");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(!res.areArgsValid, caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match positional and optional args";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(2), ArgSpec::makePositionalArg(1),
+                    ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test abc 2 4.5 -size 10 -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.name == "test", caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 4, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values.size() == 2, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values[0] == "abc", caseLabel);
+      VERIFY(res.matchedCmd.args[0].values[1] == "2", caseLabel);
+      VERIFY(res.matchedCmd.args[1].values.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[1].values[0] == "4.5", caseLabel);
+      VERIFY(res.matchedCmd.args[2].label == "size", caseLabel);
+      VERIFY(res.matchedCmd.args[2].values.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[2].values[0] == "10", caseLabel);
+      VERIFY(res.matchedCmd.args[3].label == "scan", caseLabel);
+      VERIFY(res.matchedCmd.args[3].values.empty(), caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match - fail missing positional arg for mix of "
+                               "positional and optional args";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(2), ArgSpec::makePositionalArg(1),
+                    ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test abc 2 -size 10 -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(!res.areArgsValid, caseLabel);
+   }
+   {
+      const string caseLabel =
+         "CmdSpec::match - fail for too many positional args for mix of "
+         "positional and optional args";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(2), ArgSpec::makePositionalArg(1),
+                    ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test abc 2 3 4 -size 10 -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(!res.areArgsValid, caseLabel);
+   }
+   {
+      const string caseLabel =
+         "CmdSpec::match missing optional arg for mix of positional and optional args";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(2), ArgSpec::makePositionalArg(1),
+                    ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test abc 2 3 -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 3, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values.size() == 2, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values[0] == "abc", caseLabel);
+      VERIFY(res.matchedCmd.args[0].values[1] == "2", caseLabel);
+      VERIFY(res.matchedCmd.args[1].values.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[1].values[0] == "3", caseLabel);
+      VERIFY(res.matchedCmd.args[2].label == "scan", caseLabel);
+      VERIFY(res.matchedCmd.args[2].values.empty(), caseLabel);
+   }
+   {
+      const string caseLabel =
+         "CmdSpec::match - fail for too many optional args for mix of "
+         "positional and optional args";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(2), ArgSpec::makePositionalArg(1),
+                    ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test abc 2 3 -size 10 -scan -other");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(!res.areArgsValid, caseLabel);
+   }
+   {
+      const string caseLabel =
+         "CmdSpec::match zero or more positional arg values for mix of "
+         "positional and optional args";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(ArgSpec::ZeroOrMore),
+                    ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test 1 2 3 4 -size 10 -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 3, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values.size() == 4, caseLabel);
+      VERIFY(res.matchedCmd.args[1].label == "size", caseLabel);
+      VERIFY(res.matchedCmd.args[1].values.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[1].values[0] == "10", caseLabel);
+      VERIFY(res.matchedCmd.args[2].label == "scan", caseLabel);
+      VERIFY(res.matchedCmd.args[2].values.empty(), caseLabel);
+   }
+   {
+      const string caseLabel =
+         "CmdSpec::match zero positional arg values when zero or more are specified";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(ArgSpec::ZeroOrMore),
+                    ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test -size 10 -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 3, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values.empty(), caseLabel);
+      VERIFY(res.matchedCmd.args[1].label == "size", caseLabel);
+      VERIFY(res.matchedCmd.args[1].values.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[1].values[0] == "10", caseLabel);
+      VERIFY(res.matchedCmd.args[2].label == "scan", caseLabel);
+      VERIFY(res.matchedCmd.args[2].values.empty(), caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match - fail for zero or more positional arg "
+                               "followed by another positional arg";
+      CmdSpec spec{
+         "test",
+         "t",
+         "run a test",
+         {ArgSpec::makePositionalArg(ArgSpec::ZeroOrMore), ArgSpec::makePositionalArg(2)},
+         ""};
+
+      CmdSpec::Match res = spec.match("test 1 2 3 4");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(!res.areArgsValid, caseLabel);
+   }
+   {
+      const string caseLabel =
+         "CmdSpec::match one or more positional arg values for mix of "
+         "positional and optional args";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(ArgSpec::OneOrMore),
+                    ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test 1 2 3 4 -size 10 -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(res.areArgsValid, caseLabel);
+      VERIFY(res.matchedCmd.args.size() == 3, caseLabel);
+      VERIFY(res.matchedCmd.args[0].values.size() == 4, caseLabel);
+      VERIFY(res.matchedCmd.args[1].label == "size", caseLabel);
+      VERIFY(res.matchedCmd.args[1].values.size() == 1, caseLabel);
+      VERIFY(res.matchedCmd.args[1].values[0] == "10", caseLabel);
+      VERIFY(res.matchedCmd.args[2].label == "scan", caseLabel);
+      VERIFY(res.matchedCmd.args[2].values.empty(), caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match - fail for zero positional arg values "
+                               "when one or more are specified";
+      CmdSpec spec{"test",
+                   "t",
+                   "run a test",
+                   {ArgSpec::makePositionalArg(ArgSpec::OneOrMore),
+                    ArgSpec::makeOptionalArg("size", 1), ArgSpec::makeFlagArg("scan")},
+                   ""};
+
+      CmdSpec::Match res = spec.match("test -size 10 -scan");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(!res.areArgsValid, caseLabel);
+   }
+   {
+      const string caseLabel = "CmdSpec::match - fail for one or more positional arg "
+                               "followed by another positional arg";
+      CmdSpec spec{
+         "test",
+         "t",
+         "run a test",
+         {ArgSpec::makePositionalArg(ArgSpec::OneOrMore), ArgSpec::makePositionalArg(2)},
+         ""};
+
+      CmdSpec::Match res = spec.match("test 1 2 3 4");
+
+      VERIFY(res.isMatching, caseLabel);
+      VERIFY(!res.areArgsValid, caseLabel);
    }
 }
 
