@@ -141,17 +141,17 @@ CmdOutput Console::processRawInput(const std::string& rawInput) const
    if (rawInput.empty())
       return {};
 
-   CmdParsingResult res;
+   CmdSpec::Match cmdMatch;
    for (const CmdSpec& spec : m_cmds.availableCommands())
    {
-      res = parseCmd(rawInput, spec);
-      if (res.foundCommand)
+      cmdMatch = spec.match(rawInput);
+      if (cmdMatch.isMatching)
          break;
    }
 
-   if (res.foundCommand && res.areArgsValid)
-      return executeCommand(res.cmdInput);
-   else if (res.foundCommand && !res.areArgsValid)
+   if (cmdMatch.isMatching && cmdMatch.areArgsValid)
+      return executeCommand(cmdMatch.matchedCmd);
+   else if (cmdMatch.isMatching && !cmdMatch.areArgsValid)
       return {"Command syntax error."};
    return {"Command not found."};
 }

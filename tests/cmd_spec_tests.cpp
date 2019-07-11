@@ -1197,72 +1197,9 @@ void testCmdSpecEnd()
 }
 
 
-void testCmdSpecFirstPositionalArgument()
+void testCmdSpecMatch()
 {
    {
-      const string caseLabel =
-         "CmdSpec::firstPositionalArgument for existing positional arg specs";
-      CmdSpec spec{"name",
-                   "n",
-                   "descr",
-                   {ArgSpec::makePositionalArg(2), ArgSpec::makePositionalArg(1),
-                    ArgSpec::makeFlagArg("flag")},
-                   "notes"};
-      VERIFY(spec.firstPositionalArgument() == spec.begin(), caseLabel);
-   }
-   {
-      const string caseLabel =
-         "CmdSpec::firstPositionalArgument for only optional arg specs";
-      CmdSpec spec{"name", "n", "descr", {ArgSpec::makeFlagArg("flag")}, "notes"};
-      VERIFY(spec.firstPositionalArgument() == spec.end(), caseLabel);
-   }
-   {
-      const string caseLabel = "CmdSpec::firstPositionalArgument for no arg specs";
-      CmdSpec spec{"name", "n", "descr", {}, "notes"};
-      VERIFY(spec.firstPositionalArgument() == spec.end(), caseLabel);
-   }
-}
-
-
-void testCmdSpecFirstOptionalArgument()
-{
-   {
-      const string caseLabel =
-         "CmdSpec::firstOptionalArgument for existing optional arg specs";
-      CmdSpec spec{"name",
-                   "n",
-                   "descr",
-                   {ArgSpec::makePositionalArg(2), ArgSpec::makePositionalArg(1),
-                    ArgSpec::makeFlagArg("flag")},
-                   "notes"};
-      VERIFY(spec.firstOptionalArgument() != spec.end(), caseLabel);
-      VERIFY(spec.firstOptionalArgument()->label() == "flag", caseLabel);
-   }
-   {
-      const string caseLabel =
-         "CmdSpec::firstOptionalArgument for multiple optional arg specs";
-      CmdSpec spec{"name",
-                   "n",
-                   "descr",
-                   {ArgSpec::makePositionalArg(2), ArgSpec::makeOptionalArg("second", 1),
-                    ArgSpec::makeFlagArg("flag")},
-                   "notes"};
-      VERIFY(spec.firstOptionalArgument() != spec.end(), caseLabel);
-      VERIFY(spec.firstOptionalArgument()->label() == "second", caseLabel);
-   }
-   {
-      const string caseLabel = "CmdSpec::firstOptionalArgument for no optional arg specs";
-      CmdSpec spec{"name",
-                   "n",
-                   "descr",
-                   {ArgSpec::makePositionalArg(2), ArgSpec::makePositionalArg(1)},
-                   "notes"};
-      VERIFY(spec.firstOptionalArgument() == spec.end(), caseLabel);
-   }
-   {
-      const string caseLabel = "CmdSpec::firstOptionalArgument for no arg specs";
-      CmdSpec spec{"name", "n", "descr", {}, "notes"};
-      VERIFY(spec.firstOptionalArgument() == spec.end(), caseLabel);
    }
 }
 
@@ -1299,6 +1236,5 @@ void testCmdSpec()
    testCmdSpecHasArgSpec();
    testCmdSpecBegin();
    testCmdSpecEnd();
-   testCmdSpecFirstPositionalArgument();
-   testCmdSpecFirstOptionalArgument();
+   testCmdSpecMatch();
 }

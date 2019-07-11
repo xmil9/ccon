@@ -140,6 +140,17 @@ class CmdSpec
 
    ArgSpecIter_t begin() const { return m_argSpecs.begin(); }
    ArgSpecIter_t end() const { return m_argSpecs.end(); }
+
+   struct Match
+   {
+      bool isMatching = false;
+      bool areArgsValid = false;
+      VerifiedCmd matchedCmd;
+   };
+   Match match(const std::string& cmd) const;
+
+ private:
+   std::optional<VerifiedArgs> matchCmdArgs(const CmdArgs& args) const;
    ArgSpecIter_t firstPositionalArgument() const;
    ArgSpecIter_t firstOptionalArgument() const;
 

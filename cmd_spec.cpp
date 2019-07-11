@@ -6,11 +6,13 @@
 //
 #include "cmd.h"
 #include "cmd_spec.h"
+#include "cmd_parser.h"
 #include "console_util.h"
 #include "essentutils/string_util.h"
 #include <algorithm>
 #include <cassert>
 
+using namespace ccon;
 using namespace std;
 using namespace sutil;
 
@@ -38,6 +40,76 @@ bool isArgLabel(const std::string& val)
    }
 
    return numDashes == 1 || numDashes == 2;
+}
+
+
+optional<VerifiedArg> matchArgSpec(const ArgSpec& spec,
+                                   CmdArgs::const_iterator& actualArgs,
+                                   CmdArgs::const_iterator actualArgsEnd)
+{
+   CmdArgs::const_iterator iterCopy = actualArgs;
+   const optional<VerifiedArg> match = spec.match(iterCopy, actualArgsEnd);
+   if (!match.has_value())
+      return nullopt;
+
+   // Only advance the iterator over the actual arguments if we found a match.
+   actualArgs = iterCopy;
+   return match;
+}
+
+
+optional<VerifiedArgs> matchPositionalCmdArgs(CmdSpec::ArgSpecIter_t posSpec,
+                                              CmdSpec::ArgSpecIter_t posSpecEnd,
+                                              CmdArgs::const_iterator& actualArgs,
+                                              CmdArgs::const_iterator actualArgsEnd)
+{
+   VerifiedArgs verifiedArgs;
+
+   for (; posSpec != posSpecEnd; ++posSpec)
+   {
+      const optional<VerifiedArg> matchedArg =
+         matchArgSpec(*posSpec, actualArgs, actualArgsEnd);
+      if (!matchedArg.has_value())
+         return nullopt;
+
+      verifiedArgs.push_back(matchedArg.value());
+   }
+
+   return verifiedArgs;
+}
+
+
+optional<VerifiedArgs> matchOptionalCmdArgs(CmdSpec::ArgSpecIter_t optSpecBegin,
+                                            CmdSpec::ArgSpecIter_t optSpecEnd,
+                                            CmdArgs::const_iterator& actualArgs,
+                                            CmdArgs::const_iterator actualArgsEnd)
+{
+   VerifiedArgs verifiedArgs;
+
+   while (actualArgs != actualArgsEnd)
+   {
+      bool haveMatch = false;
+
+      for (CmdSpec::ArgSpecIter_t optSpec = optSpecBegin; optSpec != optSpecEnd;
+           ++optSpec)
+      {
+         const optional<VerifiedArg> matchedArg =
+            matchArgSpec(*optSpec, actualArgs, actualArgsEnd);
+         if (matchedArg.has_value())
+         {
+            verifiedArgs.push_back(matchedArg.value());
+            haveMatch = true;
+            break;
+         }
+      }
+
+      // There is an actual arg that does not match any optional arg spec. Fail the
+      // parsing.
+      if (!haveMatch)
+         return nullopt;
+   }
+
+   return verifiedArgs;
 }
 
 } // namespace
@@ -368,6 +440,64 @@ bool CmdSpec::hasArgSpec(const std::string& argLabel) const
    return (endPos !=
            find_if(std::begin(m_argSpecs), endPos,
                    [&argLabel](const auto& spec) { return spec.matchLabel(argLabel); }));
+}
+
+
+CmdSpec::Match CmdSpec::match(const std::string& cmd) const
+{
+   vector<string> cmdPieces = split(cmd, " ");
+   if (cmdPieces.empty())
+      return {};
+
+   if (!matchesName(lowercase(cmdPieces[0])))
+      return {};
+
+   VerifiedCmd verifiedCmd;
+   verifiedCmd.name = name();
+
+   cmdPieces.erase(cmdPieces.begin());
+
+   const optional<VerifiedArgs> args = matchCmdArgs(cmdPieces);
+   if (!args.has_value())
+      return {true, false, {}};
+   verifiedCmd.args = args.value();
+
+   return {true, true, verifiedCmd};
+}
+
+
+std::optional<VerifiedArgs> CmdSpec::matchCmdArgs(const CmdArgs& args) const
+{
+   if (containsHelpParameter(args))
+      return vector<VerifiedArg>{VerifiedArg{HelpArgSpec.label()}};
+
+   auto posSpecs = firstPositionalArgument();
+   auto posSpecsEnd = firstOptionalArgument();
+   auto optSpecs = posSpecsEnd;
+   auto optSpecsEnd = end();
+
+   auto actualArgs = std::begin(args);
+   auto actualArgsEnd = std::end(args);
+
+   VerifiedArgs verifiedArgs;
+   const optional<VerifiedArgs> parsedArgs =
+      matchPositionalCmdArgs(posSpecs, posSpecsEnd, actualArgs, actualArgsEnd);
+   if (!parsedArgs.has_value())
+      return nullopt;
+   verifiedArgs = parsedArgs.value();
+
+   const optional<VerifiedArgs> parsedOptArgs =
+      matchOptionalCmdArgs(optSpecs, optSpecsEnd, actualArgs, actualArgsEnd);
+   if (!parsedOptArgs.has_value())
+      return nullopt;
+
+   const bool haveUnmacthedArgs = (actualArgs != std::end(args));
+   if (haveUnmacthedArgs)
+      return nullopt;
+
+   copy(parsedOptArgs.value().begin(), parsedOptArgs.value().end(),
+        back_inserter(verifiedArgs));
+   return verifiedArgs;
 }
 
 

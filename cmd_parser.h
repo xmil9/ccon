@@ -6,7 +6,6 @@
 //
 #pragma once
 #include "cmd.h"
-#include "cmd_spec.h"
 
 namespace sutil
 {
@@ -17,15 +16,6 @@ struct Rgb;
 namespace ccon
 {
 ///////////////////
-
-// Parses a given string against a given command spec.
-struct CmdParsingResult
-{
-   bool foundCommand = false;
-   bool areArgsValid = false;
-   VerifiedCmd cmdInput;
-};
-CmdParsingResult parseCmd(const std::string& cmd, const CmdSpec& spec);
 
 // Check, if given arguments contain the 'help' parameter.
 bool containsHelpParameter(const CmdArgs& args);
