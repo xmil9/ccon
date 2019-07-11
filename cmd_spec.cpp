@@ -445,6 +445,9 @@ bool CmdSpec::hasArgSpec(const std::string& argLabel) const
 
 CmdSpec::Match CmdSpec::match(const std::string& cmd) const
 {
+   if (!*this)
+      return {};
+
    vector<string> cmdPieces = split(cmd, " ");
    if (cmdPieces.empty())
       return {};
