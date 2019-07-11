@@ -472,7 +472,7 @@ CmdSpec::Match CmdSpec::match(const std::string& cmd) const
 std::optional<VerifiedArgs> CmdSpec::matchCmdArgs(const CmdArgs& args) const
 {
    if (containsHelpParameter(args))
-      return vector<VerifiedArg>{VerifiedArg{HelpArgSpec.label()}};
+      return VerifiedArgs{VerifiedArg{HelpArgSpec.label()}};
 
    auto posSpecs = firstPositionalArgument();
    auto posSpecsEnd = firstOptionalArgument();
@@ -506,8 +506,13 @@ std::optional<VerifiedArgs> CmdSpec::matchCmdArgs(const CmdArgs& args) const
 
 CmdSpec::ArgSpecIter_t CmdSpec::firstPositionalArgument() const
 {
-   return find_if(begin(), end(),
-                  [](const ArgSpec& argSpec) { return argSpec.isRequired(); });
+   auto pos = find_if(begin(), end(),
+                      [](const ArgSpec& argSpec) { return argSpec.isRequired(); });
+   if (pos != end())
+      return pos;
+   // The end iterator for the positional arguments is the iterator of the first optional
+   // argument.
+   return firstOptionalArgument();
 }
 
 
