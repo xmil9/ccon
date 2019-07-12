@@ -57,14 +57,14 @@ optional<Rgb> colorFromString(const std::string& colorAsStr)
 {
    if (colorAsStr.size() != 6)
       return nullopt;
-
-   const uint8_t r = static_cast<uint8_t>(intFromHexDoubleDigit(colorAsStr.substr(0, 2)));
-   const uint8_t g = static_cast<uint8_t>(intFromHexDoubleDigit(colorAsStr.substr(2, 2)));
-   const uint8_t b = static_cast<uint8_t>(intFromHexDoubleDigit(colorAsStr.substr(4, 2)));
+   
+   const unsigned int r = intFromHexDoubleDigit(colorAsStr.substr(0, 2));
+   const unsigned int g = intFromHexDoubleDigit(colorAsStr.substr(2, 2));
+   const unsigned int b = intFromHexDoubleDigit(colorAsStr.substr(4, 2));
    if (r == -1 || g == -1 || b == -1)
       return nullopt;
 
-   return Rgb{r, g, b};
+   return Rgb{static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(b)};
 }
 
 } // namespace
