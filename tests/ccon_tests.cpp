@@ -4,6 +4,7 @@
 // Jul-2019, Michael Lindner
 // MIT license
 //
+#include "cmd_parser_tests.h"
 #include "cmd_spec_tests.h"
 #include "console_util_tests.h"
 #include "formatting_tests.h"
@@ -14,6 +15,7 @@
 
 int main()
 {
+   testCmdParser();
    testCmdSpec();
    testConsoleUtil();
    testFormatting();

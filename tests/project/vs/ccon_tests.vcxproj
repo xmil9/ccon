@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ccon_tests.cpp" />
+    <ClCompile Include="..\..\cmd_parser_tests.cpp" />
     <ClCompile Include="..\..\cmd_spec_tests.cpp" />
     <ClCompile Include="..\..\console_util_tests.cpp" />
     <ClCompile Include="..\..\formatting_tests.cpp" />
@@ -27,6 +28,7 @@
     <ClCompile Include="..\..\test_util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\cmd_parser_tests.h" />
     <ClInclude Include="..\..\cmd_spec_tests.h" />
     <ClInclude Include="..\..\console_util_tests.h" />
     <ClInclude Include="..\..\formatting_tests.h" />
