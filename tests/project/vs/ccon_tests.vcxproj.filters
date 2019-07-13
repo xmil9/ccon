@@ -8,6 +8,7 @@
     <ClCompile Include="..\..\console_util_tests.cpp" />
     <ClCompile Include="..\..\cmd_spec_tests.cpp" />
     <ClCompile Include="..\..\cmd_parser_tests.cpp" />
+    <ClCompile Include="..\..\cmd_depot_tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\test_util.h" />
@@ -16,5 +17,6 @@
     <ClInclude Include="..\..\console_util_tests.h" />
     <ClInclude Include="..\..\cmd_spec_tests.h" />
     <ClInclude Include="..\..\cmd_parser_tests.h" />
+    <ClInclude Include="..\..\cmd_depot_tests.h" />
   </ItemGroup>
 </Project>

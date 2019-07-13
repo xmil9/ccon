@@ -4,6 +4,7 @@
 // Jul-2019, Michael Lindner
 // MIT license
 //
+#include "cmd_depot_tests.h"
 #include "cmd_parser_tests.h"
 #include "cmd_spec_tests.h"
 #include "console_util_tests.h"
@@ -15,6 +16,7 @@
 
 int main()
 {
+   testCmdDepot();
    testCmdParser();
    testCmdSpec();
    testConsoleUtil();
