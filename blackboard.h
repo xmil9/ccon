@@ -14,7 +14,9 @@ namespace ccon
 {
 ///////////////////
 
-// Keeps track of the content that is displayed on the console.
+// Keeps track of the content that is displayed in the console.
+// The content lines are logical lines, i.e. lines wrapping caused by the console's
+// width is not considered.
 class Blackboard
 {
  public:
@@ -29,9 +31,9 @@ class Blackboard
    std::string lineText(std::size_t lineIdx) const;
    bool isEnteredLine(std::size_t lineIdx) const;
    void appendLine(const std::string& text);
-   // Returns the entire text on the input line.
+   // Returns the entire text of the input line.
    std::string inputLineText() const;
-   // Returns only the entered text on the input line.
+   // Returns only the entered text of the input line.
    std::string enteredInputText() const;
    void setInputLine(const std::string& text);
    void setEnteredInputText(const std::string& text);
