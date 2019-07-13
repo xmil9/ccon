@@ -4,6 +4,7 @@
 // Jul-2019, Michael Lindner
 // MIT license
 //
+#include "blackboard_tests.h"
 #include "cmd_depot_tests.h"
 #include "cmd_parser_tests.h"
 #include "cmd_spec_tests.h"
@@ -16,6 +17,7 @@
 
 int main()
 {
+   testBlackboard();
    testCmdDepot();
    testCmdParser();
    testCmdSpec();
