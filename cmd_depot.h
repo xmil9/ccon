@@ -22,7 +22,7 @@ namespace ccon
 {
 ///////////////////
 
-// Respository of commands and durable data that they require.
+// Respository of console commands.
 class CmdDepot
 {
 public:
