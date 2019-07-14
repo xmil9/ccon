@@ -130,7 +130,7 @@ void AutoCompletion::complete(const std::string& pattern)
 void AutoCompletion::completeIfNecessary(const std::string& pattern)
 {
    // Check if the completions got reset and we need to calculate new
-   // ones. Note that the passed pattern might be different froms
+   // ones. Note that the passed pattern might be different from
    // the completed pattern but we still don't want to re-calculate
    // the completions because the pattern can be a previously returned
    // completion itself that gets passed back as new pattern into this
