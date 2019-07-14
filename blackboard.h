@@ -20,13 +20,14 @@ namespace ccon
 class Blackboard
 {
  public:
-   Blackboard();
+   explicit Blackboard(const std::string& prompt);
    ~Blackboard() = default;
    Blackboard(const Blackboard&) = default;
    Blackboard(Blackboard&&) = default;
    Blackboard& operator=(const Blackboard&) = default;
    Blackboard& operator=(Blackboard&&) = default;
 
+   std::size_t promptLength() const;
    std::size_t countLines() const;
    std::string lineText(std::size_t lineIdx) const;
    bool isEnteredLine(std::size_t lineIdx) const;
@@ -39,7 +40,6 @@ class Blackboard
    void setEnteredInputText(const std::string& text);
    void startNewInputLine();
    void commitInputLine();
-   std::size_t promptLength() const;
    void goToPreviousInput();
    void goToNextInput();
 
@@ -58,6 +58,7 @@ class Blackboard
    };
 
  private:
+   std::string m_prompt;
    std::vector<Line> m_content;
    std::vector<std::string> m_history;
    // Holds the index of the history element that is previous to the currently displayed

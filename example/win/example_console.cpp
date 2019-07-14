@@ -33,7 +33,7 @@ namespace
 class AppWindow : public Window
 {
  public:
-    AppWindow();
+   AppWindow();
 
  protected:
    const TCHAR* windowClassName() const override;
@@ -57,7 +57,7 @@ class AppWindow : public Window
 
 
 AppWindow::AppWindow()
-   : m_prefs{userDirectory() / "ExampleConsole" / "prefs.txt"}
+: m_prefs{userDirectory() / "ExampleConsole" / "prefs.txt"}
 {
 }
 

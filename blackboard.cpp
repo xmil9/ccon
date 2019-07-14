@@ -8,20 +8,12 @@
 #include <cassert>
 
 
-namespace
-{
-///////////////////
-
-const std::string consolePrompt{"> "};
-
-} // namespace
-
-
 namespace ccon
 {
 ///////////////////
 
-Blackboard::Blackboard()
+Blackboard::Blackboard(const std::string& prompt)
+   : m_prompt{prompt}
 {
    startNewInputLine();
 }
@@ -65,7 +57,7 @@ std::string Blackboard::inputLineText() const
 std::string Blackboard::enteredInputText() const
 {
    // Strip off prompt text.
-   return inputLineText().substr(consolePrompt.size());
+   return inputLineText().substr(m_prompt.size());
 }
 
 
@@ -77,13 +69,13 @@ void Blackboard::setInputLine(const std::string& text)
 
 void Blackboard::setEnteredInputText(const std::string& text)
 {
-   setInputLine(consolePrompt + text);
+   setInputLine(m_prompt + text);
 }
 
 
 void Blackboard::startNewInputLine()
 {
-   m_content.push_back({consolePrompt, Line::Source::Entered});
+   m_content.push_back({m_prompt, Line::Source::Entered});
 }
 
 
@@ -96,7 +88,7 @@ void Blackboard::commitInputLine()
 
 std::size_t Blackboard::promptLength() const
 {
-   return consolePrompt.size();
+   return m_prompt.size();
 }
 
 
@@ -120,7 +112,7 @@ void Blackboard::goToNextInput()
    if (m_historyIdx < m_history.size() - 1)
       setInputLine(m_history[++m_historyIdx]);
    else
-      setInputLine(consolePrompt);
+      setInputLine(m_prompt);
 }
 
 } // namespace ccon

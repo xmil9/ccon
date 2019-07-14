@@ -24,10 +24,15 @@ namespace ccon
 {
 ///////////////////
 
+const std::string DefaultPrompt = "> ";
+
+
+///////////////////
+
 class Console : public ConsoleContent
 {
 public:
-   Console();
+   explicit Console(const std::string& prompt = DefaultPrompt);
    ~Console() = default;
    Console(const Console&) = delete;
    Console(Console&&) = default;

@@ -39,7 +39,8 @@ namespace ccon
 {
 ///////////////////
 
-Console::Console()
+Console::Console(const std::string& prompt)
+   : m_blackboard{prompt}
 {
    m_autoCompletion.setCmds(m_cmds.availableCommands());
 }

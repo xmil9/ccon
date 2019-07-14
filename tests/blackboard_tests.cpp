@@ -17,12 +17,41 @@ namespace
 {
 ///////////////////
 
-void testBlackboardDefaultCtor()
+const std::string StdPrompt = "> ";
+
+
+///////////////////
+
+void testBlackboardCtor()
 {
    {
-      const std::string caseLabel = "Blackboard default ctor";
-      Blackboard board;
+      const std::string caseLabel = "Blackboard ctor for standard prompt";
+      Blackboard board{StdPrompt};
       VERIFY(board.countLines() == 1, caseLabel);
+      VERIFY(board.promptLength() == StdPrompt.size(), caseLabel);
+   }
+   {
+      const std::string caseLabel = "Blackboard ctor for other prompt";
+      const std::string prompt = "User $ ";
+      Blackboard board{prompt};
+      VERIFY(board.countLines() == 1, caseLabel);
+      VERIFY(board.promptLength() == prompt.size(), caseLabel);
+   }
+}
+
+
+void testBlackboardPromptLength()
+{
+   {
+      const std::string caseLabel = "Blackboard::promptLength for standard prompt";
+      Blackboard board{StdPrompt};
+      VERIFY(board.promptLength() == StdPrompt.size(), caseLabel);
+   }
+   {
+      const std::string caseLabel = "Blackboard::promptLength for other prompt";
+      const std::string prompt = "User $ ";
+      Blackboard board{prompt};
+      VERIFY(board.promptLength() == prompt.size(), caseLabel);
    }
 }
 
@@ -31,12 +60,12 @@ void testBlackboardCountLines()
 {
    {
       const std::string caseLabel = "Blackboard::countLines for initial line";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       VERIFY(board.countLines() == 1, caseLabel);
    }
    {
       const std::string caseLabel = "Blackboard::countLines for multiple lines";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.appendLine("line 1");
       board.appendLine("line 2");
       VERIFY(board.countLines() == 3, caseLabel);
@@ -48,13 +77,13 @@ void testBlackboardLineText()
 {
    {
       const std::string caseLabel = "Blackboard::lineText for initial line";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("my text");
       VERIFY(board.lineText(0) == "my text", caseLabel);
    }
    {
       const std::string caseLabel = "Blackboard::lineText for multiple lines";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.appendLine("line 1");
       board.appendLine("line 2");
       VERIFY(!board.lineText(0).empty(), caseLabel);
@@ -63,7 +92,7 @@ void testBlackboardLineText()
    }
    {
       const std::string caseLabel = "Blackboard::lineText for invalid index";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.appendLine("line 1");
       VERIFY(board.lineText(10).empty(), caseLabel);
    }
@@ -74,12 +103,12 @@ void testBlackboardIsEnteredLine()
 {
    {
       const std::string caseLabel = "Blackboard::isEnteredLine for initial line";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       VERIFY(board.isEnteredLine(0), caseLabel);
    }
    {
       const std::string caseLabel = "Blackboard::isEnteredLine for multiple lines";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.appendLine("line 1");
       board.appendLine("line 2");
       VERIFY(board.isEnteredLine(0), caseLabel);
@@ -88,18 +117,18 @@ void testBlackboardIsEnteredLine()
    }
    {
       const std::string caseLabel = "Blackboard::isEnteredLine for invalid index";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.appendLine("line 1");
       VERIFY(!board.isEnteredLine(10), caseLabel);
    }
    {
       const std::string caseLabel = "Blackboard::isEnteredLine for input line";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       VERIFY(board.isEnteredLine(0), caseLabel);
    }
    {
       const std::string caseLabel = "Blackboard::isEnteredLine for appended line";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.appendLine("line 1");
       VERIFY(!board.isEnteredLine(1), caseLabel);
    }
@@ -110,7 +139,7 @@ void testBlackboardAppendLine()
 {
    {
       const std::string caseLabel = "Blackboard::appendLine";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.appendLine("line 1");
       board.appendLine("line 2");
       VERIFY(board.countLines() == 3, caseLabel);
@@ -124,13 +153,13 @@ void testBlackboardInputLineText()
 {
    {
       const std::string caseLabel = "Blackboard::inputLineText for existing input text";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("my input");
       VERIFY(board.inputLineText() == "my input", caseLabel);
    }
    {
       const std::string caseLabel = "Blackboard::inputLineText for no input text";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       VERIFY(board.inputLineText().size() == board.promptLength(), caseLabel);
    }
 }
@@ -140,14 +169,14 @@ void testBlackboardEnteredInputText()
 {
    {
       const std::string caseLabel = "Blackboard::enteredInputText for entered input text";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setEnteredInputText("my input");
       VERIFY(board.enteredInputText() == "my input", caseLabel);
    }
    {
       const std::string caseLabel =
          "Blackboard::enteredInputText for no entered input text";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       VERIFY(board.enteredInputText().empty(), caseLabel);
    }
 }
@@ -157,7 +186,7 @@ void testBlackboardSetInputLine()
 {
    {
       const std::string caseLabel = "Blackboard::setInputLine";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("my input");
       VERIFY(board.inputLineText() == "my input", caseLabel);
    }
@@ -168,14 +197,14 @@ void testBlackboardSetEnteredInputText()
 {
    {
       const std::string caseLabel = "Blackboard::setEnteredInputText";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setEnteredInputText("my input");
       VERIFY(board.enteredInputText() == "my input", caseLabel);
    }
    {
       const std::string caseLabel =
          "Blackboard::setEnteredInputText does not overwrite the prompt";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setEnteredInputText("my input");
       VERIFY(board.inputLineText() != "my input", caseLabel);
       VERIFY(sutil::endsWith(board.inputLineText(), "my input"), caseLabel);
@@ -187,7 +216,7 @@ void testBlackboardStartNewInputLine()
 {
    {
       const std::string caseLabel = "Blackboard::startNewInputLine adds a line";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.appendLine("line 1");
       const std::size_t prevNumLines = board.countLines();
 
@@ -198,7 +227,7 @@ void testBlackboardStartNewInputLine()
    {
       const std::string caseLabel =
          "Blackboard::startNewInputLine adds prompt but no other text";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.appendLine("line 1");
 
       board.startNewInputLine();
@@ -214,7 +243,7 @@ void testBlackboardCommitInputLine()
    {
       const std::string caseLabel =
          "Blackboard::commitInputLine adds input line to history";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("line 1");
       board.commitInputLine();
       board.setInputLine("line 2");
@@ -227,22 +256,12 @@ void testBlackboardCommitInputLine()
 }
 
 
-void testBlackboardPromptLength()
-{
-   {
-      const std::string caseLabel = "Blackboard::promptLength";
-      Blackboard board;
-      VERIFY(board.promptLength() > 0, caseLabel);
-   }
-}
-
-
 void testBlackboardGoToPreviousInput()
 {
    {
       const std::string caseLabel =
          "Blackboard::goToPreviousInput moves backwards in history";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("line 1");
       board.commitInputLine();
       board.setInputLine("line 2");
@@ -261,7 +280,7 @@ void testBlackboardGoToPreviousInput()
    {
       const std::string caseLabel =
          "Blackboard::goToPreviousInput does nothing for empty history";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("line 1");
       board.appendLine("line 2");
       board.appendLine("line 3");
@@ -274,7 +293,7 @@ void testBlackboardGoToPreviousInput()
    {
       const std::string caseLabel = "Blackboard::goToPreviousInput does not moves past "
                                     "the oldest line in the history";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("line 1");
       board.commitInputLine();
       board.setInputLine("line 2");
@@ -295,7 +314,7 @@ void testBlackboardGoToNextInput()
 {
    {
       const std::string caseLabel = "Blackboard::goToNextInput moves forward in history";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("line 1");
       board.commitInputLine();
       board.setInputLine("line 2");
@@ -315,7 +334,7 @@ void testBlackboardGoToNextInput()
    {
       const std::string caseLabel =
          "Blackboard::goToNextInput does nothing for empty history";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("line 1");
       board.appendLine("line 2");
       board.appendLine("line 3");
@@ -329,7 +348,7 @@ void testBlackboardGoToNextInput()
       const std::string caseLabel =
          "Blackboard::goToNextInput sets input line to prompt what moving past "
          "the newest line in the history";
-      Blackboard board;
+      Blackboard board{StdPrompt};
       board.setInputLine("line 1");
       board.commitInputLine();
       board.setInputLine("line 2");
@@ -351,7 +370,8 @@ void testBlackboardGoToNextInput()
 
 void testBlackboard()
 {
-   testBlackboardDefaultCtor();
+   testBlackboardCtor();
+   testBlackboardPromptLength();
    testBlackboardCountLines();
    testBlackboardLineText();
    testBlackboardIsEnteredLine();
@@ -362,7 +382,6 @@ void testBlackboard()
    testBlackboardSetEnteredInputText();
    testBlackboardStartNewInputLine();
    testBlackboardCommitInputLine();
-   testBlackboardPromptLength();
    testBlackboardGoToPreviousInput();
    testBlackboardGoToNextInput();
 }
