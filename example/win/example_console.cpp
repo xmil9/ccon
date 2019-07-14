@@ -51,13 +51,12 @@ class AppWindow : public Window
 
  private:
    UserPrefs m_prefs;
-   Console m_console;
    unique_ptr<ConsoleUIWin32> m_consoleUi;
+   unique_ptr<Console> m_console;
 };
 
 
-AppWindow::AppWindow()
-: m_prefs{userDirectory() / "ExampleConsole" / "prefs.txt"}
+AppWindow::AppWindow() : m_prefs{userDirectory() / "ExampleConsole" / "prefs.txt"}
 {
 }
 
@@ -151,10 +150,9 @@ bool AppWindow::loadPreferences()
 
 void AppWindow::setupConsole()
 {
-   m_consoleUi =
-      make_unique<ConsoleUIWin32>(hwnd(), L"Example Console", m_prefs, m_console);
-   m_console.setUI(m_consoleUi.get());
-   m_console.addCommand(makeGreetCmdSpec(), []() { return make_unique<GreetCmd>(); });
+   m_consoleUi = make_unique<ConsoleUIWin32>(hwnd(), L"Example Console", m_prefs);
+   m_console = make_unique<Console>(*m_consoleUi.get());
+   m_console->addCommand(makeGreetCmdSpec(), []() { return make_unique<GreetCmd>(); });
 }
 
 

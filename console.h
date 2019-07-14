@@ -32,16 +32,14 @@ const std::string DefaultPrompt = "> ";
 class Console : public ConsoleContent
 {
 public:
-   explicit Console(const std::string& prompt = DefaultPrompt);
+   Console(ConsoleUI& ui, const std::string& prompt = DefaultPrompt);
    ~Console() = default;
    Console(const Console&) = delete;
-   Console(Console&&) = default;
+   Console(Console&&) = delete;
    Console& operator=(const Console&) = delete;
-   Console& operator=(Console&&) = default;
+   Console& operator=(Console&&) = delete;
 
-   void setUI(ConsoleUI* ui);
    void addCommand(const CmdSpec& spec, CmdFactoryFn factoryFn);
-
    std::size_t countLines() const override;
    std::string lineText(std::size_t lineIdx) const override;
    bool isEnteredLine(std::size_t lineIdx) const override;
@@ -54,17 +52,15 @@ public:
    void nextAutoCompletion() override;
 
 private:
+   void initCommands();
    CmdOutput processRawInput(const std::string& rawInput) const;
    CmdOutput executeCommand(const VerifiedCmd& cmdInput) const;
 
 private:
+   ConsoleUI& m_ui;
    CmdDepot m_cmds;
    Blackboard m_blackboard;
    AutoCompletion m_autoCompletion;
-   ConsoleUI* m_ui = nullptr;
 };
-
-
-std::unique_ptr<Console> makeConsole();
 
 } // namespace ccon

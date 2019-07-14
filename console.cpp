@@ -6,6 +6,11 @@
 //
 #include "console.h"
 #include "cmd_parser.h"
+#include "commands/colors_cmd.h"
+#include "commands/exit_cmd.h"
+#include "commands/font_size_cmd.h"
+#include "commands/help_cmd.h"
+#include "console_ui.h"
 #include "essentutils/string_util.h"
 #include <algorithm>
 #include <cassert>
@@ -39,17 +44,12 @@ namespace ccon
 {
 ///////////////////
 
-Console::Console(const std::string& prompt)
-   : m_blackboard{prompt}
+Console::Console(ConsoleUI& ui, const std::string& prompt)
+: m_ui{ui}, m_blackboard{prompt}
 {
+   m_ui.setContent(this);
+   initCommands();
    m_autoCompletion.setCmds(m_cmds.availableCommands());
-}
-
-
-void Console::setUI(ConsoleUI* ui)
-{
-   m_ui = ui;
-   m_cmds.setUI(ui);
 }
 
 
@@ -136,6 +136,19 @@ void Console::nextAutoCompletion()
 }
 
 
+void Console::initCommands()
+{
+   m_cmds.addCommand(makeConsoleColorsCmdSpec(),
+                     [this]() { return make_unique<ConsoleColorsCmd>(&m_ui); });
+   m_cmds.addCommand(makeConsoleFontSizeCmdSpec(),
+                     [this]() { return make_unique<ConsoleFontSizeCmd>(&m_ui); });
+   m_cmds.addCommand(makeExitCmdSpec(), [this]() { return make_unique<ExitCmd>(&m_ui); });
+   m_cmds.addCommand(makeHelpCmdSpec(), [this]() {
+      return make_unique<HelpCmd>(m_cmds.availableCommands());
+   });
+}
+
+
 CmdOutput Console::processRawInput(const std::string& rawInput) const
 {
    // No input. Output nothing.
@@ -170,14 +183,6 @@ CmdOutput Console::executeCommand(const VerifiedCmd& cmdInput) const
    assert(false && "Command was already validated against a spec. We should be able to "
                    "instantiate it!");
    return {"Internal error. Failed to instantiate command."};
-}
-
-
-///////////////////
-
-std::unique_ptr<Console> makeConsole()
-{
-   return make_unique<Console>();
 }
 
 } // namespace ccon

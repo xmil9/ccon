@@ -15,7 +15,7 @@ namespace ccon
 {
 class CmdSpec;
 struct ConsoleUI;
-}
+} // namespace ccon
 
 
 namespace ccon
@@ -25,17 +25,8 @@ namespace ccon
 // Respository of console commands.
 class CmdDepot
 {
-public:
-   CmdDepot();
-   ~CmdDepot();
-   CmdDepot(const CmdDepot&) = delete;
-   CmdDepot(CmdDepot&&) = default;
-   CmdDepot& operator=(const CmdDepot&) = delete;
-   CmdDepot& operator=(CmdDepot&&) = default;
-
-   void setUI(ConsoleUI* ui);
+ public:
    void addCommand(const CmdSpec& spec, CmdFactoryFn factoryFn);
-
    // Returns a collection of all available console command specs.
    const std::set<CmdSpec>& availableCommands() const;
    // Instantiates a command with a given name.
@@ -43,9 +34,12 @@ public:
    // Returns the help description for a given command.
    std::vector<std::string> getCommandHelp(const std::string& cmdName) const;
 
-private:
-   class Impl;
-   std::unique_ptr<Impl> m_pimpl;
+ private:
+   using CmdName = std::string;
+
+ private:
+   std::set<CmdSpec> m_specs;
+   std::unordered_map<CmdName, CmdFactoryFn> m_cmdFactory;
 };
 
 } // namespace ccon

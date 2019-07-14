@@ -19,16 +19,24 @@ namespace ccon
 ///////////////////
 
 ConsoleUIWin32::ConsoleUIWin32(HWND parentWnd, const std::wstring& title,
-                               const UserPrefs& prefs, ConsoleContent& content)
-: m_parentWnd(parentWnd), m_title{title}, m_userPrefs{prefs}, m_content(content)
+                               const UserPrefs& prefs)
+: m_parentWnd(parentWnd), m_title{title}, m_userPrefs{prefs}
 {
+}
+
+
+void ConsoleUIWin32::setContent(ConsoleContent* content)
+{
+   m_content = content;
 }
 
 
 void ConsoleUIWin32::showConsole()
 {
+   assert(m_content);
+
    if (!m_wnd)
-      m_wnd = std::make_unique<ConsoleWndWin32>(m_userPrefs, m_content);
+      m_wnd = std::make_unique<ConsoleWndWin32>(m_userPrefs, *m_content);
    assert(m_wnd);
 
    if (!m_wnd->exists())
