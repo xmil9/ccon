@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\auto_completion_tests.cpp" />
     <ClCompile Include="..\..\blackboard_tests.cpp" />
     <ClCompile Include="..\..\ccon_tests.cpp" />
     <ClCompile Include="..\..\cmd_depot_tests.cpp" />
@@ -30,6 +31,7 @@
     <ClCompile Include="..\..\test_util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\auto_completion_tests.h" />
     <ClInclude Include="..\..\blackboard_tests.h" />
     <ClInclude Include="..\..\cmd_depot_tests.h" />
     <ClInclude Include="..\..\cmd_parser_tests.h" />

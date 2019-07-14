@@ -4,6 +4,7 @@
 // Jul-2019, Michael Lindner
 // MIT license
 //
+#include "auto_completion_tests.h"
 #include "blackboard_tests.h"
 #include "cmd_depot_tests.h"
 #include "cmd_parser_tests.h"
@@ -17,6 +18,7 @@
 
 int main()
 {
+   testAutoCompletion();
    testBlackboard();
    testCmdDepot();
    testCmdParser();
