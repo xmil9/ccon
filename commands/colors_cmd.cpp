@@ -11,42 +11,15 @@
 
 using namespace ccon;
 using namespace ccon::consoleColorsCmdSpec;
-using namespace std;
-
-
-namespace
-{
-///////////////////
-
-ConsoleColorsCmd::Options interpretArgs(const VerifiedArgs& args)
-{
-   auto optArgs = args.begin();
-   auto optArgsEnd = args.end();
-
-   ConsoleColorsCmd::Options opt;
-   if (haveArgWithLabel(optArgs, optArgsEnd, backgroundOption))
-      opt.background = parseColorArg(optArgs, optArgsEnd, backgroundOption, {});
-   if (haveArgWithLabel(optArgs, optArgsEnd, outputTextOption))
-      opt.outputText = parseColorArg(optArgs, optArgsEnd, outputTextOption, {});
-   if (haveArgWithLabel(optArgs, optArgsEnd, inputTextOption))
-      opt.inputText = parseColorArg(optArgs, optArgsEnd, inputTextOption, {});
-   opt.defaults = haveArgWithLabel(optArgs, optArgsEnd, defaultsOption);
-
-   return opt;
-}
-
-} // namespace
 
 
 namespace ccon
 {
 ///////////////////
 
-ConsoleColorsCmd::ConsoleColorsCmd(ConsoleUI* ui)
-   : m_ui{ui}
+ConsoleColorsCmd::ConsoleColorsCmd(ConsoleUI* ui) : m_ui{ui}
 {
 }
-
 
 
 CmdOutput ConsoleColorsCmd::execute(const VerifiedCmd& input)
@@ -65,6 +38,24 @@ CmdOutput ConsoleColorsCmd::execute(const VerifiedCmd& input)
       m_ui->resetColors();
 
    return {};
+}
+
+
+ConsoleColorsCmd::Options ConsoleColorsCmd::interpretArgs(const VerifiedArgs& args)
+{
+   auto optArgs = args.begin();
+   auto optArgsEnd = args.end();
+
+   ConsoleColorsCmd::Options opt;
+   if (haveArgWithLabel(optArgs, optArgsEnd, backgroundOption))
+      opt.background = parseColorArg(optArgs, optArgsEnd, backgroundOption, {});
+   if (haveArgWithLabel(optArgs, optArgsEnd, outputTextOption))
+      opt.outputText = parseColorArg(optArgs, optArgsEnd, outputTextOption, {});
+   if (haveArgWithLabel(optArgs, optArgsEnd, inputTextOption))
+      opt.inputText = parseColorArg(optArgs, optArgsEnd, inputTextOption, {});
+   opt.defaults = haveArgWithLabel(optArgs, optArgsEnd, defaultsOption);
+
+   return opt;
 }
 
 } // namespace ccon

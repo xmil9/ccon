@@ -56,15 +56,6 @@ inline CmdSpec makeConsoleColorsCmdSpec()
 class ConsoleColorsCmd : public Cmd
 {
  public:
-   struct Options
-   {
-      std::optional<sutil::Rgb> background;
-      std::optional<sutil::Rgb> outputText;
-      std::optional<sutil::Rgb> inputText;
-      bool defaults = false;
-   };
-
- public:
    ConsoleColorsCmd() = default;
    explicit ConsoleColorsCmd(ConsoleUI* ui);
    ~ConsoleColorsCmd() = default;
@@ -74,6 +65,18 @@ class ConsoleColorsCmd : public Cmd
    ConsoleColorsCmd& operator=(ConsoleColorsCmd&&) = default;
 
    CmdOutput execute(const VerifiedCmd& input) override;
+
+ private:
+   struct Options
+   {
+      std::optional<sutil::Rgb> background;
+      std::optional<sutil::Rgb> outputText;
+      std::optional<sutil::Rgb> inputText;
+      bool defaults = false;
+   };
+
+private:
+   static Options interpretArgs(const VerifiedArgs& args);
 
  private:
    ConsoleUI* m_ui = nullptr;
