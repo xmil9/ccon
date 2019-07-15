@@ -16,7 +16,6 @@
 
 namespace win32
 {
-
 ///////////////////
 
 // Provides DC functionality without any ownership sematics.

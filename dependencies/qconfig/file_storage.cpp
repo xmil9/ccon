@@ -14,21 +14,18 @@
 #include <type_traits>
 #include <utility>
 
-using namespace std;
-using namespace sutil;
-
 
 namespace
 {
 ///////////////////
 
-using Setting = pair<string, string>;
+using Setting = std::pair<std::string, std::string>;
 
-const string KvSeparator = "=";
-const string CommentPrefix = "#";
+const std::string KvSeparator = "=";
+const std::string CommentPrefix = "#";
 
 
-void saveSetting(const Setting& setting, ofstream& file)
+void saveSetting(const Setting& setting, std::ofstream& file)
 {
    file << setting.first;
    file << KvSeparator;
@@ -37,14 +34,14 @@ void saveSetting(const Setting& setting, ofstream& file)
 }
 
 
-optional<Setting> parseSetting(const std::string& line)
+std::optional<Setting> parseSetting(const std::string& line)
 {
-   string trimmedLine = trimLeft(line, ' ');
-   if (startsWith(trimmedLine, CommentPrefix))
+   std::string trimmedLine = sutil::trimLeft(line, ' ');
+   if (sutil::startsWith(trimmedLine, CommentPrefix))
       return {};
 
    const auto pos = line.find(KvSeparator);
-   if (pos != string::npos)
+   if (pos != std::string::npos)
       return make_pair(line.substr(0, pos), line.substr(pos + KvSeparator.size()));
    return {};
 }
@@ -56,8 +53,7 @@ namespace qcfg
 {
 ///////////////////
 
-FileStorage::FileStorage(const std::filesystem::path& path)
-   : m_filePath{path}
+FileStorage::FileStorage(const std::filesystem::path& path) : m_filePath{path}
 {
 }
 
@@ -67,12 +63,12 @@ bool FileStorage::load(Settings& settings)
    if (m_filePath.empty())
       return false;
 
-   ifstream file(m_filePath.c_str());
+   std::ifstream file(m_filePath.c_str());
    if (!file.is_open())
       return false;
 
-   string line;
-   while (getline(file, line))
+   std::string line;
+   while (std::getline(file, line))
    {
       const auto setting = parseSetting(line);
       if (setting.has_value())
@@ -88,7 +84,7 @@ bool FileStorage::save(const Settings& settings)
    if (m_filePath.empty())
       return false;
 
-   ofstream file(m_filePath.c_str());
+   std::ofstream file(m_filePath.c_str());
    if (!file.is_open())
       return false;
 

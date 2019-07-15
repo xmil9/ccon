@@ -11,7 +11,6 @@
 
 namespace win32
 {
-
 ///////////////////
 
 SharedDC& SharedDC::operator=(SharedDC&& other) noexcept

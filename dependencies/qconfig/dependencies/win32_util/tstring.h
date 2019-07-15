@@ -12,7 +12,6 @@
 
 namespace win32
 {
-
 ///////////////////
 
 // Std string type based on TCHAR type.

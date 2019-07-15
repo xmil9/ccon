@@ -14,8 +14,8 @@
 #include <windows.h>
 #include <array>
 
-using namespace std;
 namespace fs = std::filesystem;
+
 
 namespace
 {
@@ -46,7 +46,7 @@ namespace sutil
 
 std::filesystem::path appDirectory()
 {
-   array<char, MAX_PATH> buffer;
+   std::array<char, MAX_PATH> buffer;
    const DWORD res =
       GetModuleFileNameA(NULL, buffer.data(), static_cast<DWORD>(buffer.size()));
    if (res == 0 || GetLastError() == ERROR_INSUFFICIENT_BUFFER)

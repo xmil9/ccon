@@ -17,33 +17,30 @@
 
 namespace
 {
-
-using namespace win32;
-
 ///////////////////
 
 const TCHAR* wndSelfProperty = _T("SelfProperty");
 
 
-void setSelf(HWND hwnd, Window* self)
+void setSelf(HWND hwnd, win32::Window* self)
 {
-   ::SetProp(hwnd, wndSelfProperty, self);
+   SetProp(hwnd, wndSelfProperty, self);
 }
 
 
-Window* getSelf(HWND hwnd)
+win32::Window* getSelf(HWND hwnd)
 {
-   return reinterpret_cast<Window*>(::GetProp(hwnd, wndSelfProperty));
+   return reinterpret_cast<win32::Window*>(GetProp(hwnd, wndSelfProperty));
 }
 
 
 void removeSelf(HWND hwnd)
 {
-   ::RemoveProp(hwnd, wndSelfProperty);
+   RemoveProp(hwnd, wndSelfProperty);
 }
 
 
-Window* initSelf(HWND hwnd, UINT msgId, LPARAM lParam)
+win32::Window* initSelf(HWND hwnd, UINT msgId, LPARAM lParam)
 {
    // Check for first message sent to window during creation and set up the self pointer.
    // Note: The very first message is actually a WM_GETMINMAXINFO message. Since for that
@@ -52,7 +49,7 @@ Window* initSelf(HWND hwnd, UINT msgId, LPARAM lParam)
    if (msgId == WM_NCCREATE)
    {
       const CREATESTRUCT* createInfo = reinterpret_cast<CREATESTRUCT*>(lParam);
-      Window* self = reinterpret_cast<Window*>(createInfo->lpCreateParams);
+      win32::Window* self = reinterpret_cast<win32::Window*>(createInfo->lpCreateParams);
       setSelf(hwnd, self);
       return self;
    }
@@ -103,7 +100,7 @@ bool decodeTransitionState(LPARAM lParam)
 }
 
 
-Point decodeMousePosition(LPARAM lParam)
+win32::Point decodeMousePosition(LPARAM lParam)
 {
    return {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
 }

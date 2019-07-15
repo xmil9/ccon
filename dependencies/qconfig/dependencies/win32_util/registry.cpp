@@ -10,9 +10,6 @@
 #include "essentutils/string_util.h"
 #include <cassert>
 
-using namespace std;
-using namespace sutil;
-
 
 namespace
 {
@@ -22,7 +19,7 @@ namespace
 template <typename Int>
 std::optional<Int> readInt(HKEY key, const std::wstring& entryName)
 {
-   static_assert(is_integral_v<Int> && (sizeof(Int) == 4 || sizeof(Int) == 8));
+   static_assert(std::is_integral_v<Int> && (sizeof(Int) == 4 || sizeof(Int) == 8));
 
    if (!key)
       return {};
@@ -44,7 +41,7 @@ std::optional<Int> readInt(HKEY key, const std::wstring& entryName)
 // Writes value of integer type to given registry entry.
 template <typename Int> bool writeInt(HKEY key, const std::wstring& entryName, Int val)
 {
-   static_assert(is_integral_v<Int> && (sizeof(Int) == 4 || sizeof(Int) == 8));
+   static_assert(std::is_integral_v<Int> && (sizeof(Int) == 4 || sizeof(Int) == 8));
 
    if (!key)
       return false;
@@ -180,7 +177,7 @@ std::optional<std::string> RegKey::readString(const std::wstring& entryName) con
    if (!m_key)
       return {};
 
-   const string entryNameAnsi = utf8(entryName);
+   const std::string entryNameAnsi = sutil::utf8(entryName);
 
    DWORD numBytes = 0;
    DWORD entryType = REG_NONE;
@@ -191,10 +188,10 @@ std::optional<std::string> RegKey::readString(const std::wstring& entryName) con
 
    constexpr size_t charBytes = sizeof(char);
    assert(numBytes % charBytes == 0);
-   const size_t strLen = numBytes / charBytes;
+   const std::size_t strLen = numBytes / charBytes;
 
    // '+ 1' for additional zero terminator to make sure the string is well formed.
-   vector<char> buffer(strLen + 1, 0);
+   std::vector<char> buffer(strLen + 1, 0);
    DWORD numReadBytes = static_cast<DWORD>(buffer.size());
    res = RegQueryValueExA(m_key, entryNameAnsi.c_str(), nullptr, nullptr,
                           reinterpret_cast<BYTE*>(buffer.data()), &numReadBytes);
@@ -220,10 +217,10 @@ std::optional<std::wstring> RegKey::readWString(const std::wstring& entryName) c
 
    constexpr size_t charBytes = sizeof(wchar_t);
    assert(numBytes % charBytes == 0);
-   const size_t strLen = numBytes / charBytes;
+   const std::size_t strLen = numBytes / charBytes;
 
    // '+ 1' for additional zero terminator to make sure the string is well formed.
-   vector<wchar_t> buffer(strLen + 1);
+   std::vector<wchar_t> buffer(strLen + 1);
    DWORD numReadBytes = static_cast<DWORD>(buffer.size()) * sizeof(wchar_t);
    res = RegQueryValueExW(m_key, entryName.c_str(), nullptr, nullptr,
                           reinterpret_cast<BYTE*>(buffer.data()), &numReadBytes);
@@ -279,8 +276,8 @@ bool RegKey::writeString(const std::wstring& entryName, const std::string& val) 
    if (!m_key)
       return {};
 
-   const size_t numBytes = (val.size() + 1) * sizeof(char);
-   const LSTATUS res = RegSetValueExA(m_key, utf8(entryName).c_str(), 0, REG_SZ,
+   const std::size_t numBytes = (val.size() + 1) * sizeof(char);
+   const LSTATUS res = RegSetValueExA(m_key, sutil::utf8(entryName).c_str(), 0, REG_SZ,
                                       reinterpret_cast<const BYTE*>(val.c_str()),
                                       static_cast<DWORD>(numBytes));
    return (res == ERROR_SUCCESS);
@@ -292,7 +289,7 @@ bool RegKey::writeWString(const std::wstring& entryName, const std::wstring& val
    if (!m_key)
       return {};
 
-   const size_t numBytes = (val.size() + 1) * sizeof(wchar_t);
+   const std::size_t numBytes = (val.size() + 1) * sizeof(wchar_t);
    const LSTATUS res = RegSetValueExW(m_key, entryName.c_str(), 0, REG_SZ,
                                       reinterpret_cast<const BYTE*>(val.c_str()),
                                       static_cast<DWORD>(numBytes));
@@ -350,9 +347,9 @@ std::vector<std::wstring> RegKey::subkeyNames() const
       return {};
 
    maxSubkeyNameLen += 1;
-   vector<wchar_t> buffer(maxSubkeyNameLen, 0);
+   std::vector<wchar_t> buffer(maxSubkeyNameLen, 0);
 
-   vector<wstring> subkeys;
+   std::vector<std::wstring> subkeys;
    DWORD idx = 0;
    DWORD nameLen = maxSubkeyNameLen;
 
@@ -399,9 +396,9 @@ std::vector<std::wstring> RegKey::entryNames() const
       return {};
 
    maxEntryNameLen += 1;
-   vector<wchar_t> buffer(maxEntryNameLen, 0);
+   std::vector<wchar_t> buffer(maxEntryNameLen, 0);
 
-   vector<wstring> entries;
+   std::vector<std::wstring> entries;
    DWORD idx = 0;
    DWORD nameLen = maxEntryNameLen;
 

@@ -15,10 +15,6 @@
 
 namespace
 {
-
-using namespace win32;
-
-
 ///////////////////
 
 // Keeps track of all TimedCallback objects.
@@ -26,21 +22,21 @@ using namespace win32;
 class TimedCallbackRegistry
 {
  public:
-   static void registerTimer(UINT_PTR id, TimedCallback* timer);
+   static void registerTimer(UINT_PTR id, win32::TimedCallback* timer);
    static void unregisterTimer(UINT_PTR id);
-   static TimedCallback* getTimer(UINT_PTR id);
+   static win32::TimedCallback* getTimer(UINT_PTR id);
 
  private:
-   static std::unordered_map<UINT_PTR, TimedCallback*> m_timers;
+   static std::unordered_map<UINT_PTR, win32::TimedCallback*> m_timers;
    static std::mutex m_guard;
 };
 
 
-std::unordered_map<UINT_PTR, TimedCallback*> TimedCallbackRegistry::m_timers;
+std::unordered_map<UINT_PTR, win32::TimedCallback*> TimedCallbackRegistry::m_timers;
 std::mutex TimedCallbackRegistry::m_guard;
 
 
-void TimedCallbackRegistry::registerTimer(UINT_PTR id, TimedCallback* timer)
+void TimedCallbackRegistry::registerTimer(UINT_PTR id, win32::TimedCallback* timer)
 {
    std::lock_guard<std::mutex> lock(m_guard);
    m_timers[id] = timer;
@@ -52,7 +48,7 @@ void TimedCallbackRegistry::unregisterTimer(UINT_PTR id)
    m_timers.erase(id);
 }
 
-TimedCallback* TimedCallbackRegistry::getTimer(UINT_PTR id)
+win32::TimedCallback* TimedCallbackRegistry::getTimer(UINT_PTR id)
 {
    std::lock_guard<std::mutex> lock(m_guard);
    auto pos = m_timers.find(id);
@@ -66,7 +62,6 @@ TimedCallback* TimedCallbackRegistry::getTimer(UINT_PTR id)
 
 namespace win32
 {
-
 ///////////////////
 
 Timer& Timer::operator=(Timer&& other) noexcept

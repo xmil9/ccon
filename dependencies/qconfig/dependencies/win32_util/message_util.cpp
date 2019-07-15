@@ -12,7 +12,6 @@
 
 namespace win32
 {
-
 ///////////////////
 
 MsgLoopResult mainMessageLoop(HACCEL accelerators)

@@ -14,7 +14,6 @@
 
 namespace win32
 {
-
 ///////////////////
 
 struct MsgLoopResult

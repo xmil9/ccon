@@ -11,7 +11,6 @@
 
 namespace win32
 {
-
 ///////////////////
 
 bool isValidBrush(HBRUSH hbrush)

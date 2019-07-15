@@ -14,7 +14,6 @@
 
 namespace win32
 {
-
 ///////////////////
 
 // Types of GDI objects.

@@ -12,8 +12,6 @@
 #include <cstddef>
 #include <cstdlib>
 
-using namespace std;
-
 
 namespace
 {
@@ -71,7 +69,7 @@ std::string utf8(const std::wstring& s)
 
    Utf8Locale utf8Locale;
 
-   vector<char> buffer(s.size() * 4, 0);
+   std::vector<char> buffer(s.size() * 4, 0);
    const size_t numBytesWritten = wcstombs(buffer.data(), s.c_str(), buffer.size());
    if (numBytesWritten == -1)
       return "";
@@ -87,7 +85,7 @@ std::wstring utf16(const std::string& s)
 
    Utf8Locale utf8Locale;
 
-   vector<wchar_t> buffer(s.size() * 4, 0);
+   std::vector<wchar_t> buffer(s.size() * 4, 0);
    const size_t numBytesWritten = mbstowcs(buffer.data(), s.c_str(), buffer.size());
    if (numBytesWritten == -1)
       return L"";
@@ -108,7 +106,7 @@ std::string utf8(char ch)
 {
    // Nothing to do but it's convenient to have the overload available to
    // reduce checks in calling code.
-   return string{ch};
+   return std::string{ch};
 }
 
 
@@ -117,9 +115,9 @@ std::string utf8(wchar_t ch)
    Utf8Locale utf8Locale;
 
    std::mbstate_t state{};
-   array<char, MB_LEN_MAX + 1> buffer;
+   std::array<char, MB_LEN_MAX + 1> buffer;
    buffer.fill('\0');
-   const size_t bytesWritten = wcrtomb(buffer.data(), ch, &state);
+   const std::size_t bytesWritten = wcrtomb(buffer.data(), ch, &state);
    if (bytesWritten == -1)
       return {};
 

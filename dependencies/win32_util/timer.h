@@ -15,6 +15,7 @@
 
 namespace win32
 {
+///////////////////
 
 // RAII class for timers that are associated with a window.
 // The dtor will kill the timer.

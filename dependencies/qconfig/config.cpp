@@ -10,9 +10,6 @@
 #include "essentutils/string_util.h"
 #include <cassert>
 
-using namespace std;
-using namespace sutil;
-
 
 namespace
 {
@@ -26,10 +23,10 @@ void setSetting(const std::string& key, Value val,
    if (key.empty())
       return;
 
-   if constexpr (is_same_v<Value, const char*> || is_same_v<Value, std::string>)
+   if constexpr (std::is_same_v<Value, const char*> || std::is_same_v<Value, std::string>)
       settings[key] = val;
    else
-      settings[key] = to_string(val);
+      settings[key] = std::to_string(val);
 }
 
 
@@ -46,10 +43,10 @@ getSetting(const std::string& key,
    if (entry == settings.end())
       return {};
 
-   if constexpr (is_floating_point_v<Value>)
-      return fpFromStr<Value>(entry->second);
-   else if constexpr (is_integral_v<Value>)
-      return intFromStr<Value>(entry->second);
+   if constexpr (std::is_floating_point_v<Value>)
+      return sutil::fpFromStr<Value>(entry->second);
+   else if constexpr (std::is_integral_v<Value>)
+      return sutil::intFromStr<Value>(entry->second);
    else
       return entry->second;
 }
@@ -130,7 +127,7 @@ void Config::setString(const std::string& key, const std::string& value)
 
 void Config::setWString(const std::string& key, const std::wstring& value)
 {
-   setSetting(key, utf8(value), m_settings);
+   setSetting(key, sutil::utf8(value), m_settings);
 }
 
 
@@ -178,11 +175,11 @@ std::optional<long double> Config::getLongDouble(const std::string& key) const
 
 std::optional<bool> Config::getBool(const std::string& key) const
 {
-   const auto res = getSetting<string>(key, m_settings);
+   const auto res = getSetting<std::string>(key, m_settings);
    if (!res.has_value())
       return {};
 
-   const string valStr = trim(lowercase(res.value()), ' ');
+   const std::string valStr = sutil::trim(sutil::lowercase(res.value()), ' ');
    if (valStr == "1" || valStr == "true" || valStr == "yes")
       return true;
    else if (valStr == "0" || valStr == "false" || valStr == "no")
@@ -193,15 +190,15 @@ std::optional<bool> Config::getBool(const std::string& key) const
 
 std::optional<std::string> Config::getString(const std::string& key) const
 {
-   return getSetting<string>(key, m_settings);
+   return getSetting<std::string>(key, m_settings);
 }
 
 
 std::optional<std::wstring> Config::getWString(const std::string& key) const
 {
-   const auto res = getSetting<string>(key, m_settings);
+   const auto res = getSetting<std::string>(key, m_settings);
    if (res.has_value())
-      return utf16(res.value());
+      return sutil::utf16(res.value());
    return {};
 }
 

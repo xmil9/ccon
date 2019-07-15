@@ -18,7 +18,6 @@
 
 namespace win32
 {
-
 ///////////////////
 
 // Wrapper for Win32 HWND handles.
