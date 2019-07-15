@@ -20,7 +20,7 @@ namespace ccon
 {
 ///////////////////
 
-namespace consoleColorsCmdSpec
+namespace colorsCmd
 {
 
 const std::string cmdName = ":colors";
@@ -29,22 +29,22 @@ const std::string outputTextOption = "output";
 const std::string inputTextOption = "input";
 const std::string defaultsOption = "defaults";
 
-} // namespace consoleColorsCmdSpec
+} // namespace colorsCmd
 
 
 inline CmdSpec makeConsoleColorsCmdSpec()
 {
-   return {consoleColorsCmdSpec::cmdName,
+   return {colorsCmd::cmdName,
            ":c",
            "sets the colors for the console",
            {
-              ArgSpec::makeOptionalArg(consoleColorsCmdSpec::backgroundOption, 1, "b",
+              ArgSpec::makeOptionalArg(colorsCmd::backgroundOption, 1, "b",
                                        "background color (rrggbb)"),
-              ArgSpec::makeOptionalArg(consoleColorsCmdSpec::outputTextOption, 1, "o",
+              ArgSpec::makeOptionalArg(colorsCmd::outputTextOption, 1, "o",
                                        "output text color (rrggbb)"),
-              ArgSpec::makeOptionalArg(consoleColorsCmdSpec::inputTextOption, 1, "i",
+              ArgSpec::makeOptionalArg(colorsCmd::inputTextOption, 1, "i",
                                        "input text color (rrggbb)"),
-              ArgSpec::makeFlagArg(consoleColorsCmdSpec::defaultsOption, "d",
+              ArgSpec::makeFlagArg(colorsCmd::defaultsOption, "d",
                                    "reset all colors to defaults"),
            },
            ""};
@@ -75,7 +75,7 @@ class ConsoleColorsCmd : public Cmd
       bool defaults = false;
    };
 
-private:
+ private:
    static Options interpretArgs(const VerifiedArgs& args);
 
  private:

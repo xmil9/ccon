@@ -8,17 +8,13 @@
 #include <cassert>
 #include <string>
 
-using namespace ccon;
-using namespace greetCmdSpec;
-using namespace std;
-
 
 namespace
 {
 
 ///////////////////
 
-string interpretArgs(const VerifiedArgs& args)
+std::string interpretArgs(const ccon::VerifiedArgs& args)
 {
    return args[0].values[0];
 }
@@ -26,14 +22,14 @@ string interpretArgs(const VerifiedArgs& args)
 } // namespace
 
 
-CmdOutput GreetCmd::execute(const VerifiedCmd& input)
+ccon::CmdOutput GreetCmd::execute(const ccon::VerifiedCmd& input)
 {
-   assert(input.name == cmdName);
+   assert(input.name == greetCmd::cmdName);
 
    m_userName = interpretArgs(input.args);
 
    if (m_userName.empty())
       m_userName = "Looser";
 
-   return {string("Hello ") + m_userName + "!"};
+   return {std::string("Hello ") + m_userName + "!"};
 }

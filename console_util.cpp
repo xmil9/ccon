@@ -7,9 +7,6 @@
 #include "console_util.h"
 #include "essentutils/string_util.h"
 
-using namespace std;
-using namespace sutil;
-
 
 namespace ccon
 {
@@ -17,7 +14,7 @@ namespace ccon
 
 std::string stripArgSeparators(const std::string& s)
 {
-   return trimLeft(s, '-');
+   return sutil::trimLeft(s, '-');
 }
 
 } // namespace ccon

@@ -10,7 +10,6 @@
 #include <string>
 
 using namespace ccon;
-using namespace std;
 
 
 namespace
@@ -20,27 +19,27 @@ namespace
 void testStripArgSeparators()
 {
    {
-      const string caseLabel = "testStripArgSeparators for single separator";
+      const std::string caseLabel = "testStripArgSeparators for single separator";
       VERIFY(stripArgSeparators("-arg") == "arg", caseLabel);
    }
    {
-      const string caseLabel = "testStripArgSeparators for double separator";
+      const std::string caseLabel = "testStripArgSeparators for double separator";
       VERIFY(stripArgSeparators("--arg") == "arg", caseLabel);
    }
    {
-      const string caseLabel = "testStripArgSeparators for no separator";
+      const std::string caseLabel = "testStripArgSeparators for no separator";
       VERIFY(stripArgSeparators("arg") == "arg", caseLabel);
    }
    {
-      const string caseLabel = "testStripArgSeparators for separator in middle";
+      const std::string caseLabel = "testStripArgSeparators for separator in middle";
       VERIFY(stripArgSeparators("arg-more") == "arg-more", caseLabel);
    }
    {
-      const string caseLabel = "testStripArgSeparators for separator only";
+      const std::string caseLabel = "testStripArgSeparators for separator only";
       VERIFY(stripArgSeparators("-") == "", caseLabel);
    }
    {
-      const string caseLabel = "testStripArgSeparators for empty string";
+      const std::string caseLabel = "testStripArgSeparators for empty string";
       VERIFY(stripArgSeparators("") == "", caseLabel);
    }
 }

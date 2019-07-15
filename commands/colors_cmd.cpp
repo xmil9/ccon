@@ -9,9 +9,6 @@
 #include "console_ui.h"
 #include <cassert>
 
-using namespace ccon;
-using namespace ccon::consoleColorsCmdSpec;
-
 
 namespace ccon
 {
@@ -24,7 +21,7 @@ ConsoleColorsCmd::ConsoleColorsCmd(ConsoleUI* ui) : m_ui{ui}
 
 CmdOutput ConsoleColorsCmd::execute(const VerifiedCmd& input)
 {
-   assert(input.name == cmdName);
+   assert(input.name == colorsCmd::cmdName);
 
    m_opt = interpretArgs(input.args);
 
@@ -47,13 +44,15 @@ ConsoleColorsCmd::Options ConsoleColorsCmd::interpretArgs(const VerifiedArgs& ar
    auto optArgsEnd = args.end();
 
    ConsoleColorsCmd::Options opt;
-   if (haveArgWithLabel(optArgs, optArgsEnd, backgroundOption))
-      opt.background = parseColorArg(optArgs, optArgsEnd, backgroundOption, {});
-   if (haveArgWithLabel(optArgs, optArgsEnd, outputTextOption))
-      opt.outputText = parseColorArg(optArgs, optArgsEnd, outputTextOption, {});
-   if (haveArgWithLabel(optArgs, optArgsEnd, inputTextOption))
-      opt.inputText = parseColorArg(optArgs, optArgsEnd, inputTextOption, {});
-   opt.defaults = haveArgWithLabel(optArgs, optArgsEnd, defaultsOption);
+   if (haveArgWithLabel(optArgs, optArgsEnd, colorsCmd::backgroundOption))
+      opt.background =
+         parseColorArg(optArgs, optArgsEnd, colorsCmd::backgroundOption, {});
+   if (haveArgWithLabel(optArgs, optArgsEnd, colorsCmd::outputTextOption))
+      opt.outputText =
+         parseColorArg(optArgs, optArgsEnd, colorsCmd::outputTextOption, {});
+   if (haveArgWithLabel(optArgs, optArgsEnd, colorsCmd::inputTextOption))
+      opt.inputText = parseColorArg(optArgs, optArgsEnd, colorsCmd::inputTextOption, {});
+   opt.defaults = haveArgWithLabel(optArgs, optArgsEnd, colorsCmd::defaultsOption);
 
    return opt;
 }

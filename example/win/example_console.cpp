@@ -19,10 +19,6 @@
 #include <fstream>
 #include <memory>
 
-using namespace ccon;
-using namespace std;
-using namespace sutil;
-using namespace win32;
 namespace fs = std::filesystem;
 
 
@@ -30,7 +26,7 @@ namespace
 {
 ///////////////////
 
-class AppWindow : public Window
+class AppWindow : public win32::Window
 {
  public:
    AppWindow();
@@ -50,13 +46,13 @@ class AppWindow : public Window
    void showConsole();
 
  private:
-   UserPrefs m_prefs;
-   unique_ptr<ConsoleUIWin32> m_consoleUi;
-   unique_ptr<Console> m_console;
+   ccon::UserPrefs m_prefs;
+   std::unique_ptr<ccon::ConsoleUIWin32> m_consoleUi;
+   std::unique_ptr<ccon::Console> m_console;
 };
 
 
-AppWindow::AppWindow() : m_prefs{userDirectory() / "ExampleConsole" / "prefs.txt"}
+AppWindow::AppWindow() : m_prefs{sutil::userDirectory() / "ExampleConsole" / "prefs.txt"}
 {
 }
 
@@ -99,7 +95,7 @@ bool AppWindow::registerWindowClass() const
 }
 
 
-Window::CreationResult AppWindow::onCreate(const CREATESTRUCT* createInfo)
+win32::Window::CreationResult AppWindow::onCreate(const CREATESTRUCT* createInfo)
 {
    loadPreferences();
    setupConsole();
@@ -133,14 +129,14 @@ bool AppWindow::createPreferences(const fs::path& prefsPath)
 {
    fs::create_directories(prefsPath.parent_path());
    // Create empty file.
-   ofstream prefsFile(prefsPath, fstream::out);
+   std::ofstream prefsFile(prefsPath, std::fstream::out);
    return !prefsFile.fail();
 }
 
 
 bool AppWindow::loadPreferences()
 {
-   error_code errCode;
+   std::error_code errCode;
    if (!fs::exists(m_prefs.location(), errCode) && !createPreferences(m_prefs.location()))
       return false;
 
@@ -150,9 +146,11 @@ bool AppWindow::loadPreferences()
 
 void AppWindow::setupConsole()
 {
-   m_consoleUi = make_unique<ConsoleUIWin32>(hwnd(), L"Example Console", m_prefs);
-   m_console = make_unique<Console>(*m_consoleUi.get());
-   m_console->addCommand(makeGreetCmdSpec(), []() { return make_unique<GreetCmd>(); });
+   m_consoleUi =
+      std::make_unique<ccon::ConsoleUIWin32>(hwnd(), L"Example Console", m_prefs);
+   m_console = std::make_unique<ccon::Console>(*m_consoleUi.get());
+   m_console->addCommand(makeGreetCmdSpec(),
+                         []() { return std::make_unique<GreetCmd>(); });
 }
 
 
@@ -168,13 +166,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance,
                       _In_ LPWSTR cmdLine, _In_ int cmdShow)
 {
    AppWindow appWnd;
-   if (!appWnd.create(NULL, Rect{100, 100, 1000, 500}, L"Example Console",
+   if (!appWnd.create(NULL, win32::Rect{100, 100, 1000, 500}, L"Example Console",
                       WS_OVERLAPPEDWINDOW))
    {
       return EXIT_FAILURE;
    }
    appWnd.setVisible(true);
 
-   return mainMessageLoop(LoadAccelerators(instance, MAKEINTRESOURCE(IDC_EXAMPLECONSOLE)))
+   return win32::mainMessageLoop(
+             LoadAccelerators(instance, MAKEINTRESOURCE(IDC_EXAMPLECONSOLE)))
       .exitCode;
 }

@@ -7,17 +7,14 @@
 #ifdef _WIN32
 #include "console_input_cursor_win32.h"
 
-using namespace std;
-using namespace win32;
-
 
 namespace ccon
 {
 ///////////////////
 
 ConsoleInputCursorWin32::ConsoleInputCursorWin32(HWND hwnd, COLORREF color)
-: m_hwnd{hwnd}, m_blickCallback{bind(&ConsoleInputCursorWin32::onBlink, this,
-                                     placeholders::_1)},
+: m_hwnd{hwnd}, m_blickCallback{std::bind(&ConsoleInputCursorWin32::onBlink, this,
+                                          std::placeholders::_1)},
   m_brush{CreateSolidBrush(color)}
 {
 }
@@ -31,7 +28,7 @@ ConsoleInputCursorWin32::~ConsoleInputCursorWin32()
 
 ConsoleInputCursorWin32::ConsoleInputCursorWin32(ConsoleInputCursorWin32&& other) noexcept
 {
-   *this = move(other);
+   *this = std::move(other);
 }
 
 
@@ -40,16 +37,16 @@ operator=(ConsoleInputCursorWin32&& other) noexcept
 {
    m_hwnd = other.m_hwnd;
    // Recreate timed callback with the onBlink() member function of this instance.
-   m_blickCallback = move(
-      TimedCallback{bind(&ConsoleInputCursorWin32::onBlink, this, placeholders::_1)});
+   m_blickCallback = std::move(win32::TimedCallback{
+      std::bind(&ConsoleInputCursorWin32::onBlink, this, std::placeholders::_1)});
    m_blinkRateMs = other.m_blinkRateMs;
    m_width = other.m_width;
    m_height = other.m_height;
    m_topLeft = other.m_topLeft;
-   m_brush = move(other.m_brush);
+   m_brush = std::move(other.m_brush);
    // Make sure dtor of moved-from object won't do anything.
    other.m_hwnd = NULL;
-   other.m_blickCallback = move(TimedCallback{});
+   other.m_blickCallback = std::move(win32::TimedCallback{});
    return *this;
 }
 
@@ -74,7 +71,7 @@ void ConsoleInputCursorWin32::setHeight(long h)
 
 void ConsoleInputCursorWin32::setColor(COLORREF color)
 {
-   m_brush = move(GdiObj<HBRUSH>(CreateSolidBrush(color)));
+   m_brush = std::move(win32::GdiObj<HBRUSH>(CreateSolidBrush(color)));
 }
 
 
@@ -113,8 +110,8 @@ void ConsoleInputCursorWin32::stop()
 
 void ConsoleInputCursorWin32::inval()
 {
-   Rect invalBounds{m_topLeft.x, m_topLeft.y, m_topLeft.x + m_width,
-                    m_topLeft.y + m_height};
+   win32::Rect invalBounds{m_topLeft.x, m_topLeft.y, m_topLeft.x + m_width,
+                           m_topLeft.y + m_height};
    InvalidateRect(m_hwnd, &invalBounds, !m_isVisible);
 }
 
@@ -123,8 +120,8 @@ void ConsoleInputCursorWin32::draw(HDC hdc, const win32::Rect& wndBounds) const
 {
    if (m_isVisible)
    {
-      const Rect cursorShape(m_topLeft.x, m_topLeft.y, m_topLeft.x + m_width,
-                             m_topLeft.y + m_height);
+      const win32::Rect cursorShape(m_topLeft.x, m_topLeft.y, m_topLeft.x + m_width,
+                                    m_topLeft.y + m_height);
 
       auto [haveIntersection, intersection] = intersect(cursorShape, wndBounds);
 

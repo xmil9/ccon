@@ -12,10 +12,6 @@
 #include <algorithm>
 #include <cassert>
 
-using namespace ccon;
-using namespace std;
-using namespace sutil;
-
 
 namespace
 {
@@ -43,14 +39,14 @@ bool isArgLabel(const std::string& val)
 }
 
 
-optional<VerifiedArg> matchArgSpec(const ArgSpec& spec,
-                                   CmdArgs::const_iterator& actualArgs,
-                                   CmdArgs::const_iterator actualArgsEnd)
+std::optional<ccon::VerifiedArg> matchArgSpec(const ccon::ArgSpec& spec,
+                                              ccon::CmdArgs::const_iterator& actualArgs,
+                                              ccon::CmdArgs::const_iterator actualArgsEnd)
 {
-   CmdArgs::const_iterator iterCopy = actualArgs;
-   const optional<VerifiedArg> match = spec.match(iterCopy, actualArgsEnd);
+   ccon::CmdArgs::const_iterator iterCopy = actualArgs;
+   const std::optional<ccon::VerifiedArg> match = spec.match(iterCopy, actualArgsEnd);
    if (!match.has_value())
-      return nullopt;
+      return std::nullopt;
 
    // Only advance the iterator over the actual arguments if we found a match.
    actualArgs = iterCopy;
@@ -58,19 +54,18 @@ optional<VerifiedArg> matchArgSpec(const ArgSpec& spec,
 }
 
 
-optional<VerifiedArgs> matchPositionalCmdArgs(CmdSpec::ArgSpecIter_t posSpec,
-                                              CmdSpec::ArgSpecIter_t posSpecEnd,
-                                              CmdArgs::const_iterator& actualArgs,
-                                              CmdArgs::const_iterator actualArgsEnd)
+std::optional<ccon::VerifiedArgs> matchPositionalCmdArgs(
+   ccon::CmdSpec::ArgSpecIter_t posSpec, ccon::CmdSpec::ArgSpecIter_t posSpecEnd,
+   ccon::CmdArgs::const_iterator& actualArgs, ccon::CmdArgs::const_iterator actualArgsEnd)
 {
-   VerifiedArgs verifiedArgs;
+   ccon::VerifiedArgs verifiedArgs;
 
    for (; posSpec != posSpecEnd; ++posSpec)
    {
-      const optional<VerifiedArg> matchedArg =
+      const std::optional<ccon::VerifiedArg> matchedArg =
          matchArgSpec(*posSpec, actualArgs, actualArgsEnd);
       if (!matchedArg.has_value())
-         return nullopt;
+         return std::nullopt;
 
       verifiedArgs.push_back(matchedArg.value());
    }
@@ -79,21 +74,20 @@ optional<VerifiedArgs> matchPositionalCmdArgs(CmdSpec::ArgSpecIter_t posSpec,
 }
 
 
-optional<VerifiedArgs> matchOptionalCmdArgs(CmdSpec::ArgSpecIter_t optSpecBegin,
-                                            CmdSpec::ArgSpecIter_t optSpecEnd,
-                                            CmdArgs::const_iterator& actualArgs,
-                                            CmdArgs::const_iterator actualArgsEnd)
+std::optional<ccon::VerifiedArgs> matchOptionalCmdArgs(
+   ccon::CmdSpec::ArgSpecIter_t optSpecBegin, ccon::CmdSpec::ArgSpecIter_t optSpecEnd,
+   ccon::CmdArgs::const_iterator& actualArgs, ccon::CmdArgs::const_iterator actualArgsEnd)
 {
-   VerifiedArgs verifiedArgs;
+   ccon::VerifiedArgs verifiedArgs;
 
    while (actualArgs != actualArgsEnd)
    {
       bool haveMatch = false;
 
-      for (CmdSpec::ArgSpecIter_t optSpec = optSpecBegin; optSpec != optSpecEnd;
+      for (ccon::CmdSpec::ArgSpecIter_t optSpec = optSpecBegin; optSpec != optSpecEnd;
            ++optSpec)
       {
-         const optional<VerifiedArg> matchedArg =
+         const std::optional<ccon::VerifiedArg> matchedArg =
             matchArgSpec(*optSpec, actualArgs, actualArgsEnd);
          if (matchedArg.has_value())
          {
@@ -106,7 +100,7 @@ optional<VerifiedArgs> matchOptionalCmdArgs(CmdSpec::ArgSpecIter_t optSpecBegin,
       // There is an actual arg that does not match any optional arg spec. Fail the
       // parsing.
       if (!haveMatch)
-         return nullopt;
+         return std::nullopt;
    }
 
    return verifiedArgs;
@@ -185,8 +179,8 @@ ArgSpec ArgSpec::makeFlagArg(const std::string& label, const std::string& abbrev
 
 ArgSpec::ArgSpec(const std::string& label, const std::string& abbrev,
                  std::size_t numValues, const std::string& description)
-: m_label{lowercase(label), lowercase(abbrev)}, m_numValues{numValues}, m_description{
-                                                                           description}
+: m_label{sutil::lowercase(label), sutil::lowercase(abbrev)}, m_numValues{numValues},
+  m_description{description}
 {
 }
 
@@ -221,7 +215,7 @@ std::string ArgSpec::help(const std::string& indent) const
    if (!*this)
       return "";
 
-   string help;
+   std::string help;
 
    help += indent;
    help += isRequired() ? "Required:" : "Optional:";
@@ -247,7 +241,7 @@ std::string ArgSpec::help(const std::string& indent) const
       else if (m_numValues == OneOrMore)
          help += "one or more";
       else
-         help += to_string(m_numValues);
+         help += std::to_string(m_numValues);
       help += (m_numValues == 1) ? " value" : " values";
    }
 
@@ -263,7 +257,7 @@ std::string ArgSpec::help(const std::string& indent) const
 
 bool ArgSpec::matchLabel(const std::string& match) const
 {
-   return m_label.matches(lowercase(match));
+   return m_label.matches(sutil::lowercase(match));
 }
 
 
@@ -273,16 +267,17 @@ std::optional<VerifiedArg> ArgSpec::match(CmdArgs::const_iterator& actualArgs,
    if (actualArgs == actualArgsEnd)
    {
       // Zero matching positional values might be valid for 'zero or more' specs.
-      return (!hasLabel() && haveEnoughValues(0)) ? optional<VerifiedArg>{VerifiedArg{}}
-                                                  : nullopt;
+      return (!hasLabel() && haveEnoughValues(0))
+                ? std::optional<VerifiedArg>{VerifiedArg{}}
+                : std::nullopt;
    }
 
    CmdArgs::const_iterator actualArgsBegin = actualArgs;
-   string currArg = *actualArgs;
-   string currArgWithoutSep = stripArgSeparators(currArg);
+   std::string currArg = *actualArgs;
+   std::string currArgWithoutSep = stripArgSeparators(currArg);
 
    if (hasLabel() && (!isArgLabel(currArg) || !matchLabel(currArgWithoutSep)))
-      return nullopt;
+      return std::nullopt;
 
    VerifiedArg matchedArg;
    if (hasLabel())
@@ -296,7 +291,7 @@ std::optional<VerifiedArg> ArgSpec::match(CmdArgs::const_iterator& actualArgs,
    {
       // Restore original position of actual arg iterator.
       actualArgs = actualArgsBegin;
-      return nullopt;
+      return std::nullopt;
    }
    matchedArg.values = matchedValues.value();
 
@@ -308,9 +303,9 @@ std::optional<std::vector<std::string>>
 ArgSpec::matchValues(CmdArgs::const_iterator& actualArgs,
                      CmdArgs::const_iterator actualArgsEnd) const
 {
-   vector<string> matchedValues;
+   std::vector<std::string> matchedValues;
 
-   string currArg;
+   std::string currArg;
    while (actualArgs != actualArgsEnd && canMatchMoreValues(matchedValues.size()))
    {
       currArg = *actualArgs;
@@ -323,7 +318,7 @@ ArgSpec::matchValues(CmdArgs::const_iterator& actualArgs,
    }
 
    if (!haveEnoughValues(matchedValues.size()))
-      return nullopt;
+      return std::nullopt;
    return matchedValues;
 }
 
@@ -351,7 +346,7 @@ bool ArgSpec::haveEnoughValues(std::size_t numMatchedValues) const
 CmdSpec::CmdSpec(const std::string& name, const std::string& shortName,
                  const std::string& description, std::vector<ArgSpec> argSpecs,
                  const std::string& notes)
-: m_name{lowercase(name), lowercase(shortName)}, m_description{description},
+: m_name{sutil::lowercase(name), sutil::lowercase(shortName)}, m_description{description},
   m_argSpecs{argSpecs}, m_notes{notes}
 {
 }
@@ -387,11 +382,11 @@ std::string CmdSpec::help() const
    if (!*this)
       return "";
 
-   const string Indent{"  "};
-   const string Newline{"\n"};
-   const string NotAvailable = Indent + string{"<none>"} + Newline;
+   const std::string Indent{"  "};
+   const std::string Newline{"\n"};
+   const std::string NotAvailable = Indent + std::string{"<none>"} + Newline;
 
-   string help;
+   std::string help;
    help += "Name:\n";
    help += Indent + m_name.label() + Newline;
 
@@ -421,8 +416,8 @@ std::string CmdSpec::help() const
    help += "Notes:\n";
    if (!m_notes.empty())
    {
-      const vector<string> noteLines = split(m_notes, "\n");
-      for (const string& line : noteLines)
+      const std::vector<std::string> noteLines = sutil::split(m_notes, "\n");
+      for (const std::string& line : noteLines)
          help += Indent + line + Newline;
    }
    else
@@ -448,11 +443,11 @@ CmdSpec::Match CmdSpec::match(const std::string& cmd) const
    if (!*this)
       return {};
 
-   vector<string> cmdPieces = split(cmd, " ");
+   std::vector<std::string> cmdPieces = sutil::split(cmd, " ");
    if (cmdPieces.empty())
       return {};
 
-   if (!matchesName(lowercase(cmdPieces[0])))
+   if (!matchesName(sutil::lowercase(cmdPieces[0])))
       return {};
 
    VerifiedCmd verifiedCmd;
@@ -460,7 +455,7 @@ CmdSpec::Match CmdSpec::match(const std::string& cmd) const
 
    cmdPieces.erase(cmdPieces.begin());
 
-   const optional<VerifiedArgs> args = matchCmdArgs(cmdPieces);
+   const std::optional<VerifiedArgs> args = matchCmdArgs(cmdPieces);
    if (!args.has_value())
       return {true, false, {}};
    verifiedCmd.args = args.value();
@@ -483,23 +478,23 @@ std::optional<VerifiedArgs> CmdSpec::matchCmdArgs(const CmdArgs& args) const
    auto actualArgsEnd = std::end(args);
 
    VerifiedArgs verifiedArgs;
-   const optional<VerifiedArgs> parsedArgs =
+   const std::optional<VerifiedArgs> parsedArgs =
       matchPositionalCmdArgs(posSpecs, posSpecsEnd, actualArgs, actualArgsEnd);
    if (!parsedArgs.has_value())
-      return nullopt;
+      return std::nullopt;
    verifiedArgs = parsedArgs.value();
 
-   const optional<VerifiedArgs> parsedOptArgs =
+   const std::optional<VerifiedArgs> parsedOptArgs =
       matchOptionalCmdArgs(optSpecs, optSpecsEnd, actualArgs, actualArgsEnd);
    if (!parsedOptArgs.has_value())
-      return nullopt;
+      return std::nullopt;
 
    const bool haveUnmacthedArgs = (actualArgs != std::end(args));
    if (haveUnmacthedArgs)
-      return nullopt;
+      return std::nullopt;
 
-   copy(parsedOptArgs.value().begin(), parsedOptArgs.value().end(),
-        back_inserter(verifiedArgs));
+   std::copy(parsedOptArgs.value().begin(), parsedOptArgs.value().end(),
+             std::back_inserter(verifiedArgs));
    return verifiedArgs;
 }
 

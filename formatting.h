@@ -64,7 +64,7 @@ std::string formatIntOutput(Int val, const std::string& label, IntBase base)
 template <typename Iter>
 std::string formatIntArrayOutput(Iter begin, Iter end, const std::string& label)
 {
-   using value_type = typename iterator_traits<Iter>::value_type;
+   using value_type = typename std::iterator_traits<Iter>::value_type;
 
    std::string out;
    if (!label.empty())

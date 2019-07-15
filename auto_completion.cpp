@@ -10,21 +10,17 @@
 #include "essentutils/string_util.h"
 #include <set>
 
-using namespace ccon;
-using namespace std;
-using namespace sutil;
-
 
 namespace
 {
 ///////////////////
 
 std::vector<std::string> autoCompleteCmdName(const std::string& input,
-                                             const std::set<CmdSpec>& cmds)
+                                             const std::set<ccon::CmdSpec>& cmds)
 {
-   vector<string> candidates;
-   for (const CmdSpec& spec : cmds)
-      if (startsWith(spec.name(), input))
+   std::vector<std::string> candidates;
+   for (const ccon::CmdSpec& spec : cmds)
+      if (sutil::startsWith(spec.name(), input))
          candidates.push_back(spec.name());
    return candidates;
 }
@@ -32,20 +28,21 @@ std::vector<std::string> autoCompleteCmdName(const std::string& input,
 
 std::vector<std::string> autoCompleteCmdArg(const std::string& cmdName,
                                             const std::string& inputArg,
-                                            const std::set<CmdSpec>& cmds)
+                                            const std::set<ccon::CmdSpec>& cmds)
 {
-   const string inputLabel = stripArgSeparators(inputArg);
-   const string strippedSeps = inputArg.substr(0, inputArg.size() - inputLabel.size());
+   const std::string inputLabel = ccon::stripArgSeparators(inputArg);
+   const std::string strippedSeps =
+      inputArg.substr(0, inputArg.size() - inputLabel.size());
 
-   vector<string> candidates;
+   std::vector<std::string> candidates;
 
-   for (const CmdSpec& cmdSpec : cmds)
+   for (const ccon::CmdSpec& cmdSpec : cmds)
    {
       if (cmdSpec.matchesName(cmdName))
       {
-         for (const ArgSpec& argSpec : cmdSpec)
+         for (const ccon::ArgSpec& argSpec : cmdSpec)
          {
-            if (argSpec.hasLabel() && startsWith(argSpec.label(), inputLabel))
+            if (argSpec.hasLabel() && sutil::startsWith(argSpec.label(), inputLabel))
                candidates.push_back(strippedSeps + argSpec.label());
          }
 
@@ -58,26 +55,26 @@ std::vector<std::string> autoCompleteCmdArg(const std::string& cmdName,
 
 
 std::vector<std::string> autoComplete(const std::string& input,
-                                      const std::set<CmdSpec>& cmds)
+                                      const std::set<ccon::CmdSpec>& cmds)
 {
-   vector<string> cmdPieces = split(input, " ");
+   std::vector<std::string> cmdPieces = sutil::split(input, " ");
    if (cmdPieces.empty())
       return {};
 
    if (cmdPieces.size() == 1)
    {
-      return autoCompleteCmdName(lowercase(cmdPieces[0]), cmds);
+      return autoCompleteCmdName(sutil::lowercase(cmdPieces[0]), cmds);
    }
    else
    {
-      const vector<string> argCompletions = autoCompleteCmdArg(
-         lowercase(cmdPieces[0]), lowercase(*cmdPieces.rbegin()), cmds);
+      const std::vector<std::string> argCompletions = autoCompleteCmdArg(
+         sutil::lowercase(cmdPieces[0]), sutil::lowercase(*cmdPieces.rbegin()), cmds);
 
-      const string inputFront =
-         join(cmdPieces.begin(), (cmdPieces.rbegin() + 1).base(), " ") + ' ';
+      const std::string inputFront =
+         sutil::join(cmdPieces.begin(), (cmdPieces.rbegin() + 1).base(), " ") + ' ';
 
-      vector<string> inputCompletions;
-      for (const string& completedArg : argCompletions)
+      std::vector<std::string> inputCompletions;
+      for (const std::string& completedArg : argCompletions)
          inputCompletions.push_back(inputFront + completedArg);
 
       return inputCompletions;

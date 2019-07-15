@@ -12,20 +12,14 @@
 #include <tuple>
 #include <utility>
 
-using namespace ccon;
-using namespace ccon::consoleFontSizeCmdSpec;
-using namespace std;
-using namespace sutil;
-
 
 namespace
 {
-
 ///////////////////
 
-int interpretArgs(const VerifiedArgs& args)
+int interpretArgs(const ccon::VerifiedArgs& args)
 {
-   return intFromStr(args[0].values[0], 0);
+   return sutil::intFromStr(args[0].values[0], 0);
 }
 
 } // namespace
@@ -43,7 +37,7 @@ ConsoleFontSizeCmd::ConsoleFontSizeCmd(ConsoleUI* ui)
 
 CmdOutput ConsoleFontSizeCmd::execute(const VerifiedCmd& input)
 {
-   assert(input.name == cmdName);
+   assert(input.name == fontSizeCmd::cmdName);
 
    m_fontSize = interpretArgs(input.args);
 

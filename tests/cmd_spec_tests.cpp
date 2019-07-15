@@ -10,7 +10,6 @@
 #include <string>
 
 using namespace ccon;
-using namespace std;
 
 
 namespace
@@ -20,19 +19,19 @@ namespace
 void testLabelWithAbbrevCtor()
 {
    {
-      const string caseLabel = "LabelWithAbbrev ctor with label and abbreviation";
+      const std::string caseLabel = "LabelWithAbbrev ctor with label and abbreviation";
       LabelWithAbbrev label{"test", "t"};
       VERIFY(label.label() == "test", caseLabel);
       VERIFY(label.abbreviation() == "t", caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev ctor with label only";
+      const std::string caseLabel = "LabelWithAbbrev ctor with label only";
       LabelWithAbbrev label{"test", ""};
       VERIFY(label.label() == "test", caseLabel);
       VERIFY(label.abbreviation() == "", caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev ctor with abbreviation only";
+      const std::string caseLabel = "LabelWithAbbrev ctor with abbreviation only";
       LabelWithAbbrev label{"", "t"};
       // Abbreviation is used as label.
       VERIFY(label.label() == "t", caseLabel);
@@ -44,23 +43,24 @@ void testLabelWithAbbrevCtor()
 void testLabelWithAbbrevConversionToBool()
 {
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "LabelWithAbbrev conversion to bool for label and abbreviation";
       LabelWithAbbrev label{"test", "t"};
       VERIFY(label.operator bool(), caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev conversion to bool for label only";
+      const std::string caseLabel = "LabelWithAbbrev conversion to bool for label only";
       LabelWithAbbrev label{"test", ""};
       VERIFY(label.operator bool(), caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev conversion to bool for abbreviation only";
+      const std::string caseLabel =
+         "LabelWithAbbrev conversion to bool for abbreviation only";
       LabelWithAbbrev label{"", "t"};
       VERIFY(label.operator bool(), caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev conversion to bool for empty object";
+      const std::string caseLabel = "LabelWithAbbrev conversion to bool for empty object";
       LabelWithAbbrev label;
       VERIFY(!label.operator bool(), caseLabel);
    }
@@ -70,32 +70,32 @@ void testLabelWithAbbrevConversionToBool()
 void testLabelWithAbbrevMatches()
 {
    {
-      const string caseLabel = "LabelWithAbbrev::matches for matching label";
+      const std::string caseLabel = "LabelWithAbbrev::matches for matching label";
       LabelWithAbbrev label{"test", "t"};
       VERIFY(label.matches("test"), caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev::matches for matching abbreviation";
+      const std::string caseLabel = "LabelWithAbbrev::matches for matching abbreviation";
       LabelWithAbbrev label{"test", "t"};
       VERIFY(label.matches("t"), caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev::matches for no match";
+      const std::string caseLabel = "LabelWithAbbrev::matches for no match";
       LabelWithAbbrev label{"test", "t"};
       VERIFY(!label.matches("abc"), caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev::matches for empty object";
+      const std::string caseLabel = "LabelWithAbbrev::matches for empty object";
       LabelWithAbbrev label;
       VERIFY(!label.matches("abc"), caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev::matches for matching empty string";
+      const std::string caseLabel = "LabelWithAbbrev::matches for matching empty string";
       LabelWithAbbrev label{"abc", "a"};
       VERIFY(!label.matches(""), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "LabelWithAbbrev::matches for empty object matching empty string";
       LabelWithAbbrev label;
       VERIFY(label.matches(""), caseLabel);
@@ -106,12 +106,12 @@ void testLabelWithAbbrevMatches()
 void testLabelWithAbbrevLabel()
 {
    {
-      const string caseLabel = "LabelWithAbbrev::label for populated label";
+      const std::string caseLabel = "LabelWithAbbrev::label for populated label";
       LabelWithAbbrev label{"abc", "a"};
       VERIFY(label.label() == "abc", caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev::label for empty label";
+      const std::string caseLabel = "LabelWithAbbrev::label for empty label";
       LabelWithAbbrev label;
       VERIFY(label.label() == "", caseLabel);
    }
@@ -121,13 +121,14 @@ void testLabelWithAbbrevLabel()
 void testLabelWithAbbrevHaveAbbreviation()
 {
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "LabelWithAbbrev::haveAbbreviation for populated abbreviation";
       LabelWithAbbrev label{"abc", "a"};
       VERIFY(label.haveAbbreviation(), caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev::haveAbbreviation for empty abbreviation";
+      const std::string caseLabel =
+         "LabelWithAbbrev::haveAbbreviation for empty abbreviation";
       LabelWithAbbrev label{"abc", ""};
       VERIFY(!label.haveAbbreviation(), caseLabel);
    }
@@ -137,13 +138,14 @@ void testLabelWithAbbrevHaveAbbreviation()
 void testLabelWithAbbrevAbbreviation()
 {
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "LabelWithAbbrev::haveAbbreviation for populated abbreviation";
       LabelWithAbbrev label{"abc", "a"};
       VERIFY(label.abbreviation() == "a", caseLabel);
    }
    {
-      const string caseLabel = "LabelWithAbbrev::haveAbbreviation for empty abbreviation";
+      const std::string caseLabel =
+         "LabelWithAbbrev::haveAbbreviation for empty abbreviation";
       LabelWithAbbrev label{"abc", ""};
       VERIFY(label.abbreviation() == "", caseLabel);
    }
@@ -155,7 +157,7 @@ void testLabelWithAbbrevAbbreviation()
 void testArgSpecDefaultCtor()
 {
    {
-      const string caseLabel = "ArgSpec default ctor";
+      const std::string caseLabel = "ArgSpec default ctor";
       ArgSpec spec;
       VERIFY(!spec.hasLabel(), caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
@@ -166,51 +168,51 @@ void testArgSpecDefaultCtor()
 void testArgSpecMakePositionalArg()
 {
    {
-      const string caseLabel = "ArgSpec::makePositionalArg for one value";
+      const std::string caseLabel = "ArgSpec::makePositionalArg for one value";
 
       ArgSpec spec = ArgSpec::makePositionalArg(1);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(!spec.hasLabel(), caseLabel);
       VERIFY(spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("1 value") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("1 value") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makePositionalArg for mutiple values";
+      const std::string caseLabel = "ArgSpec::makePositionalArg for mutiple values";
 
       ArgSpec spec = ArgSpec::makePositionalArg(5);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(!spec.hasLabel(), caseLabel);
       VERIFY(spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("5 values") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("5 values") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makePositionalArg for zero or more values";
+      const std::string caseLabel = "ArgSpec::makePositionalArg for zero or more values";
 
       ArgSpec spec = ArgSpec::makePositionalArg(ArgSpec::ZeroOrMore);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(!spec.hasLabel(), caseLabel);
       VERIFY(spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("zero or more") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("zero or more") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makePositionalArg for one or more values";
+      const std::string caseLabel = "ArgSpec::makePositionalArg for one or more values";
 
       ArgSpec spec = ArgSpec::makePositionalArg(ArgSpec::OneOrMore);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(!spec.hasLabel(), caseLabel);
       VERIFY(spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("one or more") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("one or more") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::makePositionalArg for zero values. This is an empty spec object.";
 
       ArgSpec spec = ArgSpec::makePositionalArg(0);
@@ -218,25 +220,25 @@ void testArgSpecMakePositionalArg()
       VERIFY(!spec.operator bool(), caseLabel);
       VERIFY(!spec.hasLabel(), caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
-      const string help = spec.help();
+      const std::string help = spec.help();
       VERIFY(help == "", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makePositionalArg with description";
+      const std::string caseLabel = "ArgSpec::makePositionalArg with description";
 
-      const string descr = "test_description";
+      const std::string descr = "test_description";
       ArgSpec spec = ArgSpec::makePositionalArg(1, descr);
 
-      const string help = spec.help();
-      VERIFY(help.find(descr) != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find(descr) != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makePositionalArg without description";
+      const std::string caseLabel = "ArgSpec::makePositionalArg without description";
 
       ArgSpec spec = ArgSpec::makePositionalArg(5);
 
-      const string help = spec.help();
-      VERIFY(help.find("--") == string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("--") == std::string::npos, caseLabel);
    }
 }
 
@@ -244,106 +246,107 @@ void testArgSpecMakePositionalArg()
 void testArgSpecMakeOptionalArg()
 {
    {
-      const string caseLabel = "ArgSpec::makeOptionalArg for one value";
+      const std::string caseLabel = "ArgSpec::makeOptionalArg for one value";
 
-      const string label = "first_arg";
+      const std::string label = "first_arg";
       ArgSpec spec = ArgSpec::makeOptionalArg(label, 1);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(spec.label() == label, caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("1 value") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("1 value") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeOptionalArg for multiple values";
+      const std::string caseLabel = "ArgSpec::makeOptionalArg for multiple values";
 
-      const string label = "first_arg";
+      const std::string label = "first_arg";
       ArgSpec spec = ArgSpec::makeOptionalArg(label, 5);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(spec.label() == label, caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("5 values") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("5 values") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeOptionalArg for zore or more values";
+      const std::string caseLabel = "ArgSpec::makeOptionalArg for zore or more values";
 
-      const string label = "first_arg";
+      const std::string label = "first_arg";
       ArgSpec spec = ArgSpec::makeOptionalArg(label, ArgSpec::ZeroOrMore);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(spec.label() == label, caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("zero or more") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("zero or more") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeOptionalArg for one or more values";
+      const std::string caseLabel = "ArgSpec::makeOptionalArg for one or more values";
 
-      const string label = "first_arg";
+      const std::string label = "first_arg";
       ArgSpec spec = ArgSpec::makeOptionalArg(label, ArgSpec::OneOrMore);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(spec.label() == label, caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("one or more") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("one or more") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::makeOptionalArg for zero values. This is a flag argument.";
 
-      const string label = "first_arg";
+      const std::string label = "first_arg";
       ArgSpec spec = ArgSpec::makeOptionalArg(label, 0);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(spec.label() == label, caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("value") == string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("value") == std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeOptionalArg with uppercase label";
+      const std::string caseLabel = "ArgSpec::makeOptionalArg with uppercase label";
 
-      const string label = "UPPER";
+      const std::string label = "UPPER";
       ArgSpec spec = ArgSpec::makeOptionalArg(label, 1);
 
       VERIFY(spec.label() == "upper", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeOptionalArg with abbreviation";
+      const std::string caseLabel = "ArgSpec::makeOptionalArg with abbreviation";
 
-      const string label = "first_arg";
-      const string abbrev = "qq";
+      const std::string label = "first_arg";
+      const std::string abbrev = "qq";
       ArgSpec spec = ArgSpec::makeOptionalArg(label, 1, abbrev);
 
-      const string help = spec.help();
-      VERIFY(help.find(abbrev) != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find(abbrev) != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeOptionalArg with uppercase abbreviation";
+      const std::string caseLabel =
+         "ArgSpec::makeOptionalArg with uppercase abbreviation";
 
-      const string label = "first_arg";
-      const string abbrev = "QQ";
+      const std::string label = "first_arg";
+      const std::string abbrev = "QQ";
       ArgSpec spec = ArgSpec::makeOptionalArg(label, 1, abbrev);
 
-      const string help = spec.help();
-      VERIFY(help.find("qq") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("qq") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeOptionalArg with description";
+      const std::string caseLabel = "ArgSpec::makeOptionalArg with description";
 
-      const string label = "first_arg";
-      const string descr = "test_description";
+      const std::string label = "first_arg";
+      const std::string descr = "test_description";
       ArgSpec spec = ArgSpec::makeOptionalArg(label, 1, "", descr);
 
-      const string help = spec.help();
-      VERIFY(help.find(descr) != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find(descr) != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::makeOptionalArg without label. This is a positional argument.";
 
       ArgSpec spec = ArgSpec::makeOptionalArg("", 1);
@@ -351,22 +354,23 @@ void testArgSpecMakeOptionalArg()
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(!spec.hasLabel(), caseLabel);
       VERIFY(spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("value") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("value") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeOptionalArg without label but abbreviation. "
-                               "The abbreviation becomes the label.";
+      const std::string caseLabel =
+         "ArgSpec::makeOptionalArg without label but abbreviation. "
+         "The abbreviation becomes the label.";
 
-      const string abbrev = "qq";
+      const std::string abbrev = "qq";
       ArgSpec spec = ArgSpec::makeOptionalArg("", 1, abbrev);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(spec.label() == abbrev, caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("value") != string::npos, caseLabel);
-      VERIFY(help.find(abbrev) != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("value") != std::string::npos, caseLabel);
+      VERIFY(help.find(abbrev) != std::string::npos, caseLabel);
    }
 }
 
@@ -374,57 +378,57 @@ void testArgSpecMakeOptionalArg()
 void testArgSpecMakeFlagArg()
 {
    {
-      const string caseLabel = "ArgSpec::makeFlagArg";
+      const std::string caseLabel = "ArgSpec::makeFlagArg";
 
-      const string label = "first_arg";
+      const std::string label = "first_arg";
       ArgSpec spec = ArgSpec::makeFlagArg(label);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(spec.label() == label, caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find("value") == string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("value") == std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeFlagArg with uppercase label";
+      const std::string caseLabel = "ArgSpec::makeFlagArg with uppercase label";
 
-      const string label = "UPPER";
+      const std::string label = "UPPER";
       ArgSpec spec = ArgSpec::makeFlagArg(label);
 
       VERIFY(spec.label() == "upper", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeFlagArg with abbreviation";
+      const std::string caseLabel = "ArgSpec::makeFlagArg with abbreviation";
 
-      const string label = "first_arg";
-      const string abbrev = "qq";
+      const std::string label = "first_arg";
+      const std::string abbrev = "qq";
       ArgSpec spec = ArgSpec::makeFlagArg(label, abbrev);
 
-      const string help = spec.help();
-      VERIFY(help.find(abbrev) != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find(abbrev) != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeFlagArg with uppercase abbreviation";
+      const std::string caseLabel = "ArgSpec::makeFlagArg with uppercase abbreviation";
 
-      const string label = "first_arg";
-      const string abbrev = "QQ";
+      const std::string label = "first_arg";
+      const std::string abbrev = "QQ";
       ArgSpec spec = ArgSpec::makeFlagArg(label, abbrev);
 
-      const string help = spec.help();
-      VERIFY(help.find("qq") != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find("qq") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeFlagArg with description";
+      const std::string caseLabel = "ArgSpec::makeFlagArg with description";
 
-      const string label = "first_arg";
-      const string descr = "test_description";
+      const std::string label = "first_arg";
+      const std::string descr = "test_description";
       ArgSpec spec = ArgSpec::makeFlagArg(label, "", descr);
 
-      const string help = spec.help();
-      VERIFY(help.find(descr) != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find(descr) != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::makeFlagArg without label. This is an empty spec object.";
 
       ArgSpec spec = ArgSpec::makeFlagArg("");
@@ -435,17 +439,18 @@ void testArgSpecMakeFlagArg()
       VERIFY(spec.help().empty(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::makeFlagArg without label but abbreviation. "
-                               "The abbreviation becomes the label.";
+      const std::string caseLabel =
+         "ArgSpec::makeFlagArg without label but abbreviation. "
+         "The abbreviation becomes the label.";
 
-      const string abbrev = "qq";
+      const std::string abbrev = "qq";
       ArgSpec spec = ArgSpec::makeFlagArg("", abbrev);
 
       VERIFY(spec.operator bool(), caseLabel);
       VERIFY(spec.label() == abbrev, caseLabel);
       VERIFY(!spec.isRequired(), caseLabel);
-      const string help = spec.help();
-      VERIFY(help.find(abbrev) != string::npos, caseLabel);
+      const std::string help = spec.help();
+      VERIFY(help.find(abbrev) != std::string::npos, caseLabel);
    }
 }
 
@@ -453,33 +458,33 @@ void testArgSpecMakeFlagArg()
 void testArgSpecConversionToBool()
 {
    {
-      const string caseLabel = "ArgSpec conversion to bool for empty object";
+      const std::string caseLabel = "ArgSpec conversion to bool for empty object";
       ArgSpec spec;
       VERIFY(!spec.operator bool(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec conversion to bool for empty object";
+      const std::string caseLabel = "ArgSpec conversion to bool for empty object";
       ArgSpec spec;
       VERIFY(!spec.operator bool(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec conversion to bool for spec with value";
+      const std::string caseLabel = "ArgSpec conversion to bool for spec with value";
       ArgSpec spec = ArgSpec::makePositionalArg(1);
       VERIFY(spec.operator bool(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec conversion to bool for spec with label";
+      const std::string caseLabel = "ArgSpec conversion to bool for spec with label";
       ArgSpec spec = ArgSpec::makeFlagArg("label");
       VERIFY(spec.operator bool(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec conversion to bool for spec with description only";
       ArgSpec spec = ArgSpec::makeFlagArg("", "", "descr");
       VERIFY(!spec.operator bool(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec conversion to bool for spec with abbreviation only";
       ArgSpec spec = ArgSpec::makeFlagArg("", "abbreviation");
       // The abbreviation becomes the label.
@@ -491,22 +496,22 @@ void testArgSpecConversionToBool()
 void testArgSpecIsRequired()
 {
    {
-      const string caseLabel = "ArgSpec::isRequired for positional argument";
+      const std::string caseLabel = "ArgSpec::isRequired for positional argument";
       ArgSpec spec = ArgSpec::makePositionalArg(1);
       VERIFY(spec.isRequired(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::isRequired for optional argument";
+      const std::string caseLabel = "ArgSpec::isRequired for optional argument";
       ArgSpec spec = ArgSpec::makeOptionalArg("opt", 1);
       VERIFY(!spec.isRequired(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::isRequired for flag argument";
+      const std::string caseLabel = "ArgSpec::isRequired for flag argument";
       ArgSpec spec = ArgSpec::makeFlagArg("opt");
       VERIFY(!spec.isRequired(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::isRequired for empty spec";
+      const std::string caseLabel = "ArgSpec::isRequired for empty spec";
       ArgSpec spec;
       VERIFY(!spec.isRequired(), caseLabel);
    }
@@ -516,12 +521,12 @@ void testArgSpecIsRequired()
 void testArgSpecHasLabel()
 {
    {
-      const string caseLabel = "ArgSpec::hasLabel for positional argument";
+      const std::string caseLabel = "ArgSpec::hasLabel for positional argument";
       ArgSpec spec = ArgSpec::makePositionalArg(1);
       VERIFY(!spec.hasLabel(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::hasLabel for optional argument";
+      const std::string caseLabel = "ArgSpec::hasLabel for optional argument";
       ArgSpec spec = ArgSpec::makeOptionalArg("opt", 1);
       VERIFY(spec.hasLabel(), caseLabel);
    }
@@ -531,12 +536,12 @@ void testArgSpecHasLabel()
 void testArgSpecLabel()
 {
    {
-      const string caseLabel = "ArgSpec::label";
+      const std::string caseLabel = "ArgSpec::label";
       ArgSpec spec = ArgSpec::makeOptionalArg("opt", 1);
       VERIFY(spec.label() == "opt", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::label for no label";
+      const std::string caseLabel = "ArgSpec::label for no label";
       ArgSpec spec = ArgSpec::makePositionalArg(1);
       VERIFY(spec.label().empty(), caseLabel);
    }
@@ -546,52 +551,52 @@ void testArgSpecLabel()
 void testArgSpecHelp()
 {
    {
-      const string caseLabel = "ArgSpec::help for empty object";
+      const std::string caseLabel = "ArgSpec::help for empty object";
       ArgSpec spec;
       VERIFY(spec.help() == "", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::help for required argument";
+      const std::string caseLabel = "ArgSpec::help for required argument";
       ArgSpec spec = ArgSpec::makePositionalArg(1);
-      VERIFY(spec.help().find("Required") != string::npos, caseLabel);
+      VERIFY(spec.help().find("Required") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::help for optional argument";
+      const std::string caseLabel = "ArgSpec::help for optional argument";
       ArgSpec spec = ArgSpec::makeOptionalArg("foo", 1);
-      VERIFY(spec.help().find("Optional") != string::npos, caseLabel);
+      VERIFY(spec.help().find("Optional") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::help contains label";
+      const std::string caseLabel = "ArgSpec::help contains label";
       ArgSpec spec = ArgSpec::makeOptionalArg("abcdefg", 1);
-      VERIFY(spec.help().find("abcdefg") != string::npos, caseLabel);
+      VERIFY(spec.help().find("abcdefg") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::help contains abbreviation";
+      const std::string caseLabel = "ArgSpec::help contains abbreviation";
       ArgSpec spec = ArgSpec::makeOptionalArg("abcdefg", 1, "xyz");
-      VERIFY(spec.help().find("xyz") != string::npos, caseLabel);
+      VERIFY(spec.help().find("xyz") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::help contains the number of values";
+      const std::string caseLabel = "ArgSpec::help contains the number of values";
       ArgSpec spec = ArgSpec::makePositionalArg(10);
-      VERIFY(spec.help().find("10 values") != string::npos, caseLabel);
+      VERIFY(spec.help().find("10 values") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::help contains phrase: zero or more";
+      const std::string caseLabel = "ArgSpec::help contains phrase: zero or more";
       ArgSpec spec = ArgSpec::makePositionalArg(ArgSpec::ZeroOrMore);
-      VERIFY(spec.help().find("zero or more") != string::npos, caseLabel);
+      VERIFY(spec.help().find("zero or more") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::help contains phrase: one or more";
+      const std::string caseLabel = "ArgSpec::help contains phrase: one or more";
       ArgSpec spec = ArgSpec::makePositionalArg(ArgSpec::OneOrMore);
-      VERIFY(spec.help().find("one or more") != string::npos, caseLabel);
+      VERIFY(spec.help().find("one or more") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::help contains description";
+      const std::string caseLabel = "ArgSpec::help contains description";
       ArgSpec spec = ArgSpec::makePositionalArg(1, "thisisthedescription");
-      VERIFY(spec.help().find("thisisthedescription") != string::npos, caseLabel);
+      VERIFY(spec.help().find("thisisthedescription") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::help indenting";
+      const std::string caseLabel = "ArgSpec::help indenting";
       ArgSpec spec = ArgSpec::makePositionalArg(1, "thisisthedescription");
       VERIFY(spec.help("  ").find("Required") == 2, caseLabel);
    }
@@ -601,22 +606,22 @@ void testArgSpecHelp()
 void testArgSpecMatchLabel()
 {
    {
-      const string caseLabel = "ArgSpec::matchLabel for matching label";
+      const std::string caseLabel = "ArgSpec::matchLabel for matching label";
       ArgSpec spec = ArgSpec::makeFlagArg("abcdefg");
       VERIFY(spec.matchLabel("abcdefg"), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::matchLabel for matching abbreviation";
+      const std::string caseLabel = "ArgSpec::matchLabel for matching abbreviation";
       ArgSpec spec = ArgSpec::makeFlagArg("abcdefg", "ab");
       VERIFY(spec.matchLabel("ab"), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::matchLabel for no match";
+      const std::string caseLabel = "ArgSpec::matchLabel for no match";
       ArgSpec spec = ArgSpec::makeFlagArg("abcdefg");
       VERIFY(!spec.matchLabel("cd"), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::matchLabel for different case";
+      const std::string caseLabel = "ArgSpec::matchLabel for different case";
       ArgSpec spec = ArgSpec::makeFlagArg("abcd");
       VERIFY(spec.matchLabel("ABCD"), caseLabel);
    }
@@ -626,12 +631,13 @@ void testArgSpecMatchLabel()
 void testArgSpecMatch()
 {
    {
-      const string caseLabel = "ArgSpec::match label for matching actual flag argument";
+      const std::string caseLabel =
+         "ArgSpec::match label for matching actual flag argument";
       ArgSpec spec = ArgSpec::makeFlagArg("myflag");
-      vector<string> actualArgs{"-myflag"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-myflag"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "myflag", caseLabel);
@@ -639,13 +645,13 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match label for matching actual flag argument with double-dash";
       ArgSpec spec = ArgSpec::makeFlagArg("myflag");
-      vector<string> actualArgs{"--myflag"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"--myflag"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "myflag", caseLabel);
@@ -653,46 +659,47 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match label for not matching actual flag argument";
       ArgSpec spec = ArgSpec::makeFlagArg("myflag");
-      vector<string> actualArgs{"-other"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-other"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(*argIter == "-other", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match label for no actual arguments";
+      const std::string caseLabel = "ArgSpec::match label for no actual arguments";
       ArgSpec spec = ArgSpec::makeFlagArg("myflag");
-      vector<string> actualArgs;
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs;
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match label for not optional actual argument";
+      const std::string caseLabel =
+         "ArgSpec::match label for not optional actual argument";
       ArgSpec spec = ArgSpec::makeFlagArg("myflag");
-      vector<string> actualArgs{"myflag"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"myflag"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(*argIter == "myflag", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match label for multiple actual arguments";
+      const std::string caseLabel = "ArgSpec::match label for multiple actual arguments";
       ArgSpec spec = ArgSpec::makeFlagArg("myflag");
-      vector<string> actualArgs{"-myflag", "-other", "-more"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-myflag", "-other", "-more"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "myflag", caseLabel);
@@ -700,13 +707,13 @@ void testArgSpecMatch()
       VERIFY(*argIter == "-other", caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match label for different actual arguments with different case";
       ArgSpec spec = ArgSpec::makeFlagArg("myflag");
-      vector<string> actualArgs{"-myFlag"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-myFlag"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "myflag", caseLabel);
@@ -714,12 +721,12 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match value";
+      const std::string caseLabel = "ArgSpec::match value";
       ArgSpec spec = ArgSpec::makePositionalArg(1);
-      vector<string> actualArgs{"first"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"first"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label.empty(), caseLabel);
@@ -728,12 +735,12 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match multiple values";
+      const std::string caseLabel = "ArgSpec::match multiple values";
       ArgSpec spec = ArgSpec::makePositionalArg(3);
-      vector<string> actualArgs{"first", "1", "other"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"first", "1", "other"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label.empty(), caseLabel);
@@ -743,12 +750,13 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match multiple values with more actual args";
+      const std::string caseLabel =
+         "ArgSpec::match multiple values with more actual args";
       ArgSpec spec = ArgSpec::makePositionalArg(3);
-      vector<string> actualArgs{"first", "1", "other", "more1", "more2"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"first", "1", "other", "more1", "more2"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label.empty(), caseLabel);
@@ -758,34 +766,35 @@ void testArgSpecMatch()
       VERIFY(*argIter == "more1", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match value with labeled actual args";
+      const std::string caseLabel = "ArgSpec::match value with labeled actual args";
       ArgSpec spec = ArgSpec::makePositionalArg(1);
-      vector<string> actualArgs{"-labeled"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-labeled"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(*argIter == "-labeled", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match value with no actual args";
+      const std::string caseLabel = "ArgSpec::match value with no actual args";
       ArgSpec spec = ArgSpec::makePositionalArg(1);
-      vector<string> actualArgs;
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs;
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match zero or more values with zero actual args";
+      const std::string caseLabel =
+         "ArgSpec::match zero or more values with zero actual args";
       ArgSpec spec = ArgSpec::makePositionalArg(ArgSpec::ZeroOrMore);
-      vector<string> actualArgs;
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs;
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label.empty(), caseLabel);
@@ -793,13 +802,13 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match zero or more values with multiple actual args";
       ArgSpec spec = ArgSpec::makePositionalArg(ArgSpec::ZeroOrMore);
-      vector<string> actualArgs{"1", "2", "3", "4", "-flag"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"1", "2", "3", "4", "-flag"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label.empty(), caseLabel);
@@ -810,23 +819,25 @@ void testArgSpecMatch()
       VERIFY(*argIter == "-flag", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match one or more values with zero actual args";
+      const std::string caseLabel =
+         "ArgSpec::match one or more values with zero actual args";
       ArgSpec spec = ArgSpec::makePositionalArg(ArgSpec::OneOrMore);
-      vector<string> actualArgs;
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs;
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match one or more values with one actual arg";
+      const std::string caseLabel =
+         "ArgSpec::match one or more values with one actual arg";
       ArgSpec spec = ArgSpec::makePositionalArg(ArgSpec::OneOrMore);
-      vector<string> actualArgs{"1"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"1"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label.empty(), caseLabel);
@@ -835,13 +846,13 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match one or more values with multiple actual args";
       ArgSpec spec = ArgSpec::makePositionalArg(ArgSpec::OneOrMore);
-      vector<string> actualArgs{"1", "2", "3", "4", "-flag"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"1", "2", "3", "4", "-flag"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label.empty(), caseLabel);
@@ -852,12 +863,12 @@ void testArgSpecMatch()
       VERIFY(*argIter == "-flag", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match optional value";
+      const std::string caseLabel = "ArgSpec::match optional value";
       ArgSpec spec = ArgSpec::makeOptionalArg("test", 1);
-      vector<string> actualArgs{"-test", "1"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-test", "1"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "test", caseLabel);
@@ -866,12 +877,12 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match multiple optional values";
+      const std::string caseLabel = "ArgSpec::match multiple optional values";
       ArgSpec spec = ArgSpec::makeOptionalArg("label", 3);
-      vector<string> actualArgs{"-label", "1", "two", "3"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-label", "1", "two", "3"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "label", caseLabel);
@@ -881,13 +892,13 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match multiple optional values with more actual args";
       ArgSpec spec = ArgSpec::makeOptionalArg("label", 3);
-      vector<string> actualArgs{"-label", "1", "two", "3", "more", "more2"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-label", "1", "two", "3", "more", "more2"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "label", caseLabel);
@@ -897,47 +908,48 @@ void testArgSpecMatch()
       VERIFY(*argIter == "more", caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match optional value with missing actual value args";
       ArgSpec spec = ArgSpec::makeOptionalArg("mylabel", 1);
-      vector<string> actualArgs{"-mylabel"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-mylabel"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(*argIter == "-mylabel", caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match optional value with no actual args";
+      const std::string caseLabel = "ArgSpec::match optional value with no actual args";
       ArgSpec spec = ArgSpec::makeOptionalArg("mylabel", 1);
-      vector<string> actualArgs;
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs;
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel = "ArgSpec::match optional value with too few actual args";
+      const std::string caseLabel =
+         "ArgSpec::match optional value with too few actual args";
       ArgSpec spec = ArgSpec::makeOptionalArg("mylabel", 3);
-      vector<string> actualArgs{"-mylabel", "1", "2"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-mylabel", "1", "2"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(*argIter == "-mylabel", caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match zero or more optional values with zero actual value args";
       ArgSpec spec = ArgSpec::makeOptionalArg("mylabel", ArgSpec::ZeroOrMore);
-      vector<string> actualArgs{"-mylabel"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-mylabel"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "mylabel", caseLabel);
@@ -945,13 +957,13 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match zero or more optional values with multiple actual value args";
       ArgSpec spec = ArgSpec::makeOptionalArg("mylabel", ArgSpec::ZeroOrMore);
-      vector<string> actualArgs{"-mylabel", "1", "2", "3", "4", "-flag"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-mylabel", "1", "2", "3", "4", "-flag"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "mylabel", caseLabel);
@@ -962,25 +974,25 @@ void testArgSpecMatch()
       VERIFY(*argIter == "-flag", caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match one or more optional values with zero actual value args";
       ArgSpec spec = ArgSpec::makeOptionalArg("mylabel", ArgSpec::OneOrMore);
-      vector<string> actualArgs;
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs;
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(!matched.has_value(), caseLabel);
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match one or more optional values with one actual value arg";
       ArgSpec spec = ArgSpec::makeOptionalArg("mylabel", ArgSpec::OneOrMore);
-      vector<string> actualArgs{"-mylabel", "1"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-mylabel", "1"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "mylabel", caseLabel);
@@ -989,13 +1001,13 @@ void testArgSpecMatch()
       VERIFY(argIter == actualArgs.end(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "ArgSpec::match one or more optional values with multiple actual value args";
       ArgSpec spec = ArgSpec::makeOptionalArg("mylabel", ArgSpec::OneOrMore);
-      vector<string> actualArgs{"-mylabel", "1", "2", "3", "4", "-flag"};
-      vector<string>::const_iterator argIter = actualArgs.begin();
+      std::vector<std::string> actualArgs{"-mylabel", "1", "2", "3", "4", "-flag"};
+      std::vector<std::string>::const_iterator argIter = actualArgs.begin();
 
-      const optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
+      const std::optional<VerifiedArg> matched = spec.match(argIter, actualArgs.end());
 
       VERIFY(matched.has_value(), caseLabel);
       VERIFY(matched.value().label == "mylabel", caseLabel);
@@ -1011,7 +1023,7 @@ void testArgSpecMatch()
 void testCmdSpecDefaultCtor()
 {
    {
-      const string caseLabel = "CmdSpec default ctor";
+      const std::string caseLabel = "CmdSpec default ctor";
       CmdSpec spec;
       VERIFY(!spec, caseLabel);
       VERIFY(spec.name().empty(), caseLabel);
@@ -1024,12 +1036,12 @@ void testCmdSpecDefaultCtor()
 void testCmdSpecConversionToBool()
 {
    {
-      const string caseLabel = "CmdSpec conversion to bool for populated spec";
+      const std::string caseLabel = "CmdSpec conversion to bool for populated spec";
       CmdSpec spec{"name", "n", "descr", {}, "notes"};
       VERIFY(spec.operator bool(), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec conversion to bool for empty spec";
+      const std::string caseLabel = "CmdSpec conversion to bool for empty spec";
       CmdSpec spec;
       VERIFY(!spec.operator bool(), caseLabel);
    }
@@ -1039,32 +1051,32 @@ void testCmdSpecConversionToBool()
 void testCmdSpecMatchesName()
 {
    {
-      const string caseLabel = "CmdSpec::matchesName for matching name";
+      const std::string caseLabel = "CmdSpec::matchesName for matching name";
       CmdSpec spec{"name", "n", "descr", {}, "notes"};
       VERIFY(spec.matchesName("name"), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::matchesName for matching abbreviation";
+      const std::string caseLabel = "CmdSpec::matchesName for matching abbreviation";
       CmdSpec spec{"name", "n", "descr", {}, "notes"};
       VERIFY(spec.matchesName("n"), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::matchesName for no match";
+      const std::string caseLabel = "CmdSpec::matchesName for no match";
       CmdSpec spec{"name", "n", "descr", {}, "notes"};
       VERIFY(!spec.matchesName("other"), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::matchesName for empty object";
+      const std::string caseLabel = "CmdSpec::matchesName for empty object";
       CmdSpec spec;
       VERIFY(!spec.matchesName("other"), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::matchesName for matching empty string";
+      const std::string caseLabel = "CmdSpec::matchesName for matching empty string";
       CmdSpec spec{"name", "n", "descr", {}, "notes"};
       VERIFY(!spec.matchesName(""), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::matchesName for empty object matching empty string";
       CmdSpec spec;
       VERIFY(spec.matchesName(""), caseLabel);
@@ -1075,12 +1087,12 @@ void testCmdSpecMatchesName()
 void testCmdSpecName()
 {
    {
-      const string caseLabel = "CmdSpec::name for named spec";
+      const std::string caseLabel = "CmdSpec::name for named spec";
       CmdSpec spec{"name", "n", "descr", {}, "notes"};
       VERIFY(spec.name() == "name", caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::name for empty spec";
+      const std::string caseLabel = "CmdSpec::name for empty spec";
       CmdSpec spec;
       VERIFY(spec.name().empty(), caseLabel);
    }
@@ -1090,12 +1102,12 @@ void testCmdSpecName()
 void testCmdSpecDescription()
 {
    {
-      const string caseLabel = "CmdSpec::description for spec with description";
+      const std::string caseLabel = "CmdSpec::description for spec with description";
       CmdSpec spec{"name", "n", "descr", {}, "notes"};
       VERIFY(spec.description() == "descr", caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::description for empty spec";
+      const std::string caseLabel = "CmdSpec::description for empty spec";
       CmdSpec spec;
       VERIFY(spec.description().empty(), caseLabel);
    }
@@ -1105,34 +1117,34 @@ void testCmdSpecDescription()
 void testCmdSpecHelp()
 {
    {
-      const string caseLabel = "CmdSpec::help for empty object";
+      const std::string caseLabel = "CmdSpec::help for empty object";
       CmdSpec spec;
       VERIFY(spec.help().empty(), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::help contains name";
+      const std::string caseLabel = "CmdSpec::help contains name";
       CmdSpec spec{"searchablename", "n", "descr", {}, "notes"};
-      VERIFY(spec.help().find("searchablename") != string::npos, caseLabel);
+      VERIFY(spec.help().find("searchablename") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::help contains abbreviation";
+      const std::string caseLabel = "CmdSpec::help contains abbreviation";
       CmdSpec spec{"name", "qq", "descr", {}, "notes"};
-      VERIFY(spec.help().find("qq") != string::npos, caseLabel);
+      VERIFY(spec.help().find("qq") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::help contains description";
+      const std::string caseLabel = "CmdSpec::help contains description";
       CmdSpec spec{"name", "n", "searchableDescription", {}, "notes"};
-      VERIFY(spec.help().find("searchableDescription") != string::npos, caseLabel);
+      VERIFY(spec.help().find("searchableDescription") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::help contains arguments";
+      const std::string caseLabel = "CmdSpec::help contains arguments";
       CmdSpec spec{"name", "n", "descr", {ArgSpec::makeFlagArg("-myflag")}, "notes"};
-      VERIFY(spec.help().find("myflag") != string::npos, caseLabel);
+      VERIFY(spec.help().find("myflag") != std::string::npos, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::help contains notes";
+      const std::string caseLabel = "CmdSpec::help contains notes";
       CmdSpec spec{"name", "n", "descr", {}, "searchableNotes"};
-      VERIFY(spec.help().find("searchableNotes") != string::npos, caseLabel);
+      VERIFY(spec.help().find("searchableNotes") != std::string::npos, caseLabel);
    }
 }
 
@@ -1140,12 +1152,12 @@ void testCmdSpecHelp()
 void testCmdSpecHasArgSpec()
 {
    {
-      const string caseLabel = "CmdSpec::hasArgSpec for existing arg spec";
+      const std::string caseLabel = "CmdSpec::hasArgSpec for existing arg spec";
       CmdSpec spec{"name", "n", "descr", {ArgSpec::makeFlagArg("myflag")}, "notes"};
       VERIFY(spec.hasArgSpec("myflag"), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::hasArgSpec for not existing arg spec";
+      const std::string caseLabel = "CmdSpec::hasArgSpec for not existing arg spec";
       CmdSpec spec{"name",
                    "n",
                    "descr",
@@ -1154,7 +1166,7 @@ void testCmdSpecHasArgSpec()
       VERIFY(!spec.hasArgSpec("myflag"), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::hasArgSpec for no arg specs";
+      const std::string caseLabel = "CmdSpec::hasArgSpec for no arg specs";
       CmdSpec spec{"name", "n", "descr", {}, "notes"};
       VERIFY(!spec.hasArgSpec("myflag"), caseLabel);
    }
@@ -1164,7 +1176,7 @@ void testCmdSpecHasArgSpec()
 void testCmdSpecBegin()
 {
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::begin for multiple arg specs with required arg first";
       CmdSpec spec{"name",
                    "n",
@@ -1174,7 +1186,7 @@ void testCmdSpecBegin()
       VERIFY(spec.begin()->isRequired(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::begin for multiple arg specs with optional arg first";
       CmdSpec spec{"name",
                    "n",
@@ -1184,7 +1196,7 @@ void testCmdSpecBegin()
       VERIFY(spec.begin()->label() == "first", caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::begin for no arg specs";
+      const std::string caseLabel = "CmdSpec::begin for no arg specs";
       CmdSpec spec{"name", "n", "descr", {}, "notes"};
       VERIFY(spec.begin() == spec.end(), caseLabel);
    }
@@ -1200,17 +1212,17 @@ void testCmdSpecEnd()
 void testCmdSpecMatch()
 {
    {
-      const string caseLabel = "CmdSpec::match - no match for empty spec";
+      const std::string caseLabel = "CmdSpec::match - no match for empty spec";
       CmdSpec spec;
       VERIFY(!spec.match("help").isMatching, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match - no match for empty command";
+      const std::string caseLabel = "CmdSpec::match - no match for empty command";
       CmdSpec spec{"test", "t", "run a test", {}, ""};
       VERIFY(!spec.match("").isMatching, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match command name";
+      const std::string caseLabel = "CmdSpec::match command name";
       CmdSpec spec{"test", "t", "run a test", {}, ""};
 
       CmdSpec::Match res = spec.match("test");
@@ -1220,7 +1232,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.name == "test", caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match - fail for incorrect command name";
+      const std::string caseLabel = "CmdSpec::match - fail for incorrect command name";
       CmdSpec spec{"test", "t", "run a test", {}, ""};
 
       CmdSpec::Match res = spec.match("toast");
@@ -1228,7 +1240,7 @@ void testCmdSpecMatch()
       VERIFY(!res.isMatching, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match command abbreviation";
+      const std::string caseLabel = "CmdSpec::match command abbreviation";
       CmdSpec spec{"test", "t", "run a test", {}, ""};
 
       CmdSpec::Match res = spec.match("t");
@@ -1238,7 +1250,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.name == "test", caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match command name with different case";
+      const std::string caseLabel = "CmdSpec::match command name with different case";
       CmdSpec spec{"test", "t", "run a test", {}, ""};
 
       CmdSpec::Match res = spec.match("TEST");
@@ -1248,7 +1260,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.name == "test", caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match help argument";
+      const std::string caseLabel = "CmdSpec::match help argument";
       CmdSpec spec{"test", "t", "run a test", {}, ""};
 
       CmdSpec::Match res = spec.match("test -help");
@@ -1260,7 +1272,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[0].label == "help", caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match help argument abbreviation";
+      const std::string caseLabel = "CmdSpec::match help argument abbreviation";
       CmdSpec spec{"test", "t", "run a test", {}, ""};
 
       CmdSpec::Match res = spec.match("test -?");
@@ -1272,7 +1284,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[0].label == "help", caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match positional args";
+      const std::string caseLabel = "CmdSpec::match positional args";
       CmdSpec spec{"test", "t", "run a test", {ArgSpec::makePositionalArg(2)}, ""};
 
       CmdSpec::Match res = spec.match("test abc 2");
@@ -1286,7 +1298,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[0].values[1] == "2", caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::match positional args specified in two arg specs";
       CmdSpec spec{"test",
                    "t",
@@ -1305,7 +1317,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[1].values[0] == "2", caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match - fail for too few positional args";
+      const std::string caseLabel = "CmdSpec::match - fail for too few positional args";
       CmdSpec spec{"test", "t", "run a test", {ArgSpec::makePositionalArg(2)}, ""};
 
       CmdSpec::Match res = spec.match("test abc");
@@ -1314,7 +1326,7 @@ void testCmdSpecMatch()
       VERIFY(!res.areArgsValid, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match - fail for too many positional args";
+      const std::string caseLabel = "CmdSpec::match - fail for too many positional args";
       CmdSpec spec{"test", "t", "run a test", {ArgSpec::makePositionalArg(2)}, ""};
 
       CmdSpec::Match res = spec.match("test abc 2 3");
@@ -1323,7 +1335,7 @@ void testCmdSpecMatch()
       VERIFY(!res.areArgsValid, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match optional args";
+      const std::string caseLabel = "CmdSpec::match optional args";
       CmdSpec spec{"test",
                    "t",
                    "run a test",
@@ -1343,7 +1355,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[1].values.empty(), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match missing optional arg";
+      const std::string caseLabel = "CmdSpec::match missing optional arg";
       CmdSpec spec{"test",
                    "t",
                    "run a test",
@@ -1360,7 +1372,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[0].values.empty(), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match all optional args missing";
+      const std::string caseLabel = "CmdSpec::match all optional args missing";
       CmdSpec spec{"test",
                    "t",
                    "run a test",
@@ -1375,7 +1387,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args.empty(), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match - fail for too many optional args";
+      const std::string caseLabel = "CmdSpec::match - fail for too many optional args";
       CmdSpec spec{"test",
                    "t",
                    "run a test",
@@ -1388,7 +1400,7 @@ void testCmdSpecMatch()
       VERIFY(!res.areArgsValid, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match positional and optional args";
+      const std::string caseLabel = "CmdSpec::match positional and optional args";
       CmdSpec spec{"test",
                    "t",
                    "run a test",
@@ -1414,8 +1426,9 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[3].values.empty(), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match - fail missing positional arg for mix of "
-                               "positional and optional args";
+      const std::string caseLabel =
+         "CmdSpec::match - fail missing positional arg for mix of "
+         "positional and optional args";
       CmdSpec spec{"test",
                    "t",
                    "run a test",
@@ -1429,7 +1442,7 @@ void testCmdSpecMatch()
       VERIFY(!res.areArgsValid, caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::match - fail for too many positional args for mix of "
          "positional and optional args";
       CmdSpec spec{"test",
@@ -1445,7 +1458,7 @@ void testCmdSpecMatch()
       VERIFY(!res.areArgsValid, caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::match missing optional arg for mix of positional and optional args";
       CmdSpec spec{"test",
                    "t",
@@ -1468,7 +1481,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[2].values.empty(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::match - fail for too many optional args for mix of "
          "positional and optional args";
       CmdSpec spec{"test",
@@ -1484,7 +1497,7 @@ void testCmdSpecMatch()
       VERIFY(!res.areArgsValid, caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::match zero or more positional arg values for mix of "
          "positional and optional args";
       CmdSpec spec{"test",
@@ -1507,7 +1520,7 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[2].values.empty(), caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::match zero positional arg values when zero or more are specified";
       CmdSpec spec{"test",
                    "t",
@@ -1529,8 +1542,9 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[2].values.empty(), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match - fail for zero or more positional arg "
-                               "followed by another positional arg";
+      const std::string caseLabel =
+         "CmdSpec::match - fail for zero or more positional arg "
+         "followed by another positional arg";
       CmdSpec spec{
          "test",
          "t",
@@ -1544,7 +1558,7 @@ void testCmdSpecMatch()
       VERIFY(!res.areArgsValid, caseLabel);
    }
    {
-      const string caseLabel =
+      const std::string caseLabel =
          "CmdSpec::match one or more positional arg values for mix of "
          "positional and optional args";
       CmdSpec spec{"test",
@@ -1567,8 +1581,9 @@ void testCmdSpecMatch()
       VERIFY(res.matchedCmd.args[2].values.empty(), caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match - fail for zero positional arg values "
-                               "when one or more are specified";
+      const std::string caseLabel =
+         "CmdSpec::match - fail for zero positional arg values "
+         "when one or more are specified";
       CmdSpec spec{"test",
                    "t",
                    "run a test",
@@ -1582,8 +1597,9 @@ void testCmdSpecMatch()
       VERIFY(!res.areArgsValid, caseLabel);
    }
    {
-      const string caseLabel = "CmdSpec::match - fail for one or more positional arg "
-                               "followed by another positional arg";
+      const std::string caseLabel =
+         "CmdSpec::match - fail for one or more positional arg "
+         "followed by another positional arg";
       CmdSpec spec{
          "test",
          "t",

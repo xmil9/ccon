@@ -18,17 +18,17 @@ namespace ccon
 {
 ///////////////////
 
-namespace exitCmdSpec
+namespace exitCmd
 {
 
 const std::string cmdName = "exit";
 
-} // namespace exitCmdSpec
+} // namespace exitCmd
 
 
 inline CmdSpec makeExitCmdSpec()
 {
-   return {exitCmdSpec::cmdName, "x", "exits the console", {}, ""};
+   return {exitCmd::cmdName, "x", "exits the console", {}, ""};
 }
 
 

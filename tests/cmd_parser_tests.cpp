@@ -11,8 +11,6 @@
 #include <string>
 
 using namespace ccon;
-using namespace std;
-using namespace sutil;
 
 
 namespace
@@ -175,48 +173,53 @@ void testParseColorArg()
    {
       const std::string caseLabel = "parseColorArg for color arg";
       const VerifiedArgs args{{"bkg", {"050505"}}};
-      const Rgb color = parseColorArg(args.begin(), args.end(), "bkg", {});
-      VERIFY(color == Rgb(5, 5, 5), caseLabel);
+      const sutil::Rgb color = parseColorArg(args.begin(), args.end(), "bkg", {});
+      VERIFY(color == sutil::Rgb(5, 5, 5), caseLabel);
    }
    {
       const std::string caseLabel = "parseColorArg for missing color arg";
       const VerifiedArgs args{{"other", {"050505"}}};
-      const Rgb defaultColor = Rgb{9, 9, 9};
-      const Rgb color = parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
+      const sutil::Rgb defaultColor = sutil::Rgb{9, 9, 9};
+      const sutil::Rgb color =
+         parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
       VERIFY(color == defaultColor, caseLabel);
    }
    {
       const std::string caseLabel = "parseColorArg for no args";
       const VerifiedArgs args;
-      const Rgb defaultColor = Rgb{9, 9, 9};
-      const Rgb color = parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
+      const sutil::Rgb defaultColor = sutil::Rgb{9, 9, 9};
+      const sutil::Rgb color =
+         parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
       VERIFY(color == defaultColor, caseLabel);
    }
    {
       const std::string caseLabel = "parseColorArg for multiple args";
       const VerifiedArgs args{{"scan", {"-101"}}, {"bkg", {"a7993c"}}, {"other"}};
-      const Rgb color = parseColorArg(args.begin(), args.end(), "bkg", {});
-      VERIFY(color == Rgb(167, 153, 60), caseLabel);
+      const sutil::Rgb color = parseColorArg(args.begin(), args.end(), "bkg", {});
+      VERIFY(color == sutil::Rgb(167, 153, 60), caseLabel);
    }
    {
       const std::string caseLabel = "parseColorArg for invalid color (non-hex digit)";
       const VerifiedArgs args{{"bkg", {"11220w"}}};
-      const Rgb defaultColor = Rgb{9, 9, 9};
-      const Rgb color = parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
+      const sutil::Rgb defaultColor = sutil::Rgb{9, 9, 9};
+      const sutil::Rgb color =
+         parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
       VERIFY(color == defaultColor, caseLabel);
    }
    {
       const std::string caseLabel = "parseColorArg for invalid color (too few digits)";
       const VerifiedArgs args{{"bkg", {"1122"}}};
-      const Rgb defaultColor = Rgb{9, 9, 9};
-      const Rgb color = parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
+      const sutil::Rgb defaultColor = sutil::Rgb{9, 9, 9};
+      const sutil::Rgb color =
+         parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
       VERIFY(color == defaultColor, caseLabel);
    }
    {
       const std::string caseLabel = "parseColorArg for invalid color (too mant digits)";
       const VerifiedArgs args{{"bkg", {"11223344"}}};
-      const Rgb defaultColor = Rgb{9, 9, 9};
-      const Rgb color = parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
+      const sutil::Rgb defaultColor = sutil::Rgb{9, 9, 9};
+      const sutil::Rgb color =
+         parseColorArg(args.begin(), args.end(), "bkg", defaultColor);
       VERIFY(color == defaultColor, caseLabel);
    }
 }

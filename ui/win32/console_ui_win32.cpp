@@ -10,9 +10,6 @@
 #include "win32_util/tstring.h"
 #include <cassert>
 
-using namespace sutil;
-using namespace win32;
-
 
 namespace ccon
 {
@@ -44,8 +41,8 @@ void ConsoleUIWin32::showConsole()
       constexpr unsigned long wndStyle =
          WS_POPUPWINDOW | WS_CAPTION | WS_THICKFRAME | WS_VISIBLE | WS_VSCROLL;
       constexpr long extWndStyle = WS_EX_WINDOWEDGE | WS_EX_TOOLWINDOW;
-      m_wnd->create(m_parentWnd, calcConsoleBounds(), convertTo<TString>(m_title),
-                    wndStyle, extWndStyle);
+      m_wnd->create(m_parentWnd, calcConsoleBounds(),
+                    sutil::convertTo<win32::TString>(m_title), wndStyle, extWndStyle);
    }
 
    if (!m_wnd->isVisible())

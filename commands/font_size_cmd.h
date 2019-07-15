@@ -19,17 +19,17 @@ namespace ccon
 {
 ///////////////////
 
-namespace consoleFontSizeCmdSpec
+namespace fontSizeCmd
 {
 
 const std::string cmdName = ":fontsize";
 
-} // namespace consoleFontSizeCmdSpec
+} // namespace fontSizeCmd
 
 
 inline CmdSpec makeConsoleFontSizeCmdSpec()
 {
-   return {consoleFontSizeCmdSpec::cmdName,
+   return {fontSizeCmd::cmdName,
            ":fs",
            "sets the font size for the console",
            {

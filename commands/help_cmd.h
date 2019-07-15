@@ -15,17 +15,17 @@ namespace ccon
 {
 ///////////////////
 
-namespace helpCmdSpec
+namespace helpCmd
 {
 
 const std::string cmdName = "help";
 
-} // namespace helpCmdSpec
+} // namespace helpCmd
 
 
 inline CmdSpec makeHelpCmdSpec()
 {
-   return {helpCmdSpec::cmdName, "?", "lists all commands", {}, ""};
+   return {helpCmd::cmdName, "?", "lists all commands", {}, ""};
 }
 
 

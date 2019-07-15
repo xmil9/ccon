@@ -10,9 +10,6 @@
 #include <algorithm>
 #include <functional>
 
-using namespace std;
-using namespace sutil;
-
 
 namespace ccon
 {
@@ -50,7 +47,7 @@ std::vector<std::string> CmdDepot::getCommandHelp(const std::string& cmdName) co
       find_if(begin(m_specs), end(m_specs),
               [&cmdName](const CmdSpec& spec) { return spec.matchesName(cmdName); });
    if (match != end(m_specs))
-      return split(match->help(), "\n");
+      return sutil::split(match->help(), "\n");
    return {};
 }
 

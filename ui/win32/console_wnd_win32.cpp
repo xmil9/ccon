@@ -15,14 +15,9 @@
 #include <cassert>
 #include <cwchar>
 
-using namespace std;
-using namespace sutil;
-using namespace win32;
-
 
 namespace
 {
-
 ///////////////////
 
 constexpr UINT TextFormatFlags = DT_LEFT | DT_TOP | DT_NOPREFIX | DT_EXTERNALLEADING;
@@ -35,7 +30,7 @@ constexpr long CursorWidth = 1;
 // Converts a point size (1/72 of an inch) to a raw pixel size.
 int pointsToPixels(int points)
 {
-   return MulDiv(points, vertScreenDpi(), 72);
+   return MulDiv(points, win32::vertScreenDpi(), 72);
 }
 
 
@@ -55,23 +50,23 @@ template <typename Int> Int truncatedDivRest(Int divident, Int divisor)
 }
 
 
-optional<char> toNarrowChar(TCHAR tch)
+std::optional<char> toNarrowChar(TCHAR tch)
 {
    // The narrow char might be multiple bytes long. It that case we ignore it.
-   const string mbCh = utf8(tch);
+   const std::string mbCh = sutil::utf8(tch);
    if (mbCh.size() == 1)
       return mbCh[0];
-   return nullopt;
+   return std::nullopt;
 }
 
 
-COLORREF colorrefFromRgb(const Rgb& rgb)
+COLORREF colorrefFromRgb(const sutil::Rgb& rgb)
 {
    return RGB(rgb.r, rgb.g, rgb.b);
 }
 
 
-GdiObj<HFONT> makeConsoleFont(int heightInPoints)
+win32::GdiObj<HFONT> makeConsoleFont(int heightInPoints)
 {
    LOGFONT lf;
    wcsncpy(lf.lfFaceName, L"Consolas", _countof(lf.lfFaceName));
@@ -90,7 +85,7 @@ GdiObj<HFONT> makeConsoleFont(int heightInPoints)
    lf.lfPitchAndFamily = DEFAULT_PITCH | FF_MODERN;
    lf.lfWidth = 0;
 
-   return GdiObj<HFONT>(CreateFontIndirect(&lf));
+   return win32::GdiObj<HFONT>(CreateFontIndirect(&lf));
 }
 
 
@@ -150,17 +145,17 @@ ConsoleWndWin32::ConsoleWndWin32(const UserPrefs& prefs, ConsoleContent& content
 }
 
 
-void ConsoleWndWin32::setBackgroundColor(const Rgb& color)
+void ConsoleWndWin32::setBackgroundColor(const sutil::Rgb& color)
 {
    m_backgroundBrush =
-      move(GdiObj<HBRUSH>(CreateSolidBrush(RGB(color.r, color.g, color.b))));
+      std::move(win32::GdiObj<HBRUSH>(CreateSolidBrush(RGB(color.r, color.g, color.b))));
    inval(true);
 
    m_userPrefs.setBackgroundColor(color);
 }
 
 
-void ConsoleWndWin32::setOutputTextColor(const Rgb& color)
+void ConsoleWndWin32::setOutputTextColor(const sutil::Rgb& color)
 {
    m_textOutputColor = RGB(color.r, color.g, color.b);
    inval(true);
@@ -169,7 +164,7 @@ void ConsoleWndWin32::setOutputTextColor(const Rgb& color)
 }
 
 
-void ConsoleWndWin32::setInputTextColor(const Rgb& color)
+void ConsoleWndWin32::setInputTextColor(const sutil::Rgb& color)
 {
    m_textInputColor = RGB(color.r, color.g, color.b);
    inval(true);
@@ -233,7 +228,7 @@ bool ConsoleWndWin32::registerWindowClass() const
 }
 
 
-Window::CreationResult ConsoleWndWin32::onCreate(const CREATESTRUCT* createInfo)
+win32::Window::CreationResult ConsoleWndWin32::onCreate(const CREATESTRUCT* createInfo)
 {
    Window::onCreate(createInfo);
 
@@ -369,7 +364,7 @@ bool ConsoleWndWin32::onMouseWheel(int delta, UINT keyState, win32::Point mouseP
 bool ConsoleWndWin32::setupColors()
 {
    m_textOutputColor = colorrefFromRgb(DefaultPrefs::textOutputDefaultColor());
-   optional<Rgb> color = m_userPrefs.textOutputColor();
+   std::optional<sutil::Rgb> color = m_userPrefs.textOutputColor();
    if (color.has_value())
       m_textOutputColor = RGB(color.value().r, color.value().g, color.value().b);
 
@@ -384,7 +379,7 @@ bool ConsoleWndWin32::setupColors()
 
 bool ConsoleWndWin32::setupFont()
 {
-   optional<int> fontSize = m_userPrefs.fontSize();
+   std::optional<int> fontSize = m_userPrefs.fontSize();
    if (!fontSize.has_value())
       fontSize = DefaultPrefs::fontSize();
 
@@ -395,7 +390,7 @@ bool ConsoleWndWin32::setupFont()
 
 bool ConsoleWndWin32::setupBackgroundBrush()
 {
-   optional<Rgb> color = m_userPrefs.backgroundColor();
+   std::optional<sutil::Rgb> color = m_userPrefs.backgroundColor();
    if (!color.has_value())
       color = DefaultPrefs::backgroundDefaultColor();
 
@@ -431,14 +426,14 @@ void ConsoleWndWin32::updateInputLine(HDC hdc)
 
 void ConsoleWndWin32::invalInputLine()
 {
-   const Rect bounds = m_layout.logicalLineBounds(m_content.countLines() - 1);
+   const win32::Rect bounds = m_layout.logicalLineBounds(m_content.countLines() - 1);
    inval(bounds, true);
 }
 
 
 void ConsoleWndWin32::refreshInputLine()
 {
-   SharedDC consoleDC{GetDC(hwnd()), hwnd()};
+   win32::SharedDC consoleDC{GetDC(hwnd()), hwnd()};
    if (consoleDC)
    {
       ConsoleDCAttributes dcAttribs{consoleDC, m_font, m_textOutputColor};
@@ -453,7 +448,7 @@ void ConsoleWndWin32::updateInputCursor()
 {
    m_inputCursor.stop();
 
-   m_inputCursor = move(ConsoleInputCursorWin32{hwnd(), m_textInputColor});
+   m_inputCursor = std::move(ConsoleInputCursorWin32{hwnd(), m_textInputColor});
    m_inputCursor.setBlinkRate(CursorBlinkRateMs);
    m_inputCursor.setWidth(CursorWidth);
    m_inputCursor.setHeight(m_layout.textHeight());
@@ -499,16 +494,16 @@ void ConsoleWndWin32::drawContent(HDC hdc, const win32::Rect& bounds)
       updateContentLayout(hdc);
 
    const int lineHeight = m_layout.lineHeight();
-   const size_t maxPhysLine = m_layout.countPhysicalLines() - 1;
+   const std::size_t maxPhysLine = m_layout.countPhysicalLines() - 1;
 
-   const size_t firstDrawnLine =
+   const std::size_t firstDrawnLine =
       m_layout.firstVisiblePhysicalLine() + bounds.top / lineHeight;
    // Prevent drawing of partial lines at the bottom.
-   const size_t lastDrawnLine =
-      min(firstDrawnLine + bounds.height() / lineHeight - 1, maxPhysLine);
+   const std::size_t lastDrawnLine =
+      std::min(firstDrawnLine + bounds.height() / lineHeight - 1, maxPhysLine);
 
-   Rect lineBounds = bounds;
-   for (size_t i = firstDrawnLine; i <= lastDrawnLine; ++i)
+   win32::Rect lineBounds = bounds;
+   for (std::size_t i = firstDrawnLine; i <= lastDrawnLine; ++i)
    {
       lineBounds.bottom = lineBounds.top + lineHeight;
       if (m_content.isEnteredLine(m_layout.logicalFromPhysicalLine(i)))
@@ -607,11 +602,11 @@ bool ConsoleWndWin32::handleInputKey(TCHAR tch)
    if (tch == VK_BACK || tch == VK_RETURN || tch == VK_TAB)
       return false;
 
-   const optional<char> ch = toNarrowChar(tch);
+   const std::optional<char> ch = toNarrowChar(tch);
    if (!ch.has_value())
       return false;
 
-   string inputText = m_content.inputLineText();
+   std::string inputText = m_content.inputLineText();
    inputText.insert(inputText.begin() + m_layout.inputCursorPosition(), ch.value());
    m_content.setInputLine(inputText);
 
@@ -628,7 +623,7 @@ void ConsoleWndWin32::deleteInputCharacter(std::size_t charIdx, int cursorOffset
 
    invalInputLine();
 
-   string inputText = m_content.inputLineText();
+   std::string inputText = m_content.inputLineText();
    inputText.erase(charIdx);
    m_content.setInputLine(inputText);
 
@@ -734,8 +729,8 @@ void ConsoleWndWin32::scrollVertical(UINT scrollAction, UINT thumbPos)
    // Limit the scrolled area to the section of the client area where complete lines are
    // going to be drawn. At the bottom of the client area is a section whose height is
    // less than a line. We want to exclude that area from scrolling.
-   const Rect clientArea = clientBounds();
-   Rect scrolledBounds = clientArea;
+   const win32::Rect clientArea = clientBounds();
+   win32::Rect scrolledBounds = clientArea;
    scrolledBounds.bottom =
       truncatedDiv<long>(scrolledBounds.height(), m_layout.lineHeight());
 
@@ -744,7 +739,7 @@ void ConsoleWndWin32::scrollVertical(UINT scrollAction, UINT thumbPos)
 
    // To make sure the bottom section of the client area where no full line fits anymore
    // stays empty, inval and erase it.
-   Rect unfilledBottomArea = clientBounds();
+   win32::Rect unfilledBottomArea = clientBounds();
    unfilledBottomArea.top = scrolledBounds.bottom;
    inval(unfilledBottomArea, true);
 }
@@ -760,18 +755,18 @@ void ConsoleWndWin32::scrollVerticalBy(int numLines)
 
 void ConsoleWndWin32::scrollIntoView()
 {
-   const size_t firstVisibleLine = m_layout.firstVisiblePhysicalLine();
-   const size_t lastVisibleLine =
+   const std::size_t firstVisibleLine = m_layout.firstVisiblePhysicalLine();
+   const std::size_t lastVisibleLine =
       firstVisibleLine + m_layout.countVisiblePhysicalLines() - 1;
 
    // Try to have both the line with the cursor and the last input line in the view.
    // But prioritize the cursor line.
 
-   const size_t lastInputLine = m_layout.countPhysicalLines() - 1;
+   const std::size_t lastInputLine = m_layout.countPhysicalLines() - 1;
    if (lastInputLine > lastVisibleLine)
       scrollVerticalBy(static_cast<int>(lastInputLine - firstVisibleLine));
 
-   const size_t cursorLine = m_layout.inputCursorPhysicalLine();
+   const std::size_t cursorLine = m_layout.inputCursorPhysicalLine();
    if (cursorLine < firstVisibleLine)
       scrollVerticalBy(static_cast<int>(cursorLine - firstVisibleLine));
 }

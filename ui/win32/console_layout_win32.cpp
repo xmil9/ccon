@@ -11,18 +11,15 @@
 #include <cassert>
 #include <vector>
 
-using namespace std;
-using namespace win32;
-
 
 namespace
 {
 
 ///////////////////
 
-vector<string> splitText(const string& text, size_t charsPerLine)
+std::vector<std::string> splitText(const std::string& text, std::size_t charsPerLine)
 {
-   vector<string> lines;
+   std::vector<std::string> lines;
    size_t pos = 0;
    size_t size = text.size();
    while (size > charsPerLine)
@@ -58,7 +55,7 @@ win32::Rect ConsoleLayoutWin32::logicalLineBounds(std::size_t lineIdx) const
    const std::size_t firstPhysLine = logMetrics.firstPhysicalLineIndex();
    const std::size_t lastPhysLine = firstPhysLine + logMetrics.countPhysicalLines() - 1;
 
-   Rect bounds = m_physMetrics[firstPhysLine].bounds();
+   win32::Rect bounds = m_physMetrics[firstPhysLine].bounds();
    for (std::size_t i = firstPhysLine + 1; i <= lastPhysLine; ++i)
       bounds = unite(bounds, m_physMetrics[i].bounds());
 
@@ -71,7 +68,7 @@ win32::Rect ConsoleLayoutWin32::logicalLineBounds(std::size_t lineIdx) const
 
 win32::Rect ConsoleLayoutWin32::physicalLineBounds(std::size_t lineIdx) const
 {
-   Rect bounds = m_physMetrics[lineIdx].bounds();
+   win32::Rect bounds = m_physMetrics[lineIdx].bounds();
    // Map bounds to be relative to the visible area.
    bounds.offset(0, -m_physMetrics[m_firstVisiblePhysLineIdx].bounds().top);
    return bounds;
@@ -202,16 +199,16 @@ std::size_t ConsoleLayoutWin32::maxLogicalIndex() const
 
 void ConsoleLayoutWin32::calcLineMetrics(std::size_t logLineIdx)
 {
-   const std::vector<string> splitLines =
+   const std::vector<std::string> splitLines =
       splitText(getContent().lineText(logLineIdx), m_charsPerLine);
 
    m_logMetrics[logLineIdx] = LineMetrics{m_physLines.size(), splitLines.size()};
 
-   copy(splitLines.begin(), splitLines.end(), back_inserter(m_physLines));
+   std::copy(splitLines.begin(), splitLines.end(), back_inserter(m_physLines));
 
    const long top = static_cast<long>(m_physMetrics.size()) * m_lineHeight;
-   Rect physLineBounds{0, top, 0, 0};
-   for (const string& text : splitLines)
+   win32::Rect physLineBounds{0, top, 0, 0};
+   for (const std::string& text : splitLines)
    {
       physLineBounds.right = static_cast<long>(text.size()) * m_charWidth;
       physLineBounds.bottom = physLineBounds.top + m_lineHeight;

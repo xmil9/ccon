@@ -10,32 +10,28 @@
 #include "win32_util/geometry.h"
 #include <string>
 
-using namespace qcfg;
-using namespace std;
-using namespace sutil;
-using namespace win32;
-
 
 namespace
 {
 ///////////////////
 
-const string ConsoleWidthKey = "ConsoleWidth";
-const string ConsoleHeightKey = "ConsoleHeight";
-const string BackgroundColorKey = "BackgroundColor";
-const string TextOutputColorKey = "TextOutputColor";
-const string TextInputColorKey = "TextInputColor";
-const string FontSizeKey = "FontSize";
+const std::string ConsoleWidthKey = "ConsoleWidth";
+const std::string ConsoleHeightKey = "ConsoleHeight";
+const std::string BackgroundColorKey = "BackgroundColor";
+const std::string TextOutputColorKey = "TextOutputColor";
+const std::string TextInputColorKey = "TextInputColor";
+const std::string FontSizeKey = "FontSize";
 
 
 ///////////////////
 
-const string RedTag = "_R";
-const string GreenTag = "_G";
-const string BlueTag = "_B";
+const std::string RedTag = "_R";
+const std::string GreenTag = "_G";
+const std::string BlueTag = "_B";
 
 
-void storeColor(Config& config, const string& colorKey, const Rgb& color)
+void storeColor(qcfg::Config& config, const std::string& colorKey,
+                const sutil::Rgb& color)
 {
    config.setInt8(colorKey + RedTag, color.r);
    config.setInt8(colorKey + GreenTag, color.g);
@@ -43,7 +39,8 @@ void storeColor(Config& config, const string& colorKey, const Rgb& color)
 }
 
 
-optional<Rgb> fetchColor(const Config& config, const string& colorKey)
+std::optional<sutil::Rgb> fetchColor(const qcfg::Config& config,
+                                     const std::string& colorKey)
 {
    const auto red = config.getInt8(colorKey + RedTag);
    if (!red.has_value())
@@ -54,7 +51,7 @@ optional<Rgb> fetchColor(const Config& config, const string& colorKey)
    const auto blue = config.getInt8(colorKey + BlueTag);
    if (!blue.has_value())
       return {};
-   return Rgb(red.value(), green.value(), blue.value());
+   return sutil::Rgb(red.value(), green.value(), blue.value());
 }
 
 } // namespace
@@ -66,19 +63,19 @@ namespace ccon
 
 sutil::Rgb DefaultPrefs::backgroundDefaultColor()
 {
-   return Rgb(26, 26, 26);
+   return sutil::Rgb(26, 26, 26);
 }
 
 
 sutil::Rgb DefaultPrefs::textOutputDefaultColor()
 {
-   return Rgb(230, 230, 230);
+   return sutil::Rgb(230, 230, 230);
 }
 
 
 sutil::Rgb DefaultPrefs::textInputDefaultColor()
 {
-   return Rgb(255, 211, 149);
+   return sutil::Rgb(255, 211, 149);
 }
 
 
@@ -90,14 +87,13 @@ int DefaultPrefs::fontSize()
 
 win32::Rect DefaultPrefs::consoleWindowBounds()
 {
-   return Rect{100, 100, 750, 600};
+   return win32::Rect{100, 100, 750, 600};
 }
 
 
 ///////////////////
 
-UserPrefs::UserPrefs(const std::filesystem::path& configPath)
-   : m_configPath{configPath}
+UserPrefs::UserPrefs(const std::filesystem::path& configPath) : m_configPath{configPath}
 {
 }
 
@@ -107,7 +103,7 @@ bool UserPrefs::load()
    if (m_configPath.empty())
       return false;
 
-   FileStorage configStorage{m_configPath};
+   qcfg::FileStorage configStorage{m_configPath};
    if (!m_config.load(configStorage))
       return false;
 
@@ -120,7 +116,7 @@ bool UserPrefs::save()
    if (m_configPath.empty())
       return false;
 
-   FileStorage configStorage{m_configPath};
+   qcfg::FileStorage configStorage{m_configPath};
    return m_config.save(configStorage);
 }
 

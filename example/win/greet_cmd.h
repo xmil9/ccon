@@ -12,17 +12,17 @@
 
 ///////////////////
 
-namespace greetCmdSpec
+namespace greetCmd
 {
 
 const std::string cmdName = "greet";
 
-} // namespace greetCmdSpec
+} // namespace greetCmd
 
 
 inline ccon::CmdSpec makeGreetCmdSpec()
 {
-   return {greetCmdSpec::cmdName,
+   return {greetCmd::cmdName,
            "g",
            "shows greeting",
            {

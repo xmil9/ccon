@@ -14,10 +14,6 @@
 #include <map>
 #include <optional>
 
-using namespace ccon;
-using namespace std;
-using namespace sutil;
-
 
 namespace
 {
@@ -25,7 +21,7 @@ namespace
 
 unsigned int intFromHexDigit(char hexChar)
 {
-   static map<char, int> hexValue = {
+   static std::map<char, int> hexValue = {
       {'0', 0},  {'1', 1},  {'2', 2},  {'3', 3},  {'4', 4},  {'5', 5},
       {'6', 6},  {'7', 7},  {'8', 8},  {'9', 9},  {'a', 10}, {'A', 10},
       {'b', 11}, {'B', 11}, {'c', 12}, {'C', 12}, {'d', 13}, {'D', 13},
@@ -53,18 +49,19 @@ unsigned int intFromHexDoubleDigit(const std::string& hex)
 }
 
 
-optional<Rgb> colorFromString(const std::string& colorAsStr)
+std::optional<sutil::Rgb> colorFromString(const std::string& colorAsStr)
 {
    if (colorAsStr.size() != 6)
-      return nullopt;
-   
+      return std::nullopt;
+
    const unsigned int r = intFromHexDoubleDigit(colorAsStr.substr(0, 2));
    const unsigned int g = intFromHexDoubleDigit(colorAsStr.substr(2, 2));
    const unsigned int b = intFromHexDoubleDigit(colorAsStr.substr(4, 2));
    if (r == -1 || g == -1 || b == -1)
-      return nullopt;
+      return std::nullopt;
 
-   return Rgb{static_cast<uint8_t>(r), static_cast<uint8_t>(g), static_cast<uint8_t>(b)};
+   return sutil::Rgb{static_cast<uint8_t>(r), static_cast<uint8_t>(g),
+                     static_cast<uint8_t>(b)};
 }
 
 } // namespace
@@ -76,7 +73,7 @@ namespace ccon
 
 bool containsHelpParameter(const CmdArgs& args)
 {
-   return any_of(begin(args), end(args), [](const string& arg) {
+   return any_of(begin(args), end(args), [](const std::string& arg) {
       return HelpArgSpec.matchLabel(stripArgSeparators(arg));
    });
 }
@@ -113,21 +110,21 @@ int parseIntArg(VerifiedArgs::const_iterator beginOptions,
 {
    auto argIter = findArgWithLabel(beginOptions, endOptions, argLabel);
    if (argIter != endOptions)
-      return intFromStr(argIter->values[0], defaultValue);
+      return sutil::intFromStr(argIter->values[0], defaultValue);
    return defaultValue;
 }
 
 
-Rgb parseColorArg(VerifiedArgs::const_iterator beginOptions,
-                  VerifiedArgs::const_iterator endOptions, const std::string& argLabel,
-                  const Rgb& defaultColor)
+sutil::Rgb parseColorArg(VerifiedArgs::const_iterator beginOptions,
+                         VerifiedArgs::const_iterator endOptions,
+                         const std::string& argLabel, const sutil::Rgb& defaultColor)
 {
    auto colorIter = findArgWithLabel(beginOptions, endOptions, argLabel);
    if (colorIter == endOptions)
       return defaultColor;
 
    assert(colorIter->values.size() == 1);
-   const optional<Rgb> color = colorFromString(colorIter->values[0]);
+   const std::optional<sutil::Rgb> color = colorFromString(colorIter->values[0]);
    return color.has_value() ? color.value() : defaultColor;
 }
 

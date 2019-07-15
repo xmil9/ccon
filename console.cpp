@@ -16,22 +16,18 @@
 #include <cassert>
 #include <iterator>
 
-using namespace ccon;
-using namespace std;
-using namespace sutil;
-
 
 namespace
 {
 ///////////////////
 
-CmdOutput splitAtNewlines(const CmdOutput& src)
+ccon::CmdOutput splitAtNewlines(const ccon::CmdOutput& src)
 {
-   CmdOutput out;
-   for (const string& line : src)
+   ccon::CmdOutput out;
+   for (const std::string& line : src)
    {
-      const vector<string> pieces = split(line, "\n");
-      copy(pieces.begin(), pieces.end(), back_inserter(out));
+      const std::vector<std::string> pieces = sutil::split(line, "\n");
+      std::copy(pieces.begin(), pieces.end(), std::back_inserter(out));
    }
 
    return out;
@@ -139,12 +135,13 @@ void Console::nextAutoCompletion()
 void Console::initCommands()
 {
    m_cmds.addCommand(makeConsoleColorsCmdSpec(),
-                     [this]() { return make_unique<ConsoleColorsCmd>(&m_ui); });
+                     [this]() { return std::make_unique<ConsoleColorsCmd>(&m_ui); });
    m_cmds.addCommand(makeConsoleFontSizeCmdSpec(),
-                     [this]() { return make_unique<ConsoleFontSizeCmd>(&m_ui); });
-   m_cmds.addCommand(makeExitCmdSpec(), [this]() { return make_unique<ExitCmd>(&m_ui); });
+                     [this]() { return std::make_unique<ConsoleFontSizeCmd>(&m_ui); });
+   m_cmds.addCommand(makeExitCmdSpec(),
+                     [this]() { return std::make_unique<ExitCmd>(&m_ui); });
    m_cmds.addCommand(makeHelpCmdSpec(), [this]() {
-      return make_unique<HelpCmd>(m_cmds.availableCommands());
+      return std::make_unique<HelpCmd>(m_cmds.availableCommands());
    });
 }
 

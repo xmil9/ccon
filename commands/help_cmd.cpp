@@ -6,8 +6,6 @@
 //
 #include "help_cmd.h"
 
-using namespace std;
-
 
 namespace ccon
 {
@@ -20,7 +18,7 @@ HelpCmd::HelpCmd(const std::set<CmdSpec>& specs) : m_specs(specs)
 
 CmdOutput HelpCmd::execute(const VerifiedCmd& input)
 {
-   const string indent{"  "};
+   const std::string indent{"  "};
 
    CmdOutput out;
    out.push_back("Commands:");
